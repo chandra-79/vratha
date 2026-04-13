@@ -216,14 +216,20 @@
 
     .card-header-info { flex: 1; min-width: 0; }
     .card-header-info .day-line {
-      font-weight: 700; font-size: 0.82rem; color: var(--saffron-d);
+      font-weight: 800; font-size: 0.95rem; color: var(--muted);
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .card-header-info .day-line .day-date-txt {
-      font-weight: 400; font-size: 0.75rem; color: var(--muted);
+      font-weight: 800; font-size: 0.95rem; color: var(--saffron-d);
       margin-left: 5px;
+   
     }
-    .day-card.completed .card-header-info .day-line { color: #2e7d32; }
+    .day-card.completed .card-header-info .day-line { 
+      color: #2e7d32; border: 1.5px solid var(--gold);
+      border-radius: 20px;
+      padding: 3px 8px;
+      min-width: 46px; text-align: center;
+    }
     .day-card.completed .card-header-info .day-date-txt { color: #4caf50; }
 
     .card-count-badge {
@@ -824,13 +830,13 @@
   <div class="about-body" id="aboutBody">
     <p><strong>Ganapati Vratha</strong> is a sacred 48-day penance dedicated to Lord Ganesha — the remover of obstacles and the bestower of wisdom and auspiciousness. Devotees observe strict discipline during this period: chanting the Ganapati Manthram <strong>21 times every day</strong> without interruption, visiting the temple daily, and maintaining purity of body, mind, and speech.</p>
     <p>This 48-day Vratha is rooted in the belief that sincere and unbroken devotion to Ganapati removes life's obstacles, brings peace and prosperity, and earns the divine grace of Lord Ganapati for the devotee and their entire family.</p>
-    <div class="about-user-card">
+    <!-- <div class="about-user-card">
       <div class="avatar">🙏</div>
       <div>
         <div class="name">Chandra</div>
         <div class="sub">Personal Vratha Tracker · 48 Days · 21 Chantings Daily</div>
       </div>
-    </div>
+    </div> -->
   </div>
 </div>
 
@@ -1372,7 +1378,7 @@ function makeCard(d) {
   info.className = 'card-header-info';
   const dayLine = document.createElement('div');
   dayLine.className = 'day-line';
-  dayLine.textContent = 'Day ' + d;
+  dayLine.textContent = 'Day ' + d + ' ➡️';
   const dateWrap = document.createElement('span');
   dateWrap.className = 'day-date-txt';
   dateWrap.id = 'datetxt' + d;
@@ -1455,9 +1461,10 @@ function makeCard(d) {
 // ── DATE HELPERS ──
 function fmtDate(iso) {
   if (!iso) return '';
-  const [, m, dd] = iso.split('-').map(Number);
+  const [yy, m, dd] = iso.split('-').map(Number);
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  return dd + ' ' + months[m - 1];
+  // return dd + ' ' + months[m - 1];
+  return  months[m - 1] + ' ' + dd + ', ' + yy;
 }
 
 function todayISO() {
