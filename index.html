@@ -281,6 +281,17 @@
       pointer-events: none;
     }
 
+    /* ── FUTURE DAY (locked) ── */
+    .day-card.future { opacity: .55; }
+    .day-card.future .marks-grid { pointer-events: none; }
+    .day-card.future .card-temple input[type=checkbox] { pointer-events: none; }
+    .day-card.future .complete-day-btn {
+      background: #bdbdbd;
+      box-shadow: none;
+      pointer-events: none;
+      letter-spacing: .3px;
+    }
+
     /* ── BOTTOM TOOLBAR ── */
     .bottom-bar {
       position: fixed; bottom: 0; left: 0; right: 0;
@@ -504,8 +515,9 @@ function makeCard(d) {
   const count = s.marks.filter(Boolean).length;
   const done  = count === CHANTS && s.temple;
 
+  const future = isFuture(d);
   const card = document.createElement('div');
-  card.className = 'day-card' + (done ? ' completed' : '');
+  card.className = 'day-card' + (done ? ' completed' : '') + (future ? ' future' : '');
   card.id = 'card' + d;
 
   // ── card header ──
@@ -560,7 +572,7 @@ function makeCard(d) {
   const completeBtn = document.createElement('button');
   completeBtn.className = 'complete-day-btn';
   completeBtn.id = 'completebtn' + d;
-  completeBtn.textContent = done ? '✓ Day Complete' : '🙏 Complete Day (21 chants + Temple)';
+  completeBtn.textContent = done ? '✓ Day Complete' : future ? '🔒 Future Day' : '🙏 Complete Day (21 chants + Temple)';
   completeBtn.addEventListener('click', () => completeDay(d));
   card.appendChild(completeBtn);
 
@@ -582,7 +594,22 @@ function makeCard(d) {
   return card;
 }
 
+// ── TODAY ISO ──
+function todayISO() {
+  const t = new Date();
+  return t.getFullYear() + '-'
+    + String(t.getMonth() + 1).padStart(2, '0') + '-'
+    + String(t.getDate()).padStart(2, '0');
+}
+
+function isFuture(d) {
+  const s = state['d' + d];
+  if (!s || !s.date) return false; // no date assigned → allow
+  return s.date > todayISO();
+}
+
 function completeDay(d) {
+  if (isFuture(d)) return;
   const k = 'd' + d;
   ensureDay(d);
   state[k].marks = new Array(CHANTS).fill(true);
@@ -593,6 +620,7 @@ function completeDay(d) {
 }
 
 function toggleMark(d, m) {
+  if (isFuture(d)) return;
   const k = 'd' + d;
   state[k].marks[m] = !state[k].marks[m];
   saveState(state);
@@ -620,9 +648,14 @@ function refreshCard(d) {
   if (done) card.classList.add('completed');
   else card.classList.remove('completed');
 
+  // update future lock
+  const future = isFuture(d);
+  if (future) card.classList.add('future');
+  else card.classList.remove('future');
+
   // update complete-day button
   const cbtn = document.getElementById('completebtn' + d);
-  if (cbtn) cbtn.textContent = done ? '✓ Day Complete' : '🙏 Complete Day (21 chants + Temple)';
+  if (cbtn) cbtn.textContent = done ? '✓ Day Complete' : future ? '🔒 Future Day' : '🙏 Complete Day (21 chants + Temple)';
 
   // keep badge & date input in sync
   const cb = card.querySelector('input[type=checkbox]');
