@@ -807,6 +807,7 @@
       </button>
     </div>
     <p class="welcome-note">Your JSON backup can be exported any time from the Reset screen. It contains all chantings, temple visits, and dates.</p>
+    <p id="welcomeCountdown" style="text-align:center;font-size:0.75rem;color:var(--muted);margin-top:8px">Closing in <span id="welcomeCountSec">5</span>s…</p>
   </div>
 </div>
 <input type="file" id="importFileInput" accept=".json,application/json" style="display:none" onchange="handleImportFile(this)"/>
@@ -1231,9 +1232,11 @@ function handleImportFile(input) {
 }
 
 let _welcomeTimer = null;
+let _welcomeCountInterval = null;
 
 function closeWelcomeModal() {
   clearTimeout(_welcomeTimer);
+  clearInterval(_welcomeCountInterval);
   document.getElementById('welcomeModal').classList.remove('open');
   // Remove the listeners once closed
   document.removeEventListener('keydown', _welcomeKeyHandler);
@@ -1257,6 +1260,17 @@ function openWelcomeModal() {
 
   // Close on Escape or Enter
   document.addEventListener('keydown', _welcomeKeyHandler);
+
+  // Countdown display
+  const secEl = document.getElementById('welcomeCountSec');
+  let remaining = 5;
+  secEl.textContent = remaining;
+  clearInterval(_welcomeCountInterval);
+  _welcomeCountInterval = setInterval(() => {
+    remaining -= 1;
+    secEl.textContent = remaining;
+    if (remaining <= 0) clearInterval(_welcomeCountInterval);
+  }, 1000);
 
   // Auto-close after 5 seconds
   _welcomeTimer = setTimeout(closeWelcomeModal, 5000);
