@@ -179,40 +179,17 @@
     }
     .day-card.completed .day-badge { background: var(--green-b); }
 
-    .card-header-info { flex: 1; }
-    .card-header-info .day-label {
+    .card-header-info { flex: 1; min-width: 0; }
+    .card-header-info .day-line {
       font-weight: 700; font-size: 0.82rem; color: var(--saffron-d);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
-    .day-card.completed .card-header-info .day-label { color: #2e7d32; }
-    .card-header-info .day-date-input {
-      border: 1px solid var(--gold);
-      border-radius: 6px; padding: 3px 5px;
-      font-size: 0.7rem; width: 130px;
-      background: white; color: var(--text);
-      margin-top: 3px;
-      cursor: pointer;
-      -webkit-appearance: none;
-      appearance: none;
+    .card-header-info .day-line .day-date-txt {
+      font-weight: 400; font-size: 0.75rem; color: var(--muted);
+      margin-left: 5px;
     }
-    .card-header-info .day-date-input::-webkit-calendar-picker-indicator {
-      opacity: 0.6; cursor: pointer; padding: 0;
-      filter: invert(40%) sepia(80%) saturate(400%) hue-rotate(0deg);
-    }
-    .day-card.completed .card-header-info .day-date-input {
-      border-color: var(--green-b);
-      background: #f9fbe7;
-    }
-
-    .card-temple {
-      display: flex; flex-direction: column;
-      align-items: center; gap: 2px;
-      flex-shrink: 0;
-    }
-    .card-temple label { font-size: 0.58rem; color: var(--muted); }
-    .card-temple input[type=checkbox] {
-      width: 22px; height: 22px;
-      accent-color: var(--saffron); cursor: pointer;
-    }
+    .day-card.completed .card-header-info .day-line { color: #2e7d32; }
+    .day-card.completed .card-header-info .day-date-txt { color: #4caf50; }
 
     .card-count-badge {
       flex-shrink: 0;
@@ -226,6 +203,34 @@
     }
     .day-card.completed .card-count-badge {
       color: #2e7d32; border-color: var(--green-b);
+    }
+
+    /* ── TEMPLE TOGGLE BUTTON ── */
+    .temple-btn {
+      flex-shrink: 0;
+      padding: 7px 13px;
+      border-radius: 20px;
+      border: 2px solid var(--saffron);
+      background: white;
+      color: var(--saffron);
+      font-size: 0.8rem; font-weight: 700;
+      cursor: pointer; white-space: nowrap;
+      transition: all .18s;
+      -webkit-tap-highlight-color: transparent;
+      min-height: 38px;
+      user-select: none;
+    }
+    .temple-btn:active { transform: scale(.93); }
+    .temple-btn.done {
+      background: var(--saffron);
+      color: white;
+      border-color: var(--saffron-d);
+    }
+    .day-card.completed .temple-btn {
+      background: #388e3c; border-color: #2e7d32; color: white;
+    }
+    .day-card.future .temple-btn {
+      pointer-events: none; opacity: .38; cursor: default;
     }
 
     /* 21 marks grid */
@@ -284,7 +289,6 @@
     /* ── FUTURE DAY (locked) ── */
     .day-card.future { opacity: .55; }
     .day-card.future .marks-grid { pointer-events: none; }
-    .day-card.future .card-temple input[type=checkbox] { pointer-events: none; }
     .day-card.future .complete-day-btn {
       background: #bdbdbd;
       box-shadow: none;
@@ -399,6 +403,56 @@
       .cards-container { grid-template-columns: repeat(3, 1fr); }
     }
 
+    /* ── QUICK LINKS ── */
+    .quick-links {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      padding: 8px 12px 4px;
+      justify-content: center;
+    }
+    .qbtn {
+      background: rgba(230,81,0,.1);
+      border: 1.5px solid var(--saffron);
+      color: var(--saffron);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 0.78rem; font-weight: 600;
+      cursor: pointer; white-space: nowrap;
+      transition: background .2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .qbtn:hover { background: rgba(230,81,0,.2); }
+    .qbtn.active { background: var(--saffron); color: white; }
+
+    .manthram-image-panel {
+      display: none; padding: 0 12px 8px;
+    }
+    .manthram-image-panel.open { display: block; }
+    .manthram-image-panel img {
+      width: 100%; border-radius: 10px;
+      border: 2px solid var(--gold);
+      box-shadow: var(--shadow);
+    }
+
+    .audio-panel {
+      display: none;
+      padding: 8px 12px;
+      background: #fff8f0;
+      border-top: 1px solid var(--gold);
+      border-bottom: 1px solid var(--gold);
+    }
+    .audio-panel.open { display: block; }
+    .audio-panel audio { width: 100%; }
+    .audio-count {
+      text-align: center; font-size: 0.78rem;
+      color: var(--muted); margin-top: 5px; font-weight: 600;
+    }
+    .audio-reset-btn {
+      display: block; width: 100%; margin-top: 6px;
+      padding: 7px; background: var(--saffron); color: white;
+      border: none; border-radius: 8px; font-size: 0.75rem;
+      font-weight: 600; cursor: pointer;
+    }
+
     /* ── PRINT ── */
     @media print {
       .site-header, .bottom-bar, .modal-overlay { display: none !important; }
@@ -439,7 +493,7 @@
 </div>
 
 <!-- ── START DATE ── -->
-<div class="start-date-row">
+<div class="start-date-row" id="startDateRow">
   <label for="startDate">Vratha Start Date:</label>
   <input type="date" id="startDate"/>
   <button onclick="applyStartDate()">Auto-fill dates</button>
@@ -451,6 +505,22 @@
   <span><span class="leg-dot on"></span> Done chant</span>
   <span>☐ Temple visit</span>
   <span>🟩 Full day complete</span>
+</div>
+
+<!-- ── QUICK LINKS ── -->
+<div class="quick-links">
+  <button class="qbtn" id="qImgBtn" onclick="toggleManthramImage()">📜 Manthram (Telugu)</button>
+  <button class="qbtn" id="qAudioBtn" onclick="toggleAudioPanel()">🔊 Play Manthram (21×)</button>
+</div>
+
+<div class="manthram-image-panel" id="manthramImagePanel">
+  <img src="Manthram_Telugu.png" alt="Manthram in Telugu"/>
+</div>
+
+<div class="audio-panel" id="audioPanel">
+  <audio id="manthramAudio" src="Manthram_English.mpeg" controls preload="auto"></audio>
+  <div class="audio-count" id="audioCount">Chanting: 0 / 21</div>
+  <button class="audio-reset-btn" onclick="resetAudio()">↺ Reset count</button>
 </div>
 
 <!-- ── CARDS ── -->
@@ -528,44 +598,39 @@ function makeCard(d) {
   badge.className = 'day-badge';
   badge.textContent = d;
 
-  const info = document.createElement('div');
-  info.className = 'card-header-info';
-  const lbl = document.createElement('div');
-  lbl.className = 'day-label';
-  lbl.textContent = 'Day ' + d;
-  const dateInp = document.createElement('input');
-  dateInp.className = 'day-date-input';
-  dateInp.type = 'date';
-  dateInp.value = s.date || '';
-  dateInp.addEventListener('change', e => { state[k].date = e.target.value; saveState(state); });
-  info.appendChild(lbl);
-  info.appendChild(dateInp);
-
   const countBadge = document.createElement('div');
   countBadge.className = 'card-count-badge';
   countBadge.id = 'count' + d;
   countBadge.textContent = count + '/21';
 
-  const templeWrap = document.createElement('div');
-  templeWrap.className = 'card-temple';
-  const templeLbl = document.createElement('label');
-  templeLbl.textContent = '🛕 Temple';
-  const templeCb = document.createElement('input');
-  templeCb.type = 'checkbox';
-  templeCb.checked = s.temple;
-  templeCb.addEventListener('change', e => {
-    state[k].temple = e.target.checked;
+  const info = document.createElement('div');
+  info.className = 'card-header-info';
+  const dayLine = document.createElement('div');
+  dayLine.className = 'day-line';
+  dayLine.textContent = 'Day ' + d;
+  const dateTxt = document.createElement('span');
+  dateTxt.className = 'day-date-txt';
+  dateTxt.id = 'datetxt' + d;
+  dateTxt.textContent = s.date ? fmtDate(s.date) : '';
+  dayLine.appendChild(dateTxt);
+  info.appendChild(dayLine);
+
+  const templeBtn = document.createElement('button');
+  templeBtn.className = 'temple-btn' + (s.temple ? ' done' : '');
+  templeBtn.id = 'templebtn' + d;
+  templeBtn.textContent = s.temple ? '🛕 Visited' : '🛕 Temple';
+  templeBtn.addEventListener('click', () => {
+    if (isFuture(d)) return;
+    state[k].temple = !state[k].temple;
     saveState(state);
     refreshCard(d);
     updateStats();
   });
-  templeWrap.appendChild(templeLbl);
-  templeWrap.appendChild(templeCb);
 
   hdr.appendChild(badge);
-  hdr.appendChild(info);
   hdr.appendChild(countBadge);
-  hdr.appendChild(templeWrap);
+  hdr.appendChild(info);
+  hdr.appendChild(templeBtn);
   card.appendChild(hdr);
 
   // ── complete-day button ──
@@ -594,7 +659,14 @@ function makeCard(d) {
   return card;
 }
 
-// ── TODAY ISO ──
+// ── DATE HELPERS ──
+function fmtDate(iso) {
+  if (!iso) return '';
+  const [, m, dd] = iso.split('-').map(Number);
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return dd + ' ' + months[m - 1];
+}
+
 function todayISO() {
   const t = new Date();
   return t.getFullYear() + '-'
@@ -657,9 +729,17 @@ function refreshCard(d) {
   const cbtn = document.getElementById('completebtn' + d);
   if (cbtn) cbtn.textContent = done ? '✓ Day Complete' : future ? '🔒 Future Day' : '🙏 Complete Day (21 chants + Temple)';
 
-  // keep badge & date input in sync
-  const cb = card.querySelector('input[type=checkbox]');
-  if (cb) cb.checked = s.temple;
+  // update temple button
+  const tbtn = document.getElementById('templebtn' + d);
+  if (tbtn) {
+    tbtn.textContent = s.temple ? '🛕 Visited' : '🛕 Temple';
+    if (s.temple) tbtn.classList.add('done');
+    else tbtn.classList.remove('done');
+  }
+
+  // update date text
+  const dtxt = document.getElementById('datetxt' + d);
+  if (dtxt) dtxt.textContent = s.date ? fmtDate(s.date) : '';
 }
 
 // ── STATS ──
@@ -697,29 +777,78 @@ function applyStartDate() {
     const yy  = dt.getFullYear();
     const mm  = String(dt.getMonth() + 1).padStart(2, '0');
     const dd  = String(dt.getDate()).padStart(2, '0');
-    const iso = yy + '-' + mm + '-' + dd;          // yyyy-mm-dd for date input
-    state['d' + d].date = iso;
-    const inp2 = document.querySelector('#card' + d + ' .day-date-input');
-    if (inp2) inp2.value = iso;
+    state['d' + d].date = yy + '-' + mm + '-' + dd;
   }
+  state.datesFixed = true;
   saveState(state);
 
-  // Scroll to today's card
-  const today = new Date();
-  const todayISO = today.getFullYear() + '-'
-    + String(today.getMonth() + 1).padStart(2, '0') + '-'
-    + String(today.getDate()).padStart(2, '0');
+  // Rebuild cards (so date text + future locks update)
+  buildCards();
+
+  // Hide the schedule row permanently
+  const row = document.getElementById('startDateRow');
+  if (row) row.style.display = 'none';
+
+  scrollToToday();
+}
+
+function scrollToToday() {
+  const iso = todayISO();
   for (let d = 1; d <= DAYS; d++) {
-    if (state['d' + d] && state['d' + d].date === todayISO) {
+    if (state['d' + d] && state['d' + d].date === iso) {
       const card = document.getElementById('card' + d);
-      if (card) {
-        setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
-      }
+      if (card) setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
       break;
     }
   }
 }
 
+
+// ── QUICK LINKS ──
+let audioLoopCount = 0;
+
+function toggleManthramImage() {
+  document.getElementById('manthramImagePanel').classList.toggle('open');
+  document.getElementById('qImgBtn').classList.toggle('active');
+}
+
+function toggleAudioPanel() {
+  const panel = document.getElementById('audioPanel');
+  panel.classList.toggle('open');
+  document.getElementById('qAudioBtn').classList.toggle('active');
+  if (panel.classList.contains('open')) {
+    audioLoopCount = 0;
+    document.getElementById('audioCount').textContent = 'Chanting: 0 / 21';
+  }
+}
+
+function resetAudio() {
+  const audio = document.getElementById('manthramAudio');
+  audio.pause();
+  audio.currentTime = 0;
+  audioLoopCount = 0;
+  document.getElementById('audioCount').textContent = 'Chanting: 0 / 21';
+}
+
+(function initAudio() {
+  const audio = document.getElementById('manthramAudio');
+  audio.addEventListener('ended', function() {
+    audioLoopCount++;
+    if (audioLoopCount < 21) {
+      document.getElementById('audioCount').textContent = 'Chanting: ' + audioLoopCount + ' / 21';
+      audio.currentTime = 0;
+      audio.play();
+    } else {
+      document.getElementById('audioCount').textContent = '✓ Completed 21 chantings 🙏';
+      audioLoopCount = 0;
+    }
+  });
+  audio.addEventListener('play', function() {
+    if (audioLoopCount === 0) {
+      document.getElementById('audioCount').textContent = 'Chanting: 0 / 21';
+    }
+  });
+})();
 
 // ── RESET ──
 function resetAll() {
@@ -733,22 +862,28 @@ function resetAll() {
 // ── INIT ──
 buildCards();
 
-// Restore start date field from saved Day-1 date (stored as yyyy-mm-dd)
-try {
-  const d1 = state['d1'];
-  if (d1 && d1.date) {
-    // Support both legacy dd/mm/yyyy and current yyyy-mm-dd
-    if (/^\d{4}-\d{2}-\d{2}$/.test(d1.date)) {
-      document.getElementById('startDate').value = d1.date;
-    } else {
-      const parts = d1.date.split('/');
-      if (parts.length === 3) {
-        document.getElementById('startDate').value =
-          parts[2] + '-' + parts[1] + '-' + parts[0];
+if (state.datesFixed) {
+  // Dates confirmed — hide the schedule row and jump to today
+  const row = document.getElementById('startDateRow');
+  if (row) row.style.display = 'none';
+  scrollToToday();
+} else {
+  // Restore start date field from saved Day-1 date
+  try {
+    const d1 = state['d1'];
+    if (d1 && d1.date) {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(d1.date)) {
+        document.getElementById('startDate').value = d1.date;
+      } else {
+        const parts = d1.date.split('/');
+        if (parts.length === 3) {
+          document.getElementById('startDate').value =
+            parts[2] + '-' + parts[1] + '-' + parts[0];
+        }
       }
     }
-  }
-} catch(e) {}
+  } catch(e) {}
+}
 </script>
 </body>
 </html>
