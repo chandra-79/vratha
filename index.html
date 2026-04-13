@@ -1230,8 +1230,36 @@ function handleImportFile(input) {
   reader.readAsText(file);
 }
 
+let _welcomeTimer = null;
+
 function closeWelcomeModal() {
+  clearTimeout(_welcomeTimer);
   document.getElementById('welcomeModal').classList.remove('open');
+  // Remove the listeners once closed
+  document.removeEventListener('keydown', _welcomeKeyHandler);
+}
+
+function _welcomeKeyHandler(e) {
+  if (e.key === 'Escape' || e.key === 'Enter') closeWelcomeModal();
+}
+
+function openWelcomeModal() {
+  const overlay = document.getElementById('welcomeModal');
+  overlay.classList.add('open');
+
+  // Close on backdrop click (but not on the modal card itself)
+  overlay.addEventListener('click', function handler(e) {
+    if (e.target === overlay) {
+      closeWelcomeModal();
+      overlay.removeEventListener('click', handler);
+    }
+  });
+
+  // Close on Escape or Enter
+  document.addEventListener('keydown', _welcomeKeyHandler);
+
+  // Auto-close after 5 seconds
+  _welcomeTimer = setTimeout(closeWelcomeModal, 5000);
 }
 
 // ── ABOUT TOGGLE ──
@@ -1261,7 +1289,7 @@ function confirmReset() {
   const row = document.getElementById('startDateRow');
   if (row) row.style.display = '';
   // Show welcome/import prompt again after full reset
-  document.getElementById('welcomeModal').classList.add('open');
+  openWelcomeModal();
 }
 
 // ── INIT ──
@@ -1276,7 +1304,7 @@ buildCards();
 
 if (freshInstall) {
   // Fresh install — ask if user wants to restore from a backup
-  document.getElementById('welcomeModal').classList.add('open');
+  openWelcomeModal();
 } else if (state.datesFixed) {
   // Dates confirmed — hide the schedule row and jump to today
   const row = document.getElementById('startDateRow');
