@@ -797,7 +797,7 @@
   <div class="stat-box"><div class="num" id="sDays">0</div><div class="lbl">Days Done</div></div>
   <div class="stat-box"><div class="num" id="sTemple">0</div><div class="lbl">Temple Visits</div></div>
   <div class="stat-box"><div class="num" id="sChants">0</div><div class="lbl">Chantings</div></div>
-  <div class="stat-box"><div class="num" id="sLeft">48</div><div class="lbl">Remaining</div></div>
+  <div class="stat-box"><div class="num" id="sLeft">48</div><div class="lbl">Days Remaining</div></div>
 </div>
 
 <!-- ── START DATE ── -->
@@ -949,6 +949,7 @@
     <div class="quote-day-label" id="quoteDayLabel">Day 1 Complete 🙏</div>
     <div class="quote-text" id="quoteText"></div>
     <div class="quote-source">— Bhagavad Gita</div>
+    <button class="qbtn" onclick="captureProgress(d)">📸 Share Progress</button>
     <button class="quote-close-btn" onclick="closeGitaQuote()">🙏 Jai Ganapati!</button>
   </div>
 </div>
@@ -1164,7 +1165,7 @@ function captureProgress() {
 
   // ── Share or download ──
   canvas.toBlob(async (blob) => {
-    const file = new File([blob], 'vratha-progress.png', { type: 'image/png' });
+    const file = new File([blob], 'vratha-progress-' + doneD + '.png', { type: 'image/png' });
     if (navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
       try {
         await navigator.share({
