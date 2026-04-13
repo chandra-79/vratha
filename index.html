@@ -867,9 +867,89 @@
   <div class="footer-copy">
     Built for personal devotional use · Ganapati Vratha Tracker<br/>
   </div>
+  <div style="display:flex;gap:8px;justify-content:center;margin-top:8px;">
+    <button class="qbtn" id="sharePageBtn" onclick="sharePage()">🔗 Share</button>
+    <button class="qbtn" id="shareImgBtn" onclick="shareScreenshot()">📸 Screenshot</button>
+  </div>
 </footer>
 
 <script>
+// Optional: detected GitHub repo (populated server-side or via git remote read)
+const GITHUB_REPO = 'https://github.com/chandra-79/vratha';
+
+// Load html2canvas dynamically for screenshot sharing
+function loadHtml2Canvas(cb) {
+  if (window.html2canvas) return cb();
+  const s = document.createElement('script');
+  s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+  s.integrity = 'sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H';
+  s.crossOrigin = 'anonymous';
+  s.onload = () => cb();
+  s.onerror = () => cb(new Error('Could not load html2canvas'));
+  document.head.appendChild(s);
+}
+
+function sharePage() {
+  const shareData = { title: document.title, text: 'Track your Ganapati Vratha progress', url: location.href };
+  if (navigator.share) {
+    navigator.share(shareData).catch(() => {});
+  } else {
+    // fallback: copy link to clipboard
+    navigator.clipboard && navigator.clipboard.writeText(location.href).then(() => {
+      alert('Link copied to clipboard.');
+    }, () => { prompt('Copy link', location.href); });
+  }
+}
+
+function shareScreenshot() {
+  loadHtml2Canvas(async (err) => {
+    if (err) { alert('Screenshot not available.'); return; }
+    try {
+      // capture the cards area (progress snapshot)
+      const el = document.getElementById('cardsContainer') || document.body;
+      const canvas = await window.html2canvas(el, { scale: 1.2 });
+      canvas.toBlob(async (blob) => {
+        if (!blob) { alert('Could not create image'); return; }
+        const file = new File([blob], 'vratha-progress.png', { type: 'image/png' });
+        if (navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
+          try { await navigator.share({ files: [file], title: document.title, text: 'My Vratha progress' }); }
+          catch(e){ alert('Sharing cancelled or not supported.'); }
+        } else {
+          // fallback: download image
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a'); a.href = url; a.download = 'vratha-progress.png'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+          alert('Screenshot downloaded. Use your device share options to send it.');
+        }
+      }, 'image/png');
+    } catch (e) { alert('Could not capture screenshot: ' + e.message); }
+  });
+}
+
+// Add subtle GitHub star link if repo available
+function addGitHubStarLink() {
+  if (!GITHUB_REPO) return;
+  const url = GITHUB_REPO.replace(/\\.git$/, '');
+  const footer = document.querySelector('.site-footer');
+  const a = document.createElement('a');
+  a.href = url;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  a.className = 'footer-link';
+  a.style.marginLeft = '6px';
+  a.textContent = '⭐ Star on GitHub';
+  if (footer) {
+    const div = document.createElement('div');
+    div.style.marginTop = '8px';
+    div.style.display = 'flex';
+    div.style.justifyContent = 'center';
+    div.appendChild(a);
+    footer.appendChild(div);
+  } else {
+    document.body.appendChild(a);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', addGitHubStarLink);
 // ── CONSTANTS ──
 const DAYS       = 48;
 const CHANTS     = 21;
