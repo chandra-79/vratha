@@ -1178,15 +1178,15 @@ function captureProgress() {
         if (e.name !== 'AbortError') _downloadCanvas(canvas);
       }
     } else {
-      _downloadCanvas(canvas);
+      _downloadCanvas(canvas, file.name);
     }
   }, 'image/png');
 }
 
-function _downloadCanvas(canvas) {
+function _downloadCanvas(canvas, filename) {
   const a = document.createElement('a');
   a.href = canvas.toDataURL('image/png');
-  a.download = 'vratha-progress.png';
+  a.download = filename;
   document.body.appendChild(a); a.click(); a.remove();
   showToast('Progress card saved!');
 }
