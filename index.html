@@ -949,11 +949,33 @@ function makeCard(d) {
   const dayLine = document.createElement('div');
   dayLine.className = 'day-line';
   dayLine.textContent = 'Day ' + d;
+  const dateWrap = document.createElement('span');
+  dateWrap.className = 'day-date-txt';
+  dateWrap.id = 'datetxt' + d;
+  // visible text
   const dateTxt = document.createElement('span');
-  dateTxt.className = 'day-date-txt';
-  dateTxt.id = 'datetxt' + d;
   dateTxt.textContent = s.date ? fmtDate(s.date) : '';
-  dayLine.appendChild(dateTxt);
+  dateTxt.style.cursor = 'pointer';
+  dateTxt.title = 'Click to edit date';
+
+  // hidden date input
+  const dateInp = document.createElement('input');
+  dateInp.type = 'date';
+  dateInp.id = 'dateinp' + d;
+  dateInp.value = s.date || '';
+  dateInp.style.display = 'none';
+  dateInp.addEventListener('change', () => saveDateInput(d));
+  dateInp.addEventListener('blur', () => { /* commit on blur */ saveDateInput(d); });
+  dateInp.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { cancelDateEdit(d); }
+    if (e.key === 'Enter') { e.preventDefault(); saveDateInput(d); }
+  });
+
+  dateTxt.addEventListener('click', () => openDateEdit(d));
+
+  dateWrap.appendChild(dateTxt);
+  dateWrap.appendChild(dateInp);
+  dayLine.appendChild(dateWrap);
   info.appendChild(dayLine);
 
   const templeBtn = document.createElement('button');
@@ -1078,9 +1100,110 @@ function refreshCard(d) {
     else tbtn.classList.remove('done');
   }
 
-  // update date text
-  const dtxt = document.getElementById('datetxt' + d);
-  if (dtxt) dtxt.textContent = s.date ? fmtDate(s.date) : '';
+  // update date text and input
+  const dtxtWrap = document.getElementById('datetxt' + d);
+  if (dtxtWrap) {
+    const txt = dtxtWrap.querySelector('span');
+    const inp = dtxtWrap.querySelector('input[type="date"]');
+    if (txt) txt.textContent = s.date ? fmtDate(s.date) : '';
+    if (inp) inp.value = s.date || '';
+  }
+}
+
+// Date edit helpers
+function openDateEdit(d) {
+  const wrap = document.getElementById('datetxt' + d);
+  if (!wrap) return;
+  const txt = wrap.querySelector('span');
+  const inp = wrap.querySelector('input[type="date"]');
+  if (!inp || !txt) return;
+  txt.style.display = 'none';
+  inp.style.display = '';
+  inp.focus();
+}
+
+function cancelDateEdit(d) {
+  const wrap = document.getElementById('datetxt' + d);
+  if (!wrap) return;
+  const txt = wrap.querySelector('span');
+  const inp = wrap.querySelector('input[type="date"]');
+  if (!inp || !txt) return;
+  inp.value = state['d' + d].date || '';
+  inp.style.display = 'none';
+  txt.style.display = '';
+}
+
+function saveDateInput(d) {
+  const wrap = document.getElementById('datetxt' + d);
+  if (!wrap) return;
+  const txt = wrap.querySelector('span');
+  const inp = wrap.querySelector('input[type="date"]');
+  if (!inp || !txt) return;
+  const val = inp.value || '';
+  // basic validation: must be YYYY-MM-DD or empty
+  if (val && !/^\d{4}-\d{2}-\d{2}$/.test(val)) {
+    alert('Please select a valid date (YYYY-MM-DD).');
+    return;
+  }
+  ensureDay(d);
+  const oldVal = state['d' + d].date || '';
+
+  // If changing an existing date to a different date and following days have dates,
+  // offer to shift subsequent assigned dates by the same delta (useful for pauses).
+  if (oldVal && val && oldVal !== val) {
+    // compute day delta
+    const od = new Date(oldVal + 'T00:00');
+    const nd = new Date(val + 'T00:00');
+    const deltaMs = nd - od;
+    const deltaDays = Math.round(deltaMs / (24 * 60 * 60 * 1000));
+
+    // check if any following days have assigned dates
+    let followingAssigned = false;
+    for (let i = d + 1; i <= DAYS; i++) {
+      if (state['d' + i] && state['d' + i].date) { followingAssigned = true; break; }
+    }
+
+    if (followingAssigned) {
+      const verb = deltaDays > 0 ? 'forward' : 'backward';
+      const ok = confirm('You changed Day ' + d + " from " + oldVal + " to " + val + '.\n\n' +
+        'Shift following assigned dates ' + Math.abs(deltaDays) + ' day(s) ' + verb + '?\n\n' +
+        'OK = shift following days, Cancel = only change this day');
+      if (ok) {
+        state['d' + d].date = val;
+        shiftFollowingDates(d, deltaDays);
+        saveState(state);
+        inp.style.display = 'none';
+        txt.style.display = '';
+        // refresh whole UI (dates changed)
+        buildCards();
+        return;
+      }
+    }
+  }
+
+  // default: just save this day's date
+  state['d' + d].date = val;
+  saveState(state);
+  inp.style.display = 'none';
+  txt.style.display = '';
+  refreshCard(d);
+}
+
+// Shift following assigned dates by `deltaDays` (can be negative)
+function shiftFollowingDates(d, deltaDays) {
+  if (!deltaDays) return;
+  for (let i = d + 1; i <= DAYS; i++) {
+    ensureDay(i);
+    const key = 'd' + i;
+    const cur = state[key].date;
+    if (!cur) continue; // skip unassigned
+    const dt = new Date(cur + 'T00:00');
+    dt.setDate(dt.getDate() + deltaDays);
+    const yy  = dt.getFullYear();
+    const mm  = String(dt.getMonth() + 1).padStart(2, '0');
+    const dd  = String(dt.getDate()).padStart(2, '0');
+    state[key].date = yy + '-' + mm + '-' + dd;
+  }
 }
 
 // ── STATS ──
