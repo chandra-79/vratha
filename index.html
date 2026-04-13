@@ -1171,22 +1171,65 @@ function resetAudio() {
   document.getElementById('audioCount').textContent = 'Chanting: 0 / 21';
 }
 
+// Helpers: map today's ISO date to a day number in the state
+function getDayForToday() {
+  const iso = todayISO();
+  // 1) If dates are assigned, find the day with matching date
+  for (let d = 1; d <= DAYS; d++) {
+    const s = state['d' + d];
+    if (s && s.date === iso) return d;
+  }
+  // 2) Otherwise, pick the first incomplete (not fully done) day
+  for (let d = 1; d <= DAYS; d++) {
+    ensureDay(d);
+    const s = state['d' + d];
+    const c = s.marks.filter(Boolean).length;
+    const done = (c === CHANTS && s.temple);
+    if (!done) return d;
+  }
+  // fallback last day
+  return DAYS;
+}
+
+// Apply `count` completed chants to the current day (idempotent)
+function applyAudioMarksToToday(count) {
+  const d = getDayForToday();
+  if (!d) return;
+  ensureDay(d);
+  const k = 'd' + d;
+  // If the day is explicitly in the future, don't mark
+  if (isFuture(d)) return;
+  // Mark the first `count` marks as done (preserve existing trues)
+  for (let i = 0; i < CHANTS; i++) {
+    state[k].marks[i] = i < count ? true : state[k].marks[i];
+  }
+  saveState(state);
+  refreshCard(d);
+  updateStats();
+}
+
 (function initAudio() {
   const audio = document.getElementById('manthramAudio');
   audio.addEventListener('ended', function() {
     audioLoopCount++;
-    if (audioLoopCount < 21) {
-      document.getElementById('audioCount').textContent = 'Chanting: ' + audioLoopCount + ' / 21';
+    // update UI and map to today's marks
+    if (audioLoopCount < CHANTS) {
+      document.getElementById('audioCount').textContent = 'Chanting: ' + audioLoopCount + ' / ' + CHANTS;
+      applyAudioMarksToToday(audioLoopCount);
       audio.currentTime = 0;
       audio.play();
     } else {
+      // final (21st) chant
+      applyAudioMarksToToday(CHANTS);
       document.getElementById('audioCount').textContent = '✓ Completed 21 chantings 🙏';
       audioLoopCount = 0;
     }
   });
   audio.addEventListener('play', function() {
     if (audioLoopCount === 0) {
-      document.getElementById('audioCount').textContent = 'Chanting: 0 / 21';
+      document.getElementById('audioCount').textContent = 'Chanting: 0 / ' + CHANTS;
+    } else {
+      document.getElementById('audioCount').textContent = 'Chanting: ' + audioLoopCount + ' / ' + CHANTS;
     }
   });
 })();
