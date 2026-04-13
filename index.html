@@ -260,6 +260,27 @@
     /* group separator every 7 */
     .marks-grid .mark:nth-child(7n) { }
 
+    /* ── COMPLETE DAY BUTTON ── */
+    .complete-day-btn {
+      display: block; width: calc(100% - 24px);
+      margin: 0 12px 10px;
+      padding: 11px 8px;
+      background: linear-gradient(135deg, var(--saffron-l), var(--saffron));
+      color: white;
+      border: none; border-radius: 10px;
+      font-size: 0.88rem; font-weight: 700;
+      cursor: pointer; letter-spacing: .4px;
+      box-shadow: 0 2px 8px rgba(230,81,0,.35);
+      transition: all .18s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .complete-day-btn:active { opacity: .8; transform: scale(.97); }
+    .day-card.completed .complete-day-btn {
+      background: linear-gradient(135deg, #81c784, #388e3c);
+      box-shadow: 0 2px 8px rgba(56,142,60,.3);
+      pointer-events: none;
+    }
+
     /* ── BOTTOM TOOLBAR ── */
     .bottom-bar {
       position: fixed; bottom: 0; left: 0; right: 0;
@@ -388,9 +409,7 @@
         <p>48-Day Sacred Penance · 21 Chantings Daily</p>
       </div>
     </div>
-    <div class="header-actions">
-      <button class="hbtn" onclick="window.print()">🖨 Print</button>
-    </div>
+    <div class="header-actions"></div>
   </div>
   <div class="progress-strip">
     <div class="progress-bar-bg">
@@ -537,6 +556,14 @@ function makeCard(d) {
   hdr.appendChild(templeWrap);
   card.appendChild(hdr);
 
+  // ── complete-day button ──
+  const completeBtn = document.createElement('button');
+  completeBtn.className = 'complete-day-btn';
+  completeBtn.id = 'completebtn' + d;
+  completeBtn.textContent = done ? '✓ Day Complete' : '🙏 Complete Day (21 chants + Temple)';
+  completeBtn.addEventListener('click', () => completeDay(d));
+  card.appendChild(completeBtn);
+
   // ── marks grid ──
   const grid = document.createElement('div');
   grid.className = 'marks-grid';
@@ -553,6 +580,16 @@ function makeCard(d) {
   }
   card.appendChild(grid);
   return card;
+}
+
+function completeDay(d) {
+  const k = 'd' + d;
+  ensureDay(d);
+  state[k].marks = new Array(CHANTS).fill(true);
+  state[k].temple = true;
+  saveState(state);
+  refreshCard(d);
+  updateStats();
 }
 
 function toggleMark(d, m) {
@@ -582,6 +619,10 @@ function refreshCard(d) {
   const done = count === CHANTS && s.temple;
   if (done) card.classList.add('completed');
   else card.classList.remove('completed');
+
+  // update complete-day button
+  const cbtn = document.getElementById('completebtn' + d);
+  if (cbtn) cbtn.textContent = done ? '✓ Day Complete' : '🙏 Complete Day (21 chants + Temple)';
 
   // keep badge & date input in sync
   const cb = card.querySelector('input[type=checkbox]');
@@ -629,6 +670,21 @@ function applyStartDate() {
     if (inp2) inp2.value = iso;
   }
   saveState(state);
+
+  // Scroll to today's card
+  const today = new Date();
+  const todayISO = today.getFullYear() + '-'
+    + String(today.getMonth() + 1).padStart(2, '0') + '-'
+    + String(today.getDate()).padStart(2, '0');
+  for (let d = 1; d <= DAYS; d++) {
+    if (state['d' + d] && state['d' + d].date === todayISO) {
+      const card = document.getElementById('card' + d);
+      if (card) {
+        setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+      }
+      break;
+    }
+  }
 }
 
 
