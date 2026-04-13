@@ -13,29 +13,46 @@
   <!-- PWA manifest inline -->
   <link rel="manifest" href="data:application/json,%7B%22name%22%3A%22Ganapati%20Vratha%22%2C%22short_name%22%3A%22Vratha%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23fdf6ec%22%2C%22theme_color%22%3A%22%23e65100%22%7D"/>
 
+  <!-- Devotional heading font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&display=swap"/>
+
   <style>
     :root {
       --saffron:   #e65100;
       --saffron-l: #ff8f00;
       --saffron-d: #bf360c;
-      --bg:        #fdf6ec;
-      --card:      #ffffff;
-      --gold:      #ffcc80;
-      --gold-l:    #fff8f0;
+      --bg:        #fef8ee;
+      --card:      #fffcf7;
+      --gold:      #f0c060;
+      --gold-l:    #fff8e8;
+      --gold-d:    #c8860a;
       --text:      #3b1f00;
       --muted:     #8d5524;
       --green:     #e8f5e9;
       --green-b:   #81c784;
-      --radius:    12px;
-      --shadow:    0 2px 12px rgba(0,0,0,0.10);
+      --radius:    14px;
+      --shadow:    0 3px 16px rgba(150,60,0,0.13);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     html { scroll-behavior: smooth; }
 
+    @keyframes omGlow {
+      from { filter: drop-shadow(0 0 3px rgba(255,215,0,.55)); }
+      to   { filter: drop-shadow(0 0 12px rgba(255,215,0,1)) drop-shadow(0 0 4px rgba(255,255,255,.5)); }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -200% center; }
+      100% { background-position:  200% center; }
+    }
+
     body {
-      background: var(--bg);
+      background:
+        radial-gradient(ellipse at 15% 85%, rgba(230,81,0,.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 85% 10%, rgba(255,193,7,.08) 0%, transparent 50%),
+        linear-gradient(170deg, #fff9f0 0%, #fef5e4 55%, #fdf0d8 100%);
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       padding: 0;
@@ -45,19 +62,26 @@
     /* ── STICKY HEADER ── */
     .site-header {
       position: sticky; top: 0; z-index: 100;
-      background: linear-gradient(135deg, var(--saffron-l), var(--saffron));
+      background: linear-gradient(150deg, #ff8f00 0%, #e65100 55%, #bf360c 100%);
       color: white;
-      padding: 12px 16px 10px;
-      box-shadow: 0 2px 10px rgba(230,81,0,.45);
+      padding: 13px 16px 11px;
+      box-shadow: 0 4px 20px rgba(150,20,0,.45);
+      border-bottom: 3px solid rgba(255,213,0,.55);
     }
     .header-top {
       display: flex; align-items: center; justify-content: space-between;
       gap: 8px;
     }
-    .header-title { display: flex; align-items: center; gap: 8px; }
-    .header-title .om { font-size: 1.6rem; line-height: 1; }
-    .header-title h1 { font-size: 1rem; font-weight: 700; letter-spacing: .5px; }
-    .header-title p  { font-size: 0.68rem; opacity: .9; }
+    .header-title { display: flex; align-items: center; gap: 10px; }
+    .header-title .om {
+      font-size: 2rem; line-height: 1;
+      animation: omGlow 2.5s ease-in-out infinite alternate;
+    }
+    .header-title h1 {
+      font-family: 'Cinzel', Georgia, serif;
+      font-size: 1rem; font-weight: 700; letter-spacing: 1px;
+    }
+    .header-title p  { font-size: 0.67rem; opacity: .88; letter-spacing: .3px; }
 
     .header-actions { display: flex; gap: 6px; flex-shrink: 0; }
     .hbtn {
@@ -70,20 +94,23 @@
     .hbtn:hover { background: rgba(255,255,255,.35); }
 
     /* progress strip */
-    .progress-strip { margin-top: 8px; }
+    .progress-strip { margin-top: 9px; }
     .progress-bar-bg {
-      background: rgba(255,255,255,.3);
-      border-radius: 20px; height: 8px; overflow: hidden;
+      background: rgba(0,0,0,.2);
+      border-radius: 20px; height: 9px; overflow: hidden;
     }
     .progress-bar-fg {
-      height: 8px;
-      background: white;
+      height: 9px;
+      background: linear-gradient(90deg, #ffe082, #ffd740, #ffab00, #ffd740, #ffe082);
+      background-size: 200% auto;
       border-radius: 20px;
-      transition: width .5s ease;
+      transition: width .6s ease;
       width: 0%;
+      box-shadow: 0 0 8px rgba(255,215,0,.7);
+      animation: shimmer 3s linear infinite;
     }
     .progress-text {
-      font-size: 0.68rem; opacity: .9; margin-top: 3px; text-align: center;
+      font-size: 0.67rem; opacity: .92; margin-top: 4px; text-align: center; letter-spacing: .2px;
     }
 
     /* ── STATS ROW ── */
@@ -94,18 +121,20 @@
       padding: 12px 12px 0;
     }
     .stat-box {
-      background: var(--card);
-      border: 1.5px solid var(--gold);
+      background: linear-gradient(160deg, #fffcf5, #fff8e8);
+      border: 2px solid var(--gold);
+      border-top: 3px solid var(--saffron);
       border-radius: var(--radius);
-      padding: 8px 4px;
+      padding: 10px 4px 8px;
       text-align: center;
-      box-shadow: var(--shadow);
+      box-shadow: 0 2px 10px rgba(150,60,0,.11), inset 0 1px 0 rgba(255,255,255,.9);
     }
     .stat-box .num {
-      font-size: 1.4rem; font-weight: 800; color: var(--saffron);
+      font-family: 'Cinzel', Georgia, serif;
+      font-size: 1.5rem; font-weight: 800; color: var(--saffron);
       line-height: 1.1;
     }
-    .stat-box .lbl { font-size: 0.6rem; color: var(--muted); margin-top: 2px; }
+    .stat-box .lbl { font-size: 0.58rem; color: var(--muted); margin-top: 3px; letter-spacing: .3px; text-transform: uppercase; }
 
     /* ── START DATE ── */
     .start-date-row {
@@ -115,14 +144,15 @@
     }
     .start-date-row input[type=date] {
       border: 1.5px solid var(--gold);
-      border-radius: 8px; padding: 5px 8px;
+      border-radius: 8px; padding: 6px 10px;
       font-size: 0.8rem; background: var(--gold-l);
       color: var(--text); cursor: pointer;
     }
     .start-date-row button {
-      background: var(--saffron); color: white;
-      border: none; border-radius: 8px;
-      padding: 5px 12px; font-size: 0.75rem; cursor: pointer;
+      background: linear-gradient(135deg, var(--saffron-l), var(--saffron));
+      color: white; border: none; border-radius: 8px;
+      padding: 6px 14px; font-size: 0.75rem; font-weight: 600; cursor: pointer;
+      box-shadow: 0 2px 6px rgba(183,28,28,.25);
     }
 
     /* ── LEGEND ── */
@@ -140,8 +170,8 @@
 
     /* ── DAY CARDS ── */
     .cards-container {
-      padding: 8px 10px 80px;
-      display: flex; flex-direction: column; gap: 10px;
+      padding: 8px 10px 16px;
+      display: flex; flex-direction: column; gap: 12px;
     }
 
     .day-card {
@@ -149,35 +179,40 @@
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       border: 1.5px solid var(--gold);
+      border-left: 4px solid var(--saffron);
       overflow: hidden;
-      transition: border-color .2s;
+      transition: border-color .2s, box-shadow .2s;
     }
+    .day-card:hover { box-shadow: 0 5px 22px rgba(150,60,0,.18); }
     .day-card.completed {
       border-color: var(--green-b);
-      background: var(--green);
+      border-left-color: #388e3c;
+      background: linear-gradient(145deg, #f9fef9, #f0faf0);
     }
 
     .card-header {
       display: flex; align-items: center;
-      padding: 8px 12px;
-      background: var(--gold-l);
+      padding: 9px 12px;
+      background: linear-gradient(90deg, #fff8e8, #fffcf5);
       border-bottom: 1px solid var(--gold);
       gap: 10px;
     }
     .day-card.completed .card-header {
-      background: #f1f8e9;
+      background: linear-gradient(90deg, #f1f8e9, #f9fef9);
       border-bottom-color: var(--green-b);
     }
 
     .day-badge {
-      background: var(--saffron); color: white;
+      background: linear-gradient(135deg, #ff8f00, #e65100);
+      color: white;
       font-weight: 800; font-size: 0.85rem;
       min-width: 36px; height: 36px;
       border-radius: 50%; display: flex;
       align-items: center; justify-content: center;
       flex-shrink: 0;
+      box-shadow: 0 2px 7px rgba(183,28,28,.35);
     }
-    .day-card.completed .day-badge { background: var(--green-b); }
+    .day-card.completed .day-badge { background: linear-gradient(135deg, #66bb6a, #388e3c); box-shadow: 0 2px 6px rgba(56,142,60,.3); }
 
     .card-header-info { flex: 1; min-width: 0; }
     .card-header-info .day-line {
@@ -195,14 +230,14 @@
       flex-shrink: 0;
       font-size: 0.72rem; font-weight: 700;
       color: var(--saffron-d);
-      background: white;
+      background: var(--gold-l);
       border: 1.5px solid var(--gold);
       border-radius: 20px;
       padding: 3px 8px;
       min-width: 46px; text-align: center;
     }
     .day-card.completed .card-count-badge {
-      color: #2e7d32; border-color: var(--green-b);
+      color: #2e7d32; border-color: var(--green-b); background: #f1f8e9;
     }
 
     /* ── TEMPLE TOGGLE BUTTON ── */
@@ -222,12 +257,15 @@
     }
     .temple-btn:active { transform: scale(.93); }
     .temple-btn.done {
-      background: var(--saffron);
+      background: linear-gradient(135deg, var(--saffron-l), var(--saffron));
       color: white;
       border-color: var(--saffron-d);
+      box-shadow: 0 2px 8px rgba(183,28,28,.3);
     }
     .day-card.completed .temple-btn {
-      background: #388e3c; border-color: #2e7d32; color: white;
+      background: linear-gradient(135deg, #66bb6a, #388e3c);
+      border-color: #2e7d32; color: white;
+      box-shadow: 0 2px 6px rgba(56,142,60,.3);
     }
     .day-card.future .temple-btn {
       pointer-events: none; opacity: .38; cursor: default;
@@ -256,9 +294,10 @@
     }
     .mark:active { transform: scale(.88); }
     .mark.done {
-      background: var(--saffron);
-      border-color: var(--saffron-d);
+      background: radial-gradient(circle at 38% 32%, #ff7043, #e64a19, #bf360c);
+      border-color: #bf360c;
       color: white;
+      box-shadow: 0 1px 6px rgba(183,28,28,.45), inset 0 1px 0 rgba(255,200,150,.25);
     }
     .mark.done::after { content: '✓'; font-weight: 700; }
 
@@ -268,20 +307,20 @@
     /* ── COMPLETE DAY BUTTON ── */
     .complete-day-btn {
       display: block; width: calc(100% - 24px);
-      margin: 0 12px 10px;
-      padding: 11px 8px;
-      background: linear-gradient(135deg, var(--saffron-l), var(--saffron));
+      margin: 0 12px 12px;
+      padding: 12px 8px;
+      background: linear-gradient(135deg, #ff8f00, #e65100, #bf360c);
       color: white;
       border: none; border-radius: 10px;
       font-size: 0.88rem; font-weight: 700;
-      cursor: pointer; letter-spacing: .4px;
-      box-shadow: 0 2px 8px rgba(230,81,0,.35);
+      cursor: pointer; letter-spacing: .5px;
+      box-shadow: 0 3px 12px rgba(183,28,28,.4);
       transition: all .18s;
       -webkit-tap-highlight-color: transparent;
     }
     .complete-day-btn:active { opacity: .8; transform: scale(.97); }
     .day-card.completed .complete-day-btn {
-      background: linear-gradient(135deg, #81c784, #388e3c);
+      background: linear-gradient(135deg, #66bb6a, #388e3c, #2e7d32);
       box-shadow: 0 2px 8px rgba(56,142,60,.3);
       pointer-events: none;
     }
@@ -325,21 +364,29 @@
     /* ── MODAL ── */
     .modal-overlay {
       display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,.5); z-index: 200;
+      background: rgba(30,8,0,.65);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 200;
       align-items: center; justify-content: center;
       padding: 16px;
     }
     .modal-overlay.open { display: flex; }
     .modal {
-      background: white; border-radius: 16px;
+      background: linear-gradient(150deg, #fffcf5, #fff8ee);
+      border-radius: 18px;
       max-width: 480px; width: 100%;
       max-height: 85vh; overflow-y: auto;
-      padding: 20px; box-shadow: 0 8px 32px rgba(0,0,0,.25);
+      padding: 22px;
+      box-shadow: 0 12px 40px rgba(0,0,0,.3);
+      border: 2px solid rgba(240,192,96,.5);
     }
     .modal h2 {
+      font-family: 'Cinzel', Georgia, serif;
       font-size: 1rem; color: var(--saffron-d);
-      margin-bottom: 12px; border-bottom: 2px solid var(--gold);
-      padding-bottom: 8px;
+      margin-bottom: 14px;
+      border-bottom: 2px solid var(--gold);
+      padding-bottom: 10px; letter-spacing: .5px;
     }
     .modal p, .modal li { font-size: 0.82rem; color: var(--text); margin-bottom: 8px; line-height: 1.6; }
     .modal ol, .modal ul { padding-left: 18px; }
@@ -392,7 +439,7 @@
       .cards-container {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        padding: 12px 16px 80px;
+        padding: 12px 16px 16px;
       }
       .marks-grid { grid-template-columns: repeat(7, 1fr); }
       .stats-row { padding: 14px 16px 0; gap: 12px; }
@@ -410,18 +457,23 @@
       justify-content: center;
     }
     .qbtn {
-      background: rgba(230,81,0,.1);
+      background: rgba(230,81,0,.08);
       border: 1.5px solid var(--saffron);
       color: var(--saffron);
       border-radius: 20px;
-      padding: 6px 14px;
-      font-size: 0.78rem; font-weight: 600;
+      padding: 7px 16px;
+      font-size: 0.8rem; font-weight: 600;
       cursor: pointer; white-space: nowrap;
-      transition: background .2s;
+      transition: all .2s;
       -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 1px 4px rgba(230,81,0,.1);
     }
-    .qbtn:hover { background: rgba(230,81,0,.2); }
-    .qbtn.active { background: var(--saffron); color: white; }
+    .qbtn:hover { background: rgba(230,81,0,.18); box-shadow: 0 2px 8px rgba(183,28,28,.18); }
+    .qbtn.active {
+      background: linear-gradient(135deg, var(--saffron-l), var(--saffron));
+      color: white; border-color: var(--saffron-d);
+      box-shadow: 0 2px 8px rgba(183,28,28,.3);
+    }
 
     .manthram-image-panel {
       display: none; padding: 0 12px 8px;
@@ -435,8 +487,8 @@
 
     .audio-panel {
       display: none;
-      padding: 8px 12px;
-      background: #fff8f0;
+      padding: 10px 12px;
+      background: linear-gradient(90deg, #fff8e8, #fffcf5);
       border-top: 1px solid var(--gold);
       border-bottom: 1px solid var(--gold);
     }
@@ -453,9 +505,200 @@
       font-weight: 600; cursor: pointer;
     }
 
+    /* ── ABOUT SECTION ── */
+    .about-section {
+      margin: 10px 12px 0;
+      background: linear-gradient(150deg, #fffcf5, #fff8e8);
+      border: 1.5px solid var(--gold);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .about-toggle {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 11px 14px;
+      cursor: pointer;
+      background: linear-gradient(90deg, #fff3e0, #fff8ea);
+      font-size: 0.82rem; font-weight: 700;
+      color: var(--saffron-d);
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .about-toggle:hover { background: linear-gradient(90deg, #ffe8b8, #fff0d0); }
+    .about-toggle .chevron { transition: transform .2s; font-size: 0.7rem; }
+    .about-toggle.open .chevron { transform: rotate(180deg); }
+    .about-body {
+      display: none;
+      padding: 14px 16px;
+      font-size: 0.82rem; line-height: 1.7;
+      color: var(--text);
+      border-top: 1px solid var(--gold);
+    }
+    .about-body.open { display: block; }
+    .about-body p { margin-bottom: 10px; }
+    .about-body p:last-of-type { margin-bottom: 0; }
+    .about-user-card {
+      display: flex; align-items: center; gap: 12px;
+      margin-top: 12px; padding: 12px;
+      background: linear-gradient(135deg, #fff3e0, #fff8ea);
+      border: 2px solid var(--gold);
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(150,60,0,.08);
+    }
+    .about-user-card .avatar { font-size: 2rem; line-height: 1; }
+    .about-user-card .name {
+      font-family: 'Cinzel', Georgia, serif;
+      font-weight: 700; font-size: 0.95rem; color: var(--saffron-d);
+    }
+    .about-user-card .sub { font-size: 0.68rem; color: var(--muted); margin-top: 3px; }
+
+    /* ── RESET BUTTON (header) ── */
+    .reset-hbtn {
+      background: #b71c1c;
+      border: 1px solid #7f0000;
+      color: white; border-radius: 20px;
+      padding: 5px 10px; font-size: 0.72rem; cursor: pointer;
+      white-space: nowrap; transition: background .2s;
+    }
+    .reset-hbtn:hover { background: #7f0000; }
+
+    /* ── RESET MODAL ── */
+    .reset-modal-step { transition: opacity .15s; }
+    .reset-warn {
+      background: #fff3f3; border: 1.5px solid #ef9a9a;
+      border-radius: 8px; padding: 10px 12px;
+      font-size: 0.8rem; color: #b71c1c;
+      margin-bottom: 12px; line-height: 1.6;
+    }
+    .reset-warn strong { display: block; margin-bottom: 4px; font-size: 0.85rem; }
+    .reset-confirm-btns { display: flex; gap: 8px; margin-top: 12px; }
+    .reset-confirm-btns button {
+      flex: 1; padding: 10px 8px;
+      border-radius: 8px; border: none;
+      font-size: 0.8rem; font-weight: 600; cursor: pointer;
+    }
+    .btn-cancel-reset { background: #f5f5f5; color: #555; }
+    .btn-step2 { background: #c62828; color: white; }
+    .btn-final-reset { background: #7f0000; color: white; }
+
+    /* ── EXPORT / IMPORT JSON ── */
+    .btn-export-json {
+      display: block; width: 100%;
+      padding: 10px 8px; margin-bottom: 10px;
+      background: #e3f2fd; color: #1565c0;
+      border: 1.5px solid #90caf9; border-radius: 8px;
+      font-size: 0.82rem; font-weight: 600;
+      cursor: pointer; text-align: center;
+      transition: background .2s;
+    }
+    .btn-export-json:hover { background: #bbdefb; }
+
+    /* ── WELCOME MODAL ── */
+    .welcome-icon {
+      text-align: center; font-size: 3.4rem; margin-bottom: 6px;
+      animation: omGlow 2.5s ease-in-out infinite alternate;
+    }
+    .welcome-choices { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+    .btn-load-json {
+      padding: 12px 10px;
+      background: #e8f5e9; color: #2e7d32;
+      border: 1.5px solid #81c784; border-radius: 10px;
+      font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; transition: background .2s;
+    }
+    .btn-load-json:hover { background: #c8e6c9; }
+    .btn-start-fresh {
+      padding: 12px 10px;
+      background: linear-gradient(135deg, var(--saffron-l), var(--saffron));
+      color: white; border: none; border-radius: 10px;
+      font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; transition: opacity .2s;
+    }
+    .btn-start-fresh:hover { opacity: .88; }
+    .welcome-note {
+      font-size: 0.72rem; color: var(--muted);
+      text-align: center; margin-top: 10px; line-height: 1.5;
+    }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      margin: 4px 12px 28px;
+      padding: 20px 18px 18px;
+      background: linear-gradient(150deg, #fffcf5, #fff8e8);
+      border: 1.5px solid var(--gold);
+      border-top: 3px solid var(--saffron);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+    .footer-om {
+      font-size: 1.8rem;
+      animation: omGlow 2.5s ease-in-out infinite alternate;
+      display: block;
+      margin-bottom: 8px;
+    }
+    .footer-name {
+      font-family: 'Cinzel', Georgia, serif;
+      font-size: 1rem; font-weight: 800;
+      color: var(--saffron-d);
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+    .footer-tagline {
+      font-size: 0.75rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    .footer-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 12px 0;
+    }
+    .footer-links {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .footer-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: linear-gradient(135deg, rgba(230,81,0,.08), rgba(230,81,0,.04));
+      border: 1.5px solid var(--saffron);
+      border-radius: 20px;
+      color: var(--saffron-d);
+      font-size: 0.78rem; font-weight: 700;
+      text-decoration: none;
+      transition: all .2s;
+      box-shadow: 0 1px 5px rgba(183,28,28,.1);
+    }
+    .footer-link:hover {
+      background: linear-gradient(135deg, var(--saffron-l), var(--saffron));
+      color: white;
+      border-color: var(--saffron-d);
+      box-shadow: 0 3px 12px rgba(183,28,28,.3);
+      transform: translateY(-1px);
+    }
+    .footer-link .link-icon { font-size: 1rem; }
+    .footer-copy {
+      font-size: 0.66rem;
+      color: var(--muted);
+      opacity: .75;
+      line-height: 1.6;
+    }
+    .footer-copy a {
+      color: var(--saffron);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
     /* ── PRINT ── */
     @media print {
-      .site-header, .bottom-bar, .modal-overlay { display: none !important; }
+      .site-header, .bottom-bar, .modal-overlay, .site-footer { display: none !important; }
       .cards-container { padding-bottom: 0; display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; }
       .day-card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
       body { background: white; }
@@ -474,7 +717,9 @@
         <p>48-Day Sacred Penance · 21 Chantings Daily</p>
       </div>
     </div>
-    <div class="header-actions"></div>
+    <div class="header-actions">
+      <button class="reset-hbtn" onclick="openResetModal()">⚠ Reset</button>
+    </div>
   </div>
   <div class="progress-strip">
     <div class="progress-bar-bg">
@@ -507,6 +752,25 @@
   <span>🟩 Full day complete</span>
 </div>
 
+<!-- ── ABOUT ── -->
+<div class="about-section">
+  <div class="about-toggle" id="aboutToggle" onclick="toggleAbout()">
+    <span>ℹ About this Vratha &amp; Tracker</span>
+    <span class="chevron">▼</span>
+  </div>
+  <div class="about-body" id="aboutBody">
+    <p><strong>Ganapati Vratha</strong> is a sacred 48-day penance dedicated to Lord Ganesha — the remover of obstacles and the bestower of wisdom and auspiciousness. Devotees observe strict discipline during this period: chanting the Ganapati Manthram <strong>21 times every day</strong> without interruption, visiting the temple daily, and maintaining purity of body, mind, and speech.</p>
+    <p>This 48-day Vratha is rooted in the belief that sincere and unbroken devotion to Ganapati removes life's obstacles, brings peace and prosperity, and earns the divine grace of Lord Ganapati for the devotee and their entire family.</p>
+    <div class="about-user-card">
+      <div class="avatar">🙏</div>
+      <div>
+        <div class="name">Chandra</div>
+        <div class="sub">Personal Vratha Tracker · 48 Days · 21 Chantings Daily</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ── QUICK LINKS ── -->
 <div class="quick-links">
   <button class="qbtn" id="qImgBtn" onclick="toggleManthramImage()">📜 Manthram (Telugu)</button>
@@ -526,7 +790,85 @@
 <!-- ── CARDS ── -->
 <div class="cards-container" id="cardsContainer"></div>
 
+<!-- ── WELCOME / IMPORT MODAL ── -->
+<div class="modal-overlay" id="welcomeModal">
+  <div class="modal">
+    <div class="welcome-icon">🕉</div>
+    <h2 style="text-align:center">Welcome to Ganapati Vratha Tracker</h2>
+    <p style="font-size:0.82rem;color:var(--text);margin-top:8px;line-height:1.6">
+      Have you already begun this Vratha and saved your progress as a JSON backup? You can restore it now — or start fresh.
+    </p>
+    <div class="welcome-choices">
+      <button class="btn-load-json" onclick="document.getElementById('importFileInput').click()">
+        📂 Yes — restore my progress from a JSON backup
+      </button>
+      <button class="btn-start-fresh" onclick="closeWelcomeModal()">
+        ✨ No — start fresh
+      </button>
+    </div>
+    <p class="welcome-note">Your JSON backup can be exported any time from the Reset screen. It contains all chantings, temple visits, and dates.</p>
+  </div>
+</div>
+<input type="file" id="importFileInput" accept=".json,application/json" style="display:none" onchange="handleImportFile(this)"/>
 
+<!-- ── RESET CONFIRMATION MODAL ── -->
+<div class="modal-overlay" id="resetModal">
+  <div class="modal">
+    <h2>⚠ Reset All Progress</h2>
+
+    <!-- Step 1 -->
+    <div id="resetStep1" class="reset-modal-step">
+      <div class="reset-warn">
+        <strong>This will permanently erase everything:</strong>
+        All 48 days of chantings, temple visits, and assigned dates will be deleted. This cannot be undone.
+      </div>
+      <p style="font-size:0.82rem;color:var(--text)">Export your data first if you want a backup before resetting.</p>
+      <div class="reset-confirm-btns">
+        <button class="btn-cancel-reset" onclick="closeResetModal()">Cancel</button>
+        <button class="btn-step2" onclick="showResetStep2()">Yes, continue →</button>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div id="resetStep2" class="reset-modal-step" style="display:none">
+      <div class="reset-warn">
+        <strong>⚠ Final confirmation</strong>
+        You are about to erase ALL Vratha progress. Are you absolutely sure?
+      </div>
+      <button class="btn-export-json" onclick="exportJSON()">📥 Save a JSON backup before resetting</button>
+      <div class="reset-confirm-btns">
+        <button class="btn-cancel-reset" onclick="closeResetModal()">No, keep my data</button>
+        <button class="btn-final-reset" onclick="confirmReset()">Yes, reset everything</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- ── FOOTER ── -->
+<footer class="site-footer">
+  <span class="footer-om">🕉</span>
+  <div class="footer-name">Chandra</div>
+  <div class="footer-tagline">
+    Devotee · Technology Enthusiast · Builder of things that matter<br/>
+    This tracker was crafted with love and devotion for Lord Ganapati.
+  </div>
+  <div class="footer-divider"></div>
+  <div class="footer-links">
+    <a class="footer-link" href="https://techknowen.com" target="_blank" rel="noopener">
+      <span class="link-icon">💻</span> techknowen.com
+    </a>
+    <a class="footer-link" href="https://ajnacs.com" target="_blank" rel="noopener">
+      <span class="link-icon">🌐</span> ajnacs.com
+    </a>
+  </div>
+  <div class="footer-copy">
+    Built for personal devotional use · Ganapati Vratha Tracker<br/>
+    Visit <a href="https://techknowen.com" target="_blank" rel="noopener">techknowen.com</a> for tech articles &amp;
+    <a href="https://ajnacs.com" target="_blank" rel="noopener">ajnacs.com</a> to get in touch.
+  </div>
+</footer>
 
 <script>
 // ── CONSTANTS ──
@@ -850,19 +1192,94 @@ function resetAudio() {
   });
 })();
 
+// ── EXPORT JSON ──
+function exportJSON() {
+  const json = JSON.stringify(state, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'ganapati-vratha-backup.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ── IMPORT FROM FILE (welcome screen) ──
+function handleImportFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (typeof data !== 'object' || Array.isArray(data)) throw new Error();
+      state = data;
+      saveState(state);
+      closeWelcomeModal();
+      buildCards();
+      if (state.datesFixed) {
+        const row = document.getElementById('startDateRow');
+        if (row) row.style.display = 'none';
+        scrollToToday();
+      }
+    } catch(err) {
+      alert('Could not read the file. Please select a valid Ganapati Vratha JSON backup.');
+    }
+    input.value = '';
+  };
+  reader.readAsText(file);
+}
+
+function closeWelcomeModal() {
+  document.getElementById('welcomeModal').classList.remove('open');
+}
+
+// ── ABOUT TOGGLE ──
+function toggleAbout() {
+  document.getElementById('aboutBody').classList.toggle('open');
+  document.getElementById('aboutToggle').classList.toggle('open');
+}
+
 // ── RESET ──
-function resetAll() {
-  if (confirm('Reset ALL progress? Export first if you want a backup!')) {
-    state = {};
-    saveState(state);
-    buildCards();
-  }
+function openResetModal() {
+  document.getElementById('resetStep1').style.display = '';
+  document.getElementById('resetStep2').style.display = 'none';
+  document.getElementById('resetModal').classList.add('open');
+}
+function closeResetModal() {
+  document.getElementById('resetModal').classList.remove('open');
+}
+function showResetStep2() {
+  document.getElementById('resetStep1').style.display = 'none';
+  document.getElementById('resetStep2').style.display = '';
+}
+function confirmReset() {
+  state = {};
+  saveState(state);
+  closeResetModal();
+  buildCards();
+  const row = document.getElementById('startDateRow');
+  if (row) row.style.display = '';
+  // Show welcome/import prompt again after full reset
+  document.getElementById('welcomeModal').classList.add('open');
 }
 
 // ── INIT ──
+function isEmptyState(st) {
+  return !Object.keys(st).some(k => /^d\d+$/.test(k));
+}
+
+// Capture before buildCards() populates state with ensureDay() keys
+const freshInstall = isEmptyState(state);
+
 buildCards();
 
-if (state.datesFixed) {
+if (freshInstall) {
+  // Fresh install — ask if user wants to restore from a backup
+  document.getElementById('welcomeModal').classList.add('open');
+} else if (state.datesFixed) {
   // Dates confirmed — hide the schedule row and jump to today
   const row = document.getElementById('startDateRow');
   if (row) row.style.display = 'none';
