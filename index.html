@@ -711,9 +711,44 @@
       font-size: 0.9rem; z-index: 300; display: none; box-shadow: 0 6px 18px rgba(0,0,0,0.3);
     }
 
-    /* share modal preview */
-    .share-modal .preview { width: 100%; max-height: 320px; object-fit: contain; border-radius: 8px; border: 1px solid #eee; }
-    .share-modal .row { display:flex; gap:8px; align-items:center; margin-top:8px; }
+    /* quote celebration overlay */
+    .quote-overlay {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(30,8,0,.72);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      display: none; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .quote-overlay.open { display: flex; }
+    .quote-box {
+      background: linear-gradient(150deg, #fffcf5, #fff8e8, #fff3d8);
+      border-radius: 20px;
+      max-width: 420px; width: 100%;
+      padding: 28px 24px 24px;
+      box-shadow: 0 16px 48px rgba(0,0,0,.35);
+      border: 2px solid var(--gold);
+      text-align: center;
+    }
+    .quote-om { font-size: 2.4rem; animation: omGlow 2.5s ease-in-out infinite alternate; display: block; margin-bottom: 10px; }
+    .quote-day-label { font-size: 0.73rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; }
+    .quote-text {
+      font-size: 0.92rem; color: var(--text); line-height: 1.75;
+      font-style: italic; margin-bottom: 10px;
+      border-left: 3px solid var(--saffron);
+      padding: 8px 12px; text-align: left;
+      background: rgba(255,193,7,.07); border-radius: 0 8px 8px 0;
+    }
+    .quote-source { font-size: 0.7rem; color: var(--muted); margin-bottom: 18px; }
+    .quote-close-btn {
+      padding: 10px 32px;
+      background: linear-gradient(135deg, var(--saffron-l), var(--saffron));
+      color: white; border: none; border-radius: 10px;
+      font-size: 0.85rem; font-weight: 700; cursor: pointer;
+      box-shadow: 0 3px 10px rgba(183,28,28,.3);
+      transition: opacity .2s;
+    }
+    .quote-close-btn:hover { opacity: .88; }
 
     /* onboard modal (tooltip-like) */
     .onboard-modal .note { font-size:0.95rem; color:var(--text); line-height:1.5; margin:6px 0; }
@@ -895,33 +930,30 @@
   <div class="footer-copy">
     Built for personal devotional use · Ganapati Vratha Tracker<br/>
   </div>
-  <div style="display:flex;gap:8px;justify-content:center;margin-top:8px;">
-    <button class="qbtn" id="sharePageBtn" onclick="sharePage()">🔗 Share</button>
-    <button class="qbtn" id="shareImgBtn" onclick="shareScreenshot()">📸 Screenshot</button>
+  <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:8px">
+    <button class="qbtn" onclick="sharePage()">🔗 Share</button>
+    <a class="qbtn" href="https://github.com/chandra-79/vratha" target="_blank" rel="noopener noreferrer"
+       title="If this tracker is useful to you, please give it a ⭐ on GitHub to help others discover it!"
+       style="text-decoration:none">⭐ Star on GitHub</a>
   </div>
+  <p style="font-size:0.68rem;color:var(--muted);text-align:center;margin-top:6px;line-height:1.5">
+    Found this helpful? A ⭐ on GitHub helps more devotees discover this tracker 🙏
+  </p>
 </footer>
+
+<!-- Quote Celebration Overlay -->
+<div id="quoteOverlay" class="quote-overlay" onclick="if(event.target===this)closeGitaQuote()">
+  <div class="quote-box">
+    <span class="quote-om">🕉</span>
+    <div class="quote-day-label" id="quoteDayLabel">Day 1 Complete 🙏</div>
+    <div class="quote-text" id="quoteText"></div>
+    <div class="quote-source">— Bhagavad Gita</div>
+    <button class="quote-close-btn" onclick="closeGitaQuote()">🙏 Jai Ganapati!</button>
+  </div>
+</div>
 
 <!-- Toast -->
 <div id="toast" role="status" aria-live="polite"></div>
-
-<!-- Share Modal -->
-<div id="shareModal" class="modal-overlay" role="dialog" aria-modal="true" style="display:none">
-  <div class="modal share-modal" style="max-width:420px;">
-    <h2>Share Progress</h2>
-    <img id="sharePreview" class="preview" alt="Progress preview" />
-    <div style="margin-top:10px">
-      <input type="text" id="shareCaption" placeholder="Add a caption (optional)" style="width:100%;padding:8px;border:1.5px solid var(--gold);border-radius:8px;background:#fff" aria-label="Caption" />
-    </div>
-    <div class="row">
-      <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="shareIncludeStats" checked/> Include stats</label>
-    </div>
-    <div class="row" style="margin-top:12px">
-      <button class="btn-export-json" id="shareDoBtn">Share</button>
-      <button class="btn-cancel-reset" id="shareDownloadBtn">Download</button>
-    </div>
-    <button class="modal close-btn" style="display:none" onclick="closeShareModal()">Close</button>
-  </div>
-</div>
 
 <!-- Onboarding / tooltip modal -->
 <div id="onboardModal" class="modal-overlay" role="dialog" aria-modal="true" style="display:none">
@@ -930,9 +962,9 @@
     <div style="display:flex;gap:12px;align-items:flex-start;">
       <div class="icon">✨</div>
       <div>
-        <p class="note">You can quickly share your progress using the <span class="pill">Share</span> button in the footer — it copies the link or opens your device's share sheet.</p>
-        <p class="note">Use <span class="pill">Screenshot</span> to capture a snapshot of your progress, add a caption, and share or download the image.</p>
-        <p class="note">This app also supports offline use — add it to your homescreen (install prompt) and the tracker will work without a network.</p>
+        <p class="note">Tap each circle to mark a chanting, then press <span class="pill">Temple</span> to record your visit for the day.</p>
+        <p class="note">On completing all 21 chants and temple visit, you will receive a verse from the Bhagavad Gita as a blessing. 🙏</p>
+        <p class="note">Use the <span class="pill">Share</span> button in the footer to share your progress. This app also supports offline use — add it to your homescreen.</p>
       </div>
     </div>
     <div class="actions" style="margin-top:6px">
@@ -943,88 +975,16 @@
 </div>
 
 <script>
-// Optional: detected GitHub repo (populated server-side or via git remote read)
-const GITHUB_REPO = 'https://github.com/chandra-79/vratha';
-
-// Load html2canvas dynamically for screenshot sharing
-function loadHtml2Canvas(cb) {
-  if (window.html2canvas) return cb();
-  const s = document.createElement('script');
-  s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
-  s.integrity = 'sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H';
-  s.crossOrigin = 'anonymous';
-  s.onload = () => cb();
-  s.onerror = () => cb(new Error('Could not load html2canvas'));
-  document.head.appendChild(s);
-}
-
 function sharePage() {
   const shareData = { title: document.title, text: 'Track your Ganapati Vratha progress', url: location.href };
   if (navigator.share) {
     navigator.share(shareData).catch(() => {});
   } else {
-    // fallback: copy link to clipboard
     navigator.clipboard && navigator.clipboard.writeText(location.href).then(() => {
-      alert('Link copied to clipboard.');
+      showToast('Link copied to clipboard');
     }, () => { prompt('Copy link', location.href); });
   }
 }
-
-function shareScreenshot() {
-  loadHtml2Canvas(async (err) => {
-    if (err) { alert('Screenshot not available.'); return; }
-    try {
-      // capture the cards area (progress snapshot)
-      const el = document.getElementById('cardsContainer') || document.body;
-      const canvas = await window.html2canvas(el, { scale: 1.2 });
-      // show share modal preview and let user choose share or download
-      const dataUrl = canvas.toDataURL('image/png');
-      openShareModal(dataUrl);
-    } catch (e) { alert('Could not capture screenshot: ' + e.message); }
-  });
-}
-
-function openShareModal(dataUrl) {
-  const overlay = document.getElementById('shareModal');
-  const img = document.getElementById('sharePreview');
-  const doBtn = document.getElementById('shareDoBtn');
-  const dlBtn = document.getElementById('shareDownloadBtn');
-  const caption = document.getElementById('shareCaption');
-  const includeStats = document.getElementById('shareIncludeStats');
-  img.src = dataUrl;
-  caption.value = '';
-  overlay.style.display = 'flex';
-
-  function cleanup() {
-    doBtn.onclick = null; dlBtn.onclick = null;
-    overlay.style.display = 'none';
-  }
-
-  doBtn.onclick = async () => {
-    const blob = await (await fetch(dataUrl)).blob();
-    const file = new File([blob], 'vratha-progress.png', { type: 'image/png' });
-    let text = caption.value || '';
-    if (includeStats.checked) text += '\n\n' + document.getElementById('progressText').textContent;
-    if (navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
-      try { await navigator.share({ files: [file], title: document.title, text }); showToast('Shared'); }
-      catch(e){ showToast('Sharing cancelled'); }
-    } else {
-      // fallback: download
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = 'vratha-progress.png'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-      showToast('Downloaded screenshot');
-    }
-    cleanup();
-  };
-
-  dlBtn.onclick = () => {
-    const a = document.createElement('a'); a.href = dataUrl; a.download = 'vratha-progress.png'; document.body.appendChild(a); a.click(); a.remove();
-    showToast('Downloaded screenshot');
-    cleanup();
-  };
-}
-
-function closeShareModal() { const overlay = document.getElementById('shareModal'); overlay.style.display = 'none'; }
 
 function showToast(msg, ms = 2200) {
   const t = document.getElementById('toast');
@@ -1032,31 +992,68 @@ function showToast(msg, ms = 2200) {
   setTimeout(() => { t.style.display = 'none'; }, ms);
 }
 
-// Add subtle GitHub star link if repo available
-function addGitHubStarLink() {
-  if (!GITHUB_REPO) return;
-  const url = GITHUB_REPO.replace(/\\.git$/, '');
-  const footer = document.querySelector('.site-footer');
-  const a = document.createElement('a');
-  a.href = url;
-  a.target = '_blank';
-  a.rel = 'noopener noreferrer';
-  a.className = 'footer-link';
-  a.style.marginLeft = '6px';
-  a.textContent = '⭐ Star on GitHub';
-  if (footer) {
-    const div = document.createElement('div');
-    div.style.marginTop = '8px';
-    div.style.display = 'flex';
-    div.style.justifyContent = 'center';
-    div.appendChild(a);
-    footer.appendChild(div);
-  } else {
-    document.body.appendChild(a);
-  }
+// ── GITA QUOTES (one per day, 48 total) ──
+const GITA_QUOTES = [
+  "The power of God is with you at all times; through the activities of mind, senses, breathing, and emotions.",
+  "Man is made by his belief. As he believes, so he is.",
+  "Perform your obligatory duty, for action is indeed better than inaction.",
+  "A man is disciplined when he keeps his mind untroubled and free from all anxiety.",
+  "Seek refuge in the attitude of detachment and you will amass the wealth of spiritual awareness.",
+  "Little by little, through patience and repeated effort, the mind will become stilled in the Self.",
+  "One who has control over the mind is tranquil in heat and cold, in pleasure and pain.",
+  "The mind is restless and difficult to restrain, but it is subdued by practice.",
+  "When meditation is mastered, the mind is unwavering like the flame of a lamp in a windless place.",
+  "Arise, O conqueror of enemies! Shake off this trivial weakness of heart.",
+  "Work is your responsibility, not the fruit. Focus on the effort, not the reward.",
+  "Even a little effort toward spiritual awareness will protect you from the greatest fear.",
+  "You have the right to work, but never to the fruit of work.",
+  "He who has let go of hatred, who treats all beings with kindness and compassion... is dear to Me.",
+  "Through selfless service, you will always be fruitful and find the fulfillment of your desires.",
+  "Whatever action is performed by a great man, common men follow in his footsteps.",
+  "There is nothing lost or wasted in this life.",
+  "Calmness, gentleness, silence, self-restraint, and purity: these are the disciplines of the mind.",
+  "The wise man lets go of all results, whether good or bad, and focuses solely on action.",
+  "Yoga is the journey of the self, through the self, to the self.",
+  "Great souls, being of my divine nature, worship Me with an unwavering mind.",
+  "The fire of knowledge burns to ashes all baggage of past karma.",
+  "A gift is pure when it is given from the heart to the right person at the right time.",
+  "He who sees Me everywhere, and sees everything in Me, I am never lost to him.",
+  "Whatever you do, whatever you eat, whatever you offer... do that as an offering to Me.",
+  "I am the beginning, the middle, and the end of all creation.",
+  "Better indeed is knowledge than mechanical practice.",
+  "One who sees inaction in action, and action in inaction, is intelligent among men.",
+  "The person whose mind is always free from attachment... attains the supreme state of freedom.",
+  "For the soul there is neither birth nor death at any time.",
+  "Faith is the very essence of man. What his faith is, he is.",
+  "Free from all thoughts of 'I' and 'mine', a man finds utter peace.",
+  "Even the most sinful, if they worship Me with exclusive devotion, must be regarded as righteous.",
+  "I am the heat of the sun; I send and withhold the rain; I am immortality and I am death.",
+  "He who is the same to friend and foe, and also in honor and dishonor, is dear to Me.",
+  "Thinking of Me, you will overcome all obstacles by My grace.",
+  "Knowledge is better than mere ritualistic practice; meditation is better than knowledge.",
+  "When one gives up all desires of the mind... then one is said to be in divine consciousness.",
+  "The light of the sun, which illuminates the whole world... know that light to be Mine.",
+  "I am the strength of the strong, devoid of passion and desire.",
+  "By devotion, he knows Me in truth — who and what I am.",
+  "Fix your mind on Me, be devoted to Me, worship Me... and you shall come to Me.",
+  "The Lord dwells in the hearts of all creatures.",
+  "In any way that men love Me, in that same way they find My love.",
+  "Action is your domain. Results are in Mine.",
+  "Having attained Me, these great souls do not again take birth in this miserable world.",
+  "Abandon all varieties of dharma and simply surrender unto Me. I shall deliver you.",
+  "Wherever there is the Lord of Yoga, and wherever there is the master of archery, there will be prosperity, victory, and glory."
+];
+
+function showGitaQuote(d) {
+  const quote = GITA_QUOTES[(d - 1) % GITA_QUOTES.length];
+  document.getElementById('quoteDayLabel').textContent = 'Day ' + d + ' Complete — Jai Ganapati! 🙏';
+  document.getElementById('quoteText').textContent = quote;
+  document.getElementById('quoteOverlay').classList.add('open');
 }
 
-document.addEventListener('DOMContentLoaded', addGitHubStarLink);
+function closeGitaQuote() {
+  document.getElementById('quoteOverlay').classList.remove('open');
+}
 // register service worker for PWA/offline
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').then(() => {
@@ -1284,6 +1281,8 @@ function refreshCard(d) {
   const countEl = document.getElementById('count' + d);
   if (!grid || !card) return;
 
+  const wasCompleted = card.classList.contains('completed');
+
   const marks = grid.querySelectorAll('.mark');
   let count = 0;
   marks.forEach((el, i) => {
@@ -1295,6 +1294,8 @@ function refreshCard(d) {
   const done = count === CHANTS && s.temple;
   if (done) card.classList.add('completed');
   else card.classList.remove('completed');
+
+  if (done && !wasCompleted) showGitaQuote(d);
 
   // update future lock
   const future = isFuture(d);
