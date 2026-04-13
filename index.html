@@ -426,100 +426,7 @@
 <!-- ── CARDS ── -->
 <div class="cards-container" id="cardsContainer"></div>
 
-<!-- ── BOTTOM TOOLBAR ── -->
-<div class="bottom-bar">
-  <button class="btn-export" onclick="openModal('exportModal')">⬆ Export</button>
-  <button class="btn-import" onclick="openModal('importModal')">⬇ Import</button>
-  <button class="btn-reset"  onclick="resetAll()">↺ Reset</button>
-  <button class="btn-guide"  onclick="openModal('guideModal')">🚀 Deploy</button>
-</div>
 
-<!-- ── EXPORT MODAL ── -->
-<div class="modal-overlay" id="exportModal">
-  <div class="modal">
-    <h2>⬆ Export / Backup Progress</h2>
-    <p>Copy the text below and save it somewhere safe (Notes app, email to yourself). Use Import to restore it on any device.</p>
-    <textarea id="exportData" readonly></textarea>
-    <div class="row-btns">
-      <button class="copy-btn" onclick="copyExport()">📋 Copy to Clipboard</button>
-    </div>
-    <button class="close-btn" onclick="closeModal('exportModal')">Close</button>
-  </div>
-</div>
-
-<!-- ── IMPORT MODAL ── -->
-<div class="modal-overlay" id="importModal">
-  <div class="modal">
-    <h2>⬇ Import / Restore Progress</h2>
-    <p>Paste previously exported data below, then tap Import. <strong>This will overwrite current progress.</strong></p>
-    <textarea id="importData" placeholder="Paste exported data here…"></textarea>
-    <div class="row-btns">
-      <button class="import-btn" onclick="doImport()">✅ Import & Restore</button>
-    </div>
-    <button class="close-btn" onclick="closeModal('importModal')">Cancel</button>
-  </div>
-</div>
-
-<!-- ── GITHUB PAGES GUIDE MODAL ── -->
-<div class="modal-overlay" id="guideModal">
-  <div class="modal">
-    <h2>🚀 Deploy to GitHub Pages</h2>
-
-    <section>
-      <h3>Why GitHub Pages?</h3>
-      <p>Free, permanent HTTPS hosting. Your tracker lives at <code>https://yourusername.github.io/vratha</code> — accessible from any phone or computer, forever.</p>
-    </section>
-
-    <section>
-      <h3>📋 Step-by-step</h3>
-
-      <div class="step"><span class="step-num">1</span>
-        <div class="step-body"><strong>Create a GitHub account</strong> (free) at <code>github.com</code> if you don't have one.</div>
-      </div>
-
-      <div class="step"><span class="step-num">2</span>
-        <div class="step-body"><strong>Create a new repository.</strong> Go to <code>github.com/new</code>. Name it <code>vratha</code> (or anything you like). Set it to <strong>Public</strong>. Click <em>Create repository</em>.</div>
-      </div>
-
-      <div class="step"><span class="step-num">3</span>
-        <div class="step-body"><strong>Upload the HTML file.</strong> On the repo page click <em>Add file → Upload files</em>. Drag and drop <code>Ganapati_Vratha_Tracker.html</code>. <strong>Rename it to <code>index.html</code></strong> before uploading (GitHub Pages serves <code>index.html</code> by default). Click <em>Commit changes</em>.</div>
-      </div>
-
-      <div class="step"><span class="step-num">4</span>
-        <div class="step-body"><strong>Enable GitHub Pages.</strong> Go to <em>Settings → Pages</em>. Under <em>Source</em> choose <em>Deploy from a branch</em>, select <code>main</code> branch, folder <code>/ (root)</code>. Click <em>Save</em>.</div>
-      </div>
-
-      <div class="step"><span class="step-num">5</span>
-        <div class="step-body"><strong>Your site is live!</strong> After ~1 minute visit: <code>https://yourusername.github.io/vratha</code> — bookmark it on your phone's home screen.</div>
-      </div>
-    </section>
-
-    <section>
-      <h3>📱 Add to Phone Home Screen</h3>
-      <p><strong>iPhone (Safari):</strong> Open the URL → tap Share → "Add to Home Screen".</p>
-      <p><strong>Android (Chrome):</strong> Open the URL → tap ⋮ menu → "Add to Home Screen".</p>
-      <p>It will appear as an app icon — no install needed!</p>
-    </section>
-
-    <section>
-      <h3>💾 About Data Storage</h3>
-      <p>Progress is stored in your browser's <strong>localStorage</strong> (private, never sent to any server) with a <strong>cookie backup</strong>. This means:</p>
-      <ul>
-        <li>✅ Works offline after first load</li>
-        <li>✅ Persists across browser restarts</li>
-        <li>⚠️ Data is per-device/browser — use <strong>Export → Import</strong> to sync between phone and desktop</li>
-        <li>⚠️ Clearing browser data will erase progress — export first!</li>
-      </ul>
-    </section>
-
-    <section>
-      <h3>🔄 Keeping it Updated</h3>
-      <p>If you want to update the page later, just re-upload <code>index.html</code> to the same GitHub repo. GitHub Pages re-deploys automatically within ~1 minute.</p>
-    </section>
-
-    <button class="close-btn" onclick="closeModal('guideModal')">Got it!</button>
-  </div>
-</div>
 
 <script>
 // ── CONSTANTS ──
@@ -724,43 +631,6 @@ function applyStartDate() {
   saveState(state);
 }
 
-// ── EXPORT / IMPORT ──
-function openModal(id) {
-  if (id === 'exportModal') {
-    document.getElementById('exportData').value = JSON.stringify(state, null, 2);
-  }
-  document.getElementById(id).classList.add('open');
-}
-
-function closeModal(id) {
-  document.getElementById(id).classList.remove('open');
-}
-
-// close on overlay click
-document.querySelectorAll('.modal-overlay').forEach(el => {
-  el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
-});
-
-function copyExport() {
-  const ta = document.getElementById('exportData');
-  ta.select();
-  try { document.execCommand('copy'); alert('Copied! Paste it somewhere safe.'); }
-  catch(e) { navigator.clipboard.writeText(ta.value).then(() => alert('Copied!')); }
-}
-
-function doImport() {
-  const raw = document.getElementById('importData').value.trim();
-  try {
-    const parsed = JSON.parse(raw);
-    state = parsed;
-    saveState(state);
-    buildCards();
-    closeModal('importModal');
-    alert('✅ Progress restored successfully!');
-  } catch(e) {
-    alert('❌ Invalid data. Please paste the exported text exactly as copied.');
-  }
-}
 
 // ── RESET ──
 function resetAll() {
