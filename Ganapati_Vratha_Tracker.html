@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="theme-color" content="#e65100"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Vratha Tracker"/>
+  <meta name="description" content="48-Day Ganapati Vratha Tracker — chant 21 times daily, visit temple, track your sacred penance."/>
+  <title>🕉 Ganapati Vratha Tracker — 48 Days</title>
+
+  <!-- PWA manifest inline -->
+  <link rel="manifest" href="data:application/json,%7B%22name%22%3A%22Ganapati%20Vratha%22%2C%22short_name%22%3A%22Vratha%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23fdf6ec%22%2C%22theme_color%22%3A%22%23e65100%22%7D"/>
+
+  <style>
+    :root {
+      --saffron:   #e65100;
+      --saffron-l: #ff8f00;
+      --saffron-d: #bf360c;
+      --bg:        #fdf6ec;
+      --card:      #ffffff;
+      --gold:      #ffcc80;
+      --gold-l:    #fff8f0;
+      --text:      #3b1f00;
+      --muted:     #8d5524;
+      --green:     #e8f5e9;
+      --green-b:   #81c784;
+      --radius:    12px;
+      --shadow:    0 2px 12px rgba(0,0,0,0.10);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    /* ── STICKY HEADER ── */
+    .site-header {
+      position: sticky; top: 0; z-index: 100;
+      background: linear-gradient(135deg, var(--saffron-l), var(--saffron));
+      color: white;
+      padding: 12px 16px 10px;
+      box-shadow: 0 2px 10px rgba(230,81,0,.45);
+    }
+    .header-top {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 8px;
+    }
+    .header-title { display: flex; align-items: center; gap: 8px; }
+    .header-title .om { font-size: 1.6rem; line-height: 1; }
+    .header-title h1 { font-size: 1rem; font-weight: 700; letter-spacing: .5px; }
+    .header-title p  { font-size: 0.68rem; opacity: .9; }
+
+    .header-actions { display: flex; gap: 6px; flex-shrink: 0; }
+    .hbtn {
+      background: rgba(255,255,255,.2);
+      border: 1px solid rgba(255,255,255,.4);
+      color: white; border-radius: 20px;
+      padding: 5px 10px; font-size: 0.72rem; cursor: pointer;
+      white-space: nowrap; transition: background .2s;
+    }
+    .hbtn:hover { background: rgba(255,255,255,.35); }
+
+    /* progress strip */
+    .progress-strip { margin-top: 8px; }
+    .progress-bar-bg {
+      background: rgba(255,255,255,.3);
+      border-radius: 20px; height: 8px; overflow: hidden;
+    }
+    .progress-bar-fg {
+      height: 8px;
+      background: white;
+      border-radius: 20px;
+      transition: width .5s ease;
+      width: 0%;
+    }
+    .progress-text {
+      font-size: 0.68rem; opacity: .9; margin-top: 3px; text-align: center;
+    }
+
+    /* ── STATS ROW ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      padding: 12px 12px 0;
+    }
+    .stat-box {
+      background: var(--card);
+      border: 1.5px solid var(--gold);
+      border-radius: var(--radius);
+      padding: 8px 4px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .stat-box .num {
+      font-size: 1.4rem; font-weight: 800; color: var(--saffron);
+      line-height: 1.1;
+    }
+    .stat-box .lbl { font-size: 0.6rem; color: var(--muted); margin-top: 2px; }
+
+    /* ── START DATE ── */
+    .start-date-row {
+      display: flex; align-items: center; justify-content: center;
+      gap: 8px; padding: 10px 12px 4px;
+      font-size: 0.8rem; color: var(--muted);
+    }
+    .start-date-row input[type=date] {
+      border: 1.5px solid var(--gold);
+      border-radius: 8px; padding: 5px 8px;
+      font-size: 0.8rem; background: var(--gold-l);
+      color: var(--text); cursor: pointer;
+    }
+    .start-date-row button {
+      background: var(--saffron); color: white;
+      border: none; border-radius: 8px;
+      padding: 5px 12px; font-size: 0.75rem; cursor: pointer;
+    }
+
+    /* ── LEGEND ── */
+    .legend {
+      display: flex; flex-wrap: wrap;
+      justify-content: center; gap: 12px;
+      padding: 8px 12px; font-size: 0.72rem; color: var(--muted);
+    }
+    .legend span { display: flex; align-items: center; gap: 5px; }
+    .leg-dot {
+      width: 13px; height: 13px; border-radius: 50%;
+      border: 2px solid var(--saffron); background: white; flex-shrink: 0;
+    }
+    .leg-dot.on { background: var(--saffron); }
+
+    /* ── DAY CARDS ── */
+    .cards-container {
+      padding: 8px 10px 80px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+
+    .day-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1.5px solid var(--gold);
+      overflow: hidden;
+      transition: border-color .2s;
+    }
+    .day-card.completed {
+      border-color: var(--green-b);
+      background: var(--green);
+    }
+
+    .card-header {
+      display: flex; align-items: center;
+      padding: 8px 12px;
+      background: var(--gold-l);
+      border-bottom: 1px solid var(--gold);
+      gap: 10px;
+    }
+    .day-card.completed .card-header {
+      background: #f1f8e9;
+      border-bottom-color: var(--green-b);
+    }
+
+    .day-badge {
+      background: var(--saffron); color: white;
+      font-weight: 800; font-size: 0.85rem;
+      min-width: 36px; height: 36px;
+      border-radius: 50%; display: flex;
+      align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .day-card.completed .day-badge { background: var(--green-b); }
+
+    .card-header-info { flex: 1; }
+    .card-header-info .day-label {
+      font-weight: 700; font-size: 0.82rem; color: var(--saffron-d);
+    }
+    .day-card.completed .card-header-info .day-label { color: #2e7d32; }
+    .card-header-info .day-date-input {
+      border: 1px solid var(--gold);
+      border-radius: 6px; padding: 3px 5px;
+      font-size: 0.7rem; width: 130px;
+      background: white; color: var(--text);
+      margin-top: 3px;
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .card-header-info .day-date-input::-webkit-calendar-picker-indicator {
+      opacity: 0.6; cursor: pointer; padding: 0;
+      filter: invert(40%) sepia(80%) saturate(400%) hue-rotate(0deg);
+    }
+    .day-card.completed .card-header-info .day-date-input {
+      border-color: var(--green-b);
+      background: #f9fbe7;
+    }
+
+    .card-temple {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 2px;
+      flex-shrink: 0;
+    }
+    .card-temple label { font-size: 0.58rem; color: var(--muted); }
+    .card-temple input[type=checkbox] {
+      width: 22px; height: 22px;
+      accent-color: var(--saffron); cursor: pointer;
+    }
+
+    .card-count-badge {
+      flex-shrink: 0;
+      font-size: 0.72rem; font-weight: 700;
+      color: var(--saffron-d);
+      background: white;
+      border: 1.5px solid var(--gold);
+      border-radius: 20px;
+      padding: 3px 8px;
+      min-width: 46px; text-align: center;
+    }
+    .day-card.completed .card-count-badge {
+      color: #2e7d32; border-color: var(--green-b);
+    }
+
+    /* 21 marks grid */
+    .marks-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      padding: 10px 12px;
+    }
+
+    .mark {
+      aspect-ratio: 1;
+      border-radius: 50%;
+      border: 2px solid var(--saffron);
+      background: white;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; color: transparent;
+      transition: all .15s;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      min-height: 36px;
+    }
+    .mark:active { transform: scale(.88); }
+    .mark.done {
+      background: var(--saffron);
+      border-color: var(--saffron-d);
+      color: white;
+    }
+    .mark.done::after { content: '✓'; font-weight: 700; }
+
+    /* group separator every 7 */
+    .marks-grid .mark:nth-child(7n) { }
+
+    /* ── BOTTOM TOOLBAR ── */
+    .bottom-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: white;
+      border-top: 1px solid var(--gold);
+      display: flex; gap: 8px;
+      padding: 8px 12px;
+      padding-bottom: calc(8px + env(safe-area-inset-bottom));
+      box-shadow: 0 -2px 10px rgba(0,0,0,.08);
+      z-index: 99;
+    }
+    .bottom-bar button {
+      flex: 1; padding: 10px 6px;
+      border-radius: 10px; border: none;
+      font-size: 0.75rem; font-weight: 600;
+      cursor: pointer; transition: all .2s;
+    }
+    .btn-export { background: #fff3e0; color: var(--saffron); border: 1.5px solid var(--gold); }
+    .btn-import { background: #e8f5e9; color: #2e7d32; border: 1.5px solid var(--green-b); }
+    .btn-reset  { background: #fce4ec; color: #c62828; border: 1.5px solid #ef9a9a; }
+    .btn-guide  { background: var(--saffron); color: white; }
+
+    .btn-export:active, .btn-import:active, .btn-reset:active, .btn-guide:active {
+      opacity: .75; transform: scale(.97);
+    }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.5); z-index: 200;
+      align-items: center; justify-content: center;
+      padding: 16px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: white; border-radius: 16px;
+      max-width: 480px; width: 100%;
+      max-height: 85vh; overflow-y: auto;
+      padding: 20px; box-shadow: 0 8px 32px rgba(0,0,0,.25);
+    }
+    .modal h2 {
+      font-size: 1rem; color: var(--saffron-d);
+      margin-bottom: 12px; border-bottom: 2px solid var(--gold);
+      padding-bottom: 8px;
+    }
+    .modal p, .modal li { font-size: 0.82rem; color: var(--text); margin-bottom: 8px; line-height: 1.6; }
+    .modal ol, .modal ul { padding-left: 18px; }
+    .modal li { margin-bottom: 6px; }
+    .modal code {
+      background: #f5f5f5; border-radius: 4px;
+      padding: 2px 6px; font-size: 0.78rem;
+      font-family: monospace; color: #c62828;
+      word-break: break-all;
+    }
+    .modal .close-btn {
+      display: block; width: 100%; margin-top: 16px;
+      padding: 10px; background: var(--saffron); color: white;
+      border: none; border-radius: 10px; font-size: 0.85rem;
+      cursor: pointer; font-weight: 600;
+    }
+    .modal section { margin-bottom: 14px; }
+    .modal section h3 {
+      font-size: 0.85rem; color: var(--saffron);
+      margin-bottom: 6px; font-weight: 700;
+    }
+    .modal textarea {
+      width: 100%; min-height: 90px;
+      border: 1.5px solid var(--gold); border-radius: 8px;
+      padding: 8px; font-size: 0.75rem;
+      font-family: monospace; resize: vertical;
+      background: #fffde7;
+    }
+    .modal .row-btns { display: flex; gap: 8px; margin-top: 8px; }
+    .modal .row-btns button {
+      flex: 1; padding: 8px;
+      border-radius: 8px; border: none;
+      font-size: 0.78rem; font-weight: 600; cursor: pointer;
+    }
+    .modal .row-btns .copy-btn { background: #e3f2fd; color: #1565c0; }
+    .modal .row-btns .import-btn { background: var(--green); color: #2e7d32; }
+
+    .step-num {
+      display: inline-block; width: 20px; height: 20px;
+      background: var(--saffron); color: white;
+      border-radius: 50%; text-align: center; line-height: 20px;
+      font-size: 0.72rem; font-weight: 700; margin-right: 4px;
+      flex-shrink: 0;
+    }
+    .step { display: flex; align-items: flex-start; gap: 6px; margin-bottom: 8px; }
+    .step-body { font-size: 0.8rem; line-height: 1.5; }
+
+    /* ── DESKTOP OVERRIDES (≥ 700px) ── */
+    @media (min-width: 700px) {
+      .cards-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        padding: 12px 16px 80px;
+      }
+      .marks-grid { grid-template-columns: repeat(7, 1fr); }
+      .stats-row { padding: 14px 16px 0; gap: 12px; }
+      .stat-box .num { font-size: 1.7rem; }
+    }
+
+    @media (min-width: 1100px) {
+      .cards-container { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    /* ── PRINT ── */
+    @media print {
+      .site-header, .bottom-bar, .modal-overlay { display: none !important; }
+      .cards-container { padding-bottom: 0; display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; }
+      .day-card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+      body { background: white; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── STICKY HEADER ── -->
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-title">
+      <span class="om">🕉</span>
+      <div>
+        <h1>Ganapati Vratha Tracker</h1>
+        <p>48-Day Sacred Penance · 21 Chantings Daily</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="hbtn" onclick="window.print()">🖨 Print</button>
+    </div>
+  </div>
+  <div class="progress-strip">
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fg" id="progressBar"></div>
+    </div>
+    <div class="progress-text" id="progressText">0 of 48 days complete 🙏</div>
+  </div>
+</header>
+
+<!-- ── STATS ── -->
+<div class="stats-row">
+  <div class="stat-box"><div class="num" id="sDays">0</div><div class="lbl">Days Done</div></div>
+  <div class="stat-box"><div class="num" id="sTemple">0</div><div class="lbl">Temple Visits</div></div>
+  <div class="stat-box"><div class="num" id="sChants">0</div><div class="lbl">Chantings</div></div>
+  <div class="stat-box"><div class="num" id="sLeft">48</div><div class="lbl">Remaining</div></div>
+</div>
+
+<!-- ── START DATE ── -->
+<div class="start-date-row">
+  <label for="startDate">Vratha Start Date:</label>
+  <input type="date" id="startDate"/>
+  <button onclick="applyStartDate()">Auto-fill dates</button>
+</div>
+
+<!-- ── LEGEND ── -->
+<div class="legend">
+  <span><span class="leg-dot"></span> Pending chant</span>
+  <span><span class="leg-dot on"></span> Done chant</span>
+  <span>☐ Temple visit</span>
+  <span>🟩 Full day complete</span>
+</div>
+
+<!-- ── CARDS ── -->
+<div class="cards-container" id="cardsContainer"></div>
+
+<!-- ── BOTTOM TOOLBAR ── -->
+<div class="bottom-bar">
+  <button class="btn-export" onclick="openModal('exportModal')">⬆ Export</button>
+  <button class="btn-import" onclick="openModal('importModal')">⬇ Import</button>
+  <button class="btn-reset"  onclick="resetAll()">↺ Reset</button>
+  <button class="btn-guide"  onclick="openModal('guideModal')">🚀 Deploy</button>
+</div>
+
+<!-- ── EXPORT MODAL ── -->
+<div class="modal-overlay" id="exportModal">
+  <div class="modal">
+    <h2>⬆ Export / Backup Progress</h2>
+    <p>Copy the text below and save it somewhere safe (Notes app, email to yourself). Use Import to restore it on any device.</p>
+    <textarea id="exportData" readonly></textarea>
+    <div class="row-btns">
+      <button class="copy-btn" onclick="copyExport()">📋 Copy to Clipboard</button>
+    </div>
+    <button class="close-btn" onclick="closeModal('exportModal')">Close</button>
+  </div>
+</div>
+
+<!-- ── IMPORT MODAL ── -->
+<div class="modal-overlay" id="importModal">
+  <div class="modal">
+    <h2>⬇ Import / Restore Progress</h2>
+    <p>Paste previously exported data below, then tap Import. <strong>This will overwrite current progress.</strong></p>
+    <textarea id="importData" placeholder="Paste exported data here…"></textarea>
+    <div class="row-btns">
+      <button class="import-btn" onclick="doImport()">✅ Import & Restore</button>
+    </div>
+    <button class="close-btn" onclick="closeModal('importModal')">Cancel</button>
+  </div>
+</div>
+
+<!-- ── GITHUB PAGES GUIDE MODAL ── -->
+<div class="modal-overlay" id="guideModal">
+  <div class="modal">
+    <h2>🚀 Deploy to GitHub Pages</h2>
+
+    <section>
+      <h3>Why GitHub Pages?</h3>
+      <p>Free, permanent HTTPS hosting. Your tracker lives at <code>https://yourusername.github.io/vratha</code> — accessible from any phone or computer, forever.</p>
+    </section>
+
+    <section>
+      <h3>📋 Step-by-step</h3>
+
+      <div class="step"><span class="step-num">1</span>
+        <div class="step-body"><strong>Create a GitHub account</strong> (free) at <code>github.com</code> if you don't have one.</div>
+      </div>
+
+      <div class="step"><span class="step-num">2</span>
+        <div class="step-body"><strong>Create a new repository.</strong> Go to <code>github.com/new</code>. Name it <code>vratha</code> (or anything you like). Set it to <strong>Public</strong>. Click <em>Create repository</em>.</div>
+      </div>
+
+      <div class="step"><span class="step-num">3</span>
+        <div class="step-body"><strong>Upload the HTML file.</strong> On the repo page click <em>Add file → Upload files</em>. Drag and drop <code>Ganapati_Vratha_Tracker.html</code>. <strong>Rename it to <code>index.html</code></strong> before uploading (GitHub Pages serves <code>index.html</code> by default). Click <em>Commit changes</em>.</div>
+      </div>
+
+      <div class="step"><span class="step-num">4</span>
+        <div class="step-body"><strong>Enable GitHub Pages.</strong> Go to <em>Settings → Pages</em>. Under <em>Source</em> choose <em>Deploy from a branch</em>, select <code>main</code> branch, folder <code>/ (root)</code>. Click <em>Save</em>.</div>
+      </div>
+
+      <div class="step"><span class="step-num">5</span>
+        <div class="step-body"><strong>Your site is live!</strong> After ~1 minute visit: <code>https://yourusername.github.io/vratha</code> — bookmark it on your phone's home screen.</div>
+      </div>
+    </section>
+
+    <section>
+      <h3>📱 Add to Phone Home Screen</h3>
+      <p><strong>iPhone (Safari):</strong> Open the URL → tap Share → "Add to Home Screen".</p>
+      <p><strong>Android (Chrome):</strong> Open the URL → tap ⋮ menu → "Add to Home Screen".</p>
+      <p>It will appear as an app icon — no install needed!</p>
+    </section>
+
+    <section>
+      <h3>💾 About Data Storage</h3>
+      <p>Progress is stored in your browser's <strong>localStorage</strong> (private, never sent to any server) with a <strong>cookie backup</strong>. This means:</p>
+      <ul>
+        <li>✅ Works offline after first load</li>
+        <li>✅ Persists across browser restarts</li>
+        <li>⚠️ Data is per-device/browser — use <strong>Export → Import</strong> to sync between phone and desktop</li>
+        <li>⚠️ Clearing browser data will erase progress — export first!</li>
+      </ul>
+    </section>
+
+    <section>
+      <h3>🔄 Keeping it Updated</h3>
+      <p>If you want to update the page later, just re-upload <code>index.html</code> to the same GitHub repo. GitHub Pages re-deploys automatically within ~1 minute.</p>
+    </section>
+
+    <button class="close-btn" onclick="closeModal('guideModal')">Got it!</button>
+  </div>
+</div>
+
+<script>
+// ── CONSTANTS ──
+const DAYS       = 48;
+const CHANTS     = 21;
+const LS_KEY     = 'ganapatiVratha_v2';
+const COOKIE_KEY = 'gvt2';
+
+// ── STORAGE: localStorage (primary) + cookie (backup) ──
+function saveState(st) {
+  const json = JSON.stringify(st);
+  try { localStorage.setItem(LS_KEY, json); } catch(e) {}
+  // compact cookie backup (expires 200 days)
+  try {
+    const d = new Date(); d.setDate(d.getDate() + 200);
+    document.cookie = COOKIE_KEY + '=' + encodeURIComponent(json)
+      + '; expires=' + d.toUTCString() + '; path=/; SameSite=Lax';
+  } catch(e) {}
+}
+
+function loadState() {
+  // 1. try localStorage
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  // 2. fallback: cookie
+  try {
+    const m = document.cookie.match('(?:^|; )' + COOKIE_KEY + '=([^;]*)');
+    if (m) return JSON.parse(decodeURIComponent(m[1]));
+  } catch(e) {}
+  return {};
+}
+
+let state = loadState();
+
+function ensureDay(d) {
+  const k = 'd' + d;
+  if (!state[k]) state[k] = { marks: new Array(CHANTS).fill(false), temple: false, date: '' };
+}
+
+// ── BUILD CARDS ──
+function buildCards() {
+  const container = document.getElementById('cardsContainer');
+  container.innerHTML = '';
+  for (let d = 1; d <= DAYS; d++) {
+    ensureDay(d);
+    container.appendChild(makeCard(d));
+  }
+  updateStats();
+}
+
+function makeCard(d) {
+  const k = 'd' + d;
+  const s = state[k];
+  const count = s.marks.filter(Boolean).length;
+  const done  = count === CHANTS && s.temple;
+
+  const card = document.createElement('div');
+  card.className = 'day-card' + (done ? ' completed' : '');
+  card.id = 'card' + d;
+
+  // ── card header ──
+  const hdr = document.createElement('div');
+  hdr.className = 'card-header';
+
+  const badge = document.createElement('div');
+  badge.className = 'day-badge';
+  badge.textContent = d;
+
+  const info = document.createElement('div');
+  info.className = 'card-header-info';
+  const lbl = document.createElement('div');
+  lbl.className = 'day-label';
+  lbl.textContent = 'Day ' + d;
+  const dateInp = document.createElement('input');
+  dateInp.className = 'day-date-input';
+  dateInp.type = 'date';
+  dateInp.value = s.date || '';
+  dateInp.addEventListener('change', e => { state[k].date = e.target.value; saveState(state); });
+  info.appendChild(lbl);
+  info.appendChild(dateInp);
+
+  const countBadge = document.createElement('div');
+  countBadge.className = 'card-count-badge';
+  countBadge.id = 'count' + d;
+  countBadge.textContent = count + '/21';
+
+  const templeWrap = document.createElement('div');
+  templeWrap.className = 'card-temple';
+  const templeLbl = document.createElement('label');
+  templeLbl.textContent = '🛕 Temple';
+  const templeCb = document.createElement('input');
+  templeCb.type = 'checkbox';
+  templeCb.checked = s.temple;
+  templeCb.addEventListener('change', e => {
+    state[k].temple = e.target.checked;
+    saveState(state);
+    refreshCard(d);
+    updateStats();
+  });
+  templeWrap.appendChild(templeLbl);
+  templeWrap.appendChild(templeCb);
+
+  hdr.appendChild(badge);
+  hdr.appendChild(info);
+  hdr.appendChild(countBadge);
+  hdr.appendChild(templeWrap);
+  card.appendChild(hdr);
+
+  // ── marks grid ──
+  const grid = document.createElement('div');
+  grid.className = 'marks-grid';
+  grid.id = 'grid' + d;
+
+  for (let m = 0; m < CHANTS; m++) {
+    const mk = document.createElement('div');
+    mk.className = 'mark' + (s.marks[m] ? ' done' : '');
+    mk.title = 'Chanting ' + (m + 1);
+    mk.addEventListener('click', () => toggleMark(d, m));
+    // touch friendly
+    mk.addEventListener('touchend', e => { e.preventDefault(); toggleMark(d, m); });
+    grid.appendChild(mk);
+  }
+  card.appendChild(grid);
+  return card;
+}
+
+function toggleMark(d, m) {
+  const k = 'd' + d;
+  state[k].marks[m] = !state[k].marks[m];
+  saveState(state);
+  refreshCard(d);
+  updateStats();
+}
+
+function refreshCard(d) {
+  const k = 'd' + d;
+  const s = state[k];
+  const grid = document.getElementById('grid' + d);
+  const card = document.getElementById('card' + d);
+  const countEl = document.getElementById('count' + d);
+  if (!grid || !card) return;
+
+  const marks = grid.querySelectorAll('.mark');
+  let count = 0;
+  marks.forEach((el, i) => {
+    if (s.marks[i]) { el.classList.add('done'); count++; }
+    else el.classList.remove('done');
+  });
+  countEl.textContent = count + '/21';
+
+  const done = count === CHANTS && s.temple;
+  if (done) card.classList.add('completed');
+  else card.classList.remove('completed');
+
+  // keep badge & date input in sync
+  const cb = card.querySelector('input[type=checkbox]');
+  if (cb) cb.checked = s.temple;
+}
+
+// ── STATS ──
+function updateStats() {
+  let doneD = 0, templeV = 0, totalC = 0;
+  for (let d = 1; d <= DAYS; d++) {
+    const k = 'd' + d; ensureDay(d);
+    const c = state[k].marks.filter(Boolean).length;
+    totalC += c;
+    if (state[k].temple) templeV++;
+    if (c === CHANTS && state[k].temple) doneD++;
+  }
+  document.getElementById('sDays').textContent   = doneD;
+  document.getElementById('sTemple').textContent = templeV;
+  document.getElementById('sChants').textContent = totalC;
+  document.getElementById('sLeft').textContent   = DAYS - doneD;
+
+  const pct = Math.round((doneD / DAYS) * 100);
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressText').textContent =
+    doneD + ' of 48 days complete (' + pct + '%) 🙏';
+}
+
+// ── START DATE AUTO-FILL ──
+function applyStartDate() {
+  const inp = document.getElementById('startDate');
+  if (!inp.value) { alert('Please pick a start date first.'); return; }
+  // Parse as local date (avoid UTC offset shifting the day)
+  const [y, mo, dy] = inp.value.split('-').map(Number);
+  const start = new Date(y, mo - 1, dy);
+  for (let d = 1; d <= DAYS; d++) {
+    ensureDay(d);
+    const dt = new Date(start);
+    dt.setDate(start.getDate() + d - 1);
+    const yy  = dt.getFullYear();
+    const mm  = String(dt.getMonth() + 1).padStart(2, '0');
+    const dd  = String(dt.getDate()).padStart(2, '0');
+    const iso = yy + '-' + mm + '-' + dd;          // yyyy-mm-dd for date input
+    state['d' + d].date = iso;
+    const inp2 = document.querySelector('#card' + d + ' .day-date-input');
+    if (inp2) inp2.value = iso;
+  }
+  saveState(state);
+}
+
+// ── EXPORT / IMPORT ──
+function openModal(id) {
+  if (id === 'exportModal') {
+    document.getElementById('exportData').value = JSON.stringify(state, null, 2);
+  }
+  document.getElementById(id).classList.add('open');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+// close on overlay click
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
+});
+
+function copyExport() {
+  const ta = document.getElementById('exportData');
+  ta.select();
+  try { document.execCommand('copy'); alert('Copied! Paste it somewhere safe.'); }
+  catch(e) { navigator.clipboard.writeText(ta.value).then(() => alert('Copied!')); }
+}
+
+function doImport() {
+  const raw = document.getElementById('importData').value.trim();
+  try {
+    const parsed = JSON.parse(raw);
+    state = parsed;
+    saveState(state);
+    buildCards();
+    closeModal('importModal');
+    alert('✅ Progress restored successfully!');
+  } catch(e) {
+    alert('❌ Invalid data. Please paste the exported text exactly as copied.');
+  }
+}
+
+// ── RESET ──
+function resetAll() {
+  if (confirm('Reset ALL progress? Export first if you want a backup!')) {
+    state = {};
+    saveState(state);
+    buildCards();
+  }
+}
+
+// ── INIT ──
+buildCards();
+
+// Restore start date field from saved Day-1 date (stored as yyyy-mm-dd)
+try {
+  const d1 = state['d1'];
+  if (d1 && d1.date) {
+    // Support both legacy dd/mm/yyyy and current yyyy-mm-dd
+    if (/^\d{4}-\d{2}-\d{2}$/.test(d1.date)) {
+      document.getElementById('startDate').value = d1.date;
+    } else {
+      const parts = d1.date.split('/');
+      if (parts.length === 3) {
+        document.getElementById('startDate').value =
+          parts[2] + '-' + parts[1] + '-' + parts[0];
+      }
+    }
+  }
+} catch(e) {}
+</script>
+</body>
+</html>
