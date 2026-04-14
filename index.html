@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+<!--
+  Ganapati Vratha Tracker
+  © 2025 Chandra Lanka (https://ajnacs.com)
+  Original: https://chandra-79.github.io/vratha
+  Unauthorised copying or redistribution is discouraged.
+-->
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
@@ -8,6 +14,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
   <meta name="apple-mobile-web-app-title" content="Vratha Tracker"/>
   <meta name="description" content="48-Day Ganapati Vratha Tracker — chant 21 times daily, visit temple, track your sacred penance."/>
+  <meta name="author" content="Chandra Lanka"/>
+  <meta name="copyright" content="© 2025 Chandra Lanka — https://ajnacs.com"/>
+  <link rel="canonical" href="https://chandra-79.github.io/vratha"/>
   <title>🕉 Ganapati Vratha Tracker — 48 Days</title>
 
   <!-- PWA manifest inline -->
@@ -272,7 +281,9 @@
       background: linear-gradient(135deg, #66bb6a, #388e3c);
       border-color: #2e7d32; color: white;
       box-shadow: 0 2px 6px rgba(56,142,60,.3);
+      pointer-events: none; cursor: default;
     }
+    .day-card.completed .marks-grid { pointer-events: none; cursor: default; }
     .day-card.future .temple-btn {
       pointer-events: none; opacity: .38; cursor: default;
     }
@@ -329,6 +340,24 @@
       background: linear-gradient(135deg, #66bb6a, #388e3c, #2e7d32);
       box-shadow: 0 2px 8px rgba(56,142,60,.3);
       pointer-events: none;
+    }
+
+    /* ── TODAY CARD ── */
+    .day-card.today {
+      border-left-color: #ff8f00;
+      box-shadow: 0 3px 20px rgba(255,143,0,.22), 0 0 0 2px rgba(255,143,0,.14);
+    }
+    .day-card.today .card-header {
+      background: linear-gradient(90deg, #fff3d0, #fffcf5);
+      border-bottom-color: #ffd54f;
+    }
+    .today-pill {
+      display: inline-block;
+      font-size: 0.58rem; font-weight: 800; letter-spacing: .8px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ff8f00, #e65100);
+      color: white; border-radius: 10px;
+      padding: 2px 7px; margin-top: 3px;
     }
 
     /* ── FUTURE DAY (locked) ── */
@@ -972,7 +1001,7 @@
       <div>
         <p class="note">Tap each circle to mark a chanting, then press <span class="pill">Temple</span> to record your visit for the day.</p>
         <p class="note">On completing all 21 chants and temple visit, you will receive a verse from the Bhagavad Gita as a blessing. 🙏</p>
-        <p class="note">Use the <span class="pill">Share</span> button in the footer to share your progress. This app also supports offline use — add it to your homescreen.</p>
+        <p class="note">Use <span class="pill">📸 Progress</span> in the footer to capture a shareable progress card of completed days. Use <span class="pill">🔗 Share</span> to share the tracker link. This app also supports offline use — add it to your homescreen.</p>
       </div>
     </div>
     <div class="actions" style="margin-top:6px">
@@ -983,6 +1012,31 @@
 </div>
 
 <script>
+// ── ORIGIN INTEGRITY CHECK ──
+// Shows a banner if this page is served from an unrecognised domain,
+// pointing visitors back to the original tracker.
+(function() {
+  const _allowed = ['chandra-79.github.io', 'localhost', '127.0.0.1', ''];
+  const _host = location.hostname;
+  if (_host && !_allowed.includes(_host)) {
+    document.addEventListener('DOMContentLoaded', function() {
+      const _b = document.createElement('div');
+      _b.setAttribute('style',
+        'position:fixed;bottom:0;left:0;right:0;z-index:9999;' +
+        'background:#7f0000;color:#fff;padding:10px 16px;' +
+        'font-size:0.78rem;text-align:center;line-height:1.5;' +
+        'box-shadow:0 -2px 10px rgba(0,0,0,.4);');
+      _b.innerHTML =
+        '\u26A0\uFE0F This appears to be an unauthorised copy. ' +
+        'The original Ganapati Vratha Tracker is at ' +
+        '<a href="https://chandra-79.github.io/vratha" ' +
+        'style="color:#ffcc80;font-weight:700" ' +
+        'target="_blank" rel="noopener">chandra-79.github.io/vratha</a>';
+      document.body.appendChild(_b);
+    });
+  }
+})();
+
 function sharePage() {
   const shareData = { title: document.title, text: 'Track your Ganapati Vratha progress', url: location.href };
   if (navigator.share) {
@@ -1220,54 +1274,187 @@ function showToast(msg, ms = 2200) {
 
 // ── GITA QUOTES (one per day, 48 total) ──
 const GITA_QUOTES = [
-  "The power of God is with you at all times; through the activities of mind, senses, breathing, and emotions.",
-  "Man is made by his belief. As he believes, so he is.",
-  "Perform your obligatory duty, for action is indeed better than inaction.",
-  "A man is disciplined when he keeps his mind untroubled and free from all anxiety.",
-  "Seek refuge in the attitude of detachment and you will amass the wealth of spiritual awareness.",
-  "Little by little, through patience and repeated effort, the mind will become stilled in the Self.",
-  "One who has control over the mind is tranquil in heat and cold, in pleasure and pain.",
-  "The mind is restless and difficult to restrain, but it is subdued by practice.",
-  "When meditation is mastered, the mind is unwavering like the flame of a lamp in a windless place.",
+  // ── Ch 1 — Arjuna Vishada Yoga ──
   "Arise, O conqueror of enemies! Shake off this trivial weakness of heart.",
-  "Work is your responsibility, not the fruit. Focus on the effort, not the reward.",
-  "Even a little effort toward spiritual awareness will protect you from the greatest fear.",
+  "The grief that clouds your mind is unworthy of you. Stand up and face your duty.",
+
+  // ── Ch 2 — Sankhya Yoga ──
   "You have the right to work, but never to the fruit of work.",
-  "He who has let go of hatred, who treats all beings with kindness and compassion... is dear to Me.",
-  "Through selfless service, you will always be fruitful and find the fulfillment of your desires.",
+  "Work is your responsibility, not the fruit. Focus on the effort, not the reward.",
+  "Never was there a time when I did not exist, nor you, nor all these beings; nor will there be any time when we do not exist.",
+  "For the soul there is neither birth nor death at any time. It is unborn, eternal, ever-existing, and primeval.",
+  "Just as a person puts on new garments, giving up old ones, the soul similarly accepts new material bodies, giving up the old and useless ones.",
+  "Weapons cannot cut the soul, nor can fire burn it; water cannot wet it, nor wind dry it.",
+  "The soul is unbreakable, insoluble, unevaporatable, and unchangeable — it is eternal, all-pervading, immovable, and primeval.",
+  "You grieve for those who should not be grieved for; yet you speak words of wisdom. The wise grieve neither for the living nor for the dead.",
+  "Fear not what is not real, never was and never will be. What is real, always was and cannot be destroyed.",
+  "Even a little effort toward spiritual awareness will protect you from the greatest fear.",
+  "No effort on this path is wasted. Even a little progress saves you from the greatest fear.",
+  "When a man dwells in his mind on the objects of sense, attachment to them is produced. From attachment springs desire, and from desire comes anger.",
+  "From anger, complete delusion arises; from delusion, bewilderment of memory. When memory is bewildered, intelligence is lost; and when intelligence is lost, one falls down again.",
+  "The self-controlled soul, who moves amongst sense objects, free from either attachment or repulsion, attains eternal peace.",
+  "He who is not disturbed by the incessant flow of desires — that enter like rivers into the ocean which is ever being filled but is always still — can alone achieve peace.",
+  "A person is elevated in yoga when, having renounced all material desires, he neither acts for sense gratification nor engages in fruitive activities.",
+  "The sage who is not disturbed by pain, who does not long for pleasure, who is free from passion, fear, and anger — he is called a man of steady wisdom.",
+  "He whose mind is untroubled even amidst threefold miseries, who is not elated by happiness, and who is free from attachment, fear, and anger, is called a sage of steady wisdom.",
+  "When a man has shed all desires, he lives in the grasp of the soul and reaches — even in this life — the peace of Brahman.",
+  "A man is disciplined when he keeps his mind untroubled and free from all anxiety.",
+
+  // ── Ch 3 — Karma Yoga ──
+  "Perform your obligatory duty, for action is indeed better than inaction.",
+  "Not by refraining from action does man attain freedom from action. Not by mere renunciation does he attain supreme perfection.",
+  "No one can remain inactive even for a moment. All are driven helplessly to action by the modes of material nature.",
+  "He who does his duty without attachment, surrendering the results to the Lord, is unaffected by sinful action, as the lotus leaf is untouched by water.",
   "Whatever action is performed by a great man, common men follow in his footsteps.",
-  "There is nothing lost or wasted in this life.",
-  "Calmness, gentleness, silence, self-restraint, and purity: these are the disciplines of the mind.",
-  "The wise man lets go of all results, whether good or bad, and focuses solely on action.",
-  "Yoga is the journey of the self, through the self, to the self.",
-  "Great souls, being of my divine nature, worship Me with an unwavering mind.",
-  "The fire of knowledge burns to ashes all baggage of past karma.",
-  "A gift is pure when it is given from the heart to the right person at the right time.",
-  "He who sees Me everywhere, and sees everything in Me, I am never lost to him.",
-  "Whatever you do, whatever you eat, whatever you offer... do that as an offering to Me.",
-  "I am the beginning, the middle, and the end of all creation.",
-  "Better indeed is knowledge than mechanical practice.",
+  "Let right deeds be thy motive, not the fruit which comes from them.",
+  "Through selfless service, you will always be fruitful and find the fulfillment of your desires.",
+  "It is better to perform one's own duty imperfectly than to perform another's duty perfectly. It is better to die in one's own duty than to follow the path of another.",
+
+  // ── Ch 4 — Jnana Karma Sanyasa Yoga ──
+  "Whenever and wherever there is a decline of righteousness and a rise of evil, I manifest Myself.",
+  "To deliver the pious and annihilate the wicked, and to reestablish the principles of dharma, I appear in every age.",
+  "Those who understand the divine nature of My birth and activities do not take birth again upon leaving the body — they come to Me.",
+  "Whatever path men travel is My path. No matter where they walk, it leads to Me.",
+  "The fire of knowledge burns to ashes all karma — all baggage of past action.",
+  "Even if you are the most sinful of all sinners, you shall cross over all sin by the raft of knowledge.",
+  "As the blazing fire reduces wood to ashes, the fire of transcendental knowledge reduces all reactions to material activities to ashes.",
   "One who sees inaction in action, and action in inaction, is intelligent among men.",
-  "The person whose mind is always free from attachment... attains the supreme state of freedom.",
-  "For the soul there is neither birth nor death at any time.",
+  "Better indeed is knowledge than mechanical practice.",
+
+  // ── Ch 5 — Karma Sanyasa Yoga ──
+  "Seek refuge in the attitude of detachment and you will amass the wealth of spiritual awareness.",
+  "The peace of God is with them whose mind and soul are in harmony, who are free from desire and wrath, who know their own soul.",
+  "There is nothing lost or wasted in this life.",
+  "He who performs his duty without attachment, surrendering the results to God, is not affected by sinful action, as the lotus leaf is untouched by water.",
+  "The senses, mind, and intellect are said to be the seat of desire; through them, desire deludes the embodied soul.",
+
+  // ── Ch 6 — Dhyana Yoga ──
+  "Little by little, through patience and repeated effort, the mind will become stilled in the Self.",
+  "When meditation is mastered, the mind is unwavering like the flame of a lamp in a windless place.",
+  "One who has control over the mind is tranquil in heat and cold, in pleasure and pain, and in honor and dishonor.",
+  "The mind is restless and difficult to restrain, but it is subdued by practice and detachment.",
+  "Lift yourself by yourself; do not allow yourself to be lowered by yourself. The self alone is its own friend, and the self alone is its own enemy.",
+  "For one who has conquered the mind, the mind is the best of friends. But for one who has failed to do so, the mind remains the greatest enemy.",
+  "The yogi who is satisfied with knowledge and wisdom, who has conquered the senses — to whom a lump of earth, a stone, and gold are the same — is said to be in yoga.",
+  "Yoga is the journey of the self, through the self, to the self.",
+  "One who sees Me in all things, and all things in Me — I am never lost to him, nor is he ever lost to Me.",
+  "The illumined soul, whose heart has been stilled in meditation, sees the Self in all beings and all beings in the Self — equal-minded toward all.",
+  "He who renounces the fruit of action and whose mind is free — that wise man neither rejoices when he gains the good, nor grieves when he gets the bad.",
+  "When the mind, controlled and disciplined, rests in the Self alone, without longing for any pleasure — then it is called yoga.",
+
+  // ── Ch 7 — Jnana Vijnana Yoga ──
+  "Man is made by his belief. As he believes, so he is.",
+  "Out of many thousands, perhaps one strives for perfection; and of those who have achieved it, perhaps one truly knows Me.",
   "Faith is the very essence of man. What his faith is, he is.",
-  "Free from all thoughts of 'I' and 'mine', a man finds utter peace.",
-  "Even the most sinful, if they worship Me with exclusive devotion, must be regarded as righteous.",
-  "I am the heat of the sun; I send and withhold the rain; I am immortality and I am death.",
-  "He who is the same to friend and foe, and also in honor and dishonor, is dear to Me.",
-  "Thinking of Me, you will overcome all obstacles by My grace.",
-  "Knowledge is better than mere ritualistic practice; meditation is better than knowledge.",
-  "When one gives up all desires of the mind... then one is said to be in divine consciousness.",
-  "The light of the sun, which illuminates the whole world... know that light to be Mine.",
+  "I am the taste of pure water, the light of the sun and the moon; I am the syllable Om in the Vedic mantras.",
+  "I am the sweet fragrance in the earth and the heat in fire; I am the life of all that lives.",
+  "Know that all states of being — goodness, passion, or ignorance — are manifested by My energy. I am, in one sense, everything; but I am independent, never controlled by them.",
+  "This divine energy of Mine, consisting of the three modes of material nature, is difficult to overcome. But those who have surrendered unto Me can easily cross beyond it.",
+  "Four kinds of pious men worship Me — the distressed, the seeker of knowledge, the seeker of wealth, and the wise. Of these, the wise man who is always engaged in My service is the best.",
+
+  // ── Ch 8 — Akshara Brahma Yoga ──
+  "Whoever, at the time of death, gives up the body remembering Me alone, reaches My state. Of this there is no doubt.",
+  "I am easily attained by the person who always remembers Me, attached to nothing else.",
+  "There are two ways of passing from this world — one in light and one in darkness. Those who pass in light do not return to be born again.",
+  "From the highest planet in the material world down to the lowest, all are places of misery where repeated birth and death take place. But one who attains My abode never takes birth again.",
+
+  // ── Ch 9 — Raja Vidya Raja Guhya Yoga ──
+  "Whatever you do, whatever you eat, whatever you offer or give away, whatever austerities you practice — do that as an offering to Me.",
+  "Whatever I am offered in devotion with a pure heart — a leaf, a flower, fruit, or water — I accept with joy.",
+  "Fix your mind on Me, be devoted to Me, worship Me, bow down to Me. So shall you come to Me. I promise you truly, for you are dear to Me.",
+  "Those who worship Me with devotion — they are in Me, and I am also in them.",
+  "Having attained Me, these great souls do not again take birth in this miserable world, full of pain, for they have attained the highest perfection.",
+  "My devotee is never lost.",
+  "For those who worship Me with devotion, meditating on My form, I carry what they lack and preserve what they have.",
+  "Even those devoted to other gods worship Me alone, though not in the ordained way.",
+  "Great souls, being of My divine nature, worship Me with an unwavering mind, knowing Me as the imperishable source of all beings.",
+  "He who offers Me in pure devotion a leaf, a flower, a fruit, or even water — I accept that offering of love from the pure of heart.",
+  "Even if a person of very evil conduct worships Me with exclusive devotion, he must be considered righteous, for he has rightly resolved.",
+
+  // ── Ch 10 — Vibhuti Yoga ──
+  "I am the beginning, the middle, and the end of all creation.",
   "I am the strength of the strong, devoid of passion and desire.",
-  "By devotion, he knows Me in truth — who and what I am.",
-  "Fix your mind on Me, be devoted to Me, worship Me... and you shall come to Me.",
-  "The Lord dwells in the hearts of all creatures.",
+  "The power of God is with you at all times; through the activities of mind, senses, breathing, and emotions.",
+  "With a single fragment of Myself I pervade and support this entire universe.",
+  "Of all that is material and spiritual in this world, know for certain that I am both its origin and dissolution.",
+  "There is no truth superior to Me. Everything rests upon Me, as pearls are strung on a thread.",
+  "I am all-devouring death, and I am the generating principle of all that is yet to be.",
+  "I am time, the destroyer of all; I have come to consume the world.",
+  "I am the silence of the unknowable, and the wisdom of the wise.",
+  "Among all trees I am the sacred fig; among sages I am Narada. I am the source of all creation, and all things exist within Me.",
+  "I am the Self, O Arjuna, seated in the hearts of all creatures. I am the beginning, the middle, and the end of all beings.",
+
+  // ── Ch 11 — Vishwarupa Darshana Yoga ──
+  "Arise and attain glory. Conquer your enemies and enjoy the kingdom. By Me alone are these warriors already slain; be merely an instrument.",
+  "Those who see with eyes of love see My presence everywhere — in every face, every creature, every moment.",
+  "I am time, the great destroyer of the world. Here I have come to annihilate all people. With the exception of you, all the soldiers on both sides will be slain.",
+
+  // ── Ch 12 — Bhakti Yoga ──
+  "He who envies no being, who is friendly and compassionate to all, who is free from possessiveness and ego — that devotee is very dear to Me.",
+  "He who neither rejoices nor grieves, who neither laments nor desires, who renounces both auspicious and inauspicious things — such a devotee is very dear to Me.",
+  "He who has let go of hatred, who treats all beings with kindness and compassion — he is dear to Me.",
+  "He who is the same to friend and foe, in honor and dishonor, in heat and cold, in pleasure and pain — who is free from attachment — he is very dear to Me.",
+  "Free from all thoughts of 'I' and 'mine', a man finds utter peace.",
+  "Better than knowledge is meditation; better than meditation is renunciation of the fruit of action — from renunciation, peace immediately follows.",
+  "He who treats alike honor and dishonor, friend and foe, giving up all projects — is said to have transcended the modes of nature.",
+
+  // ── Ch 13 — Kshetra Kshetrajna Vibhaga Yoga ──
+  "He who sees the Supreme Lord existing equally everywhere and in all beings, does not degrade himself by his mind — thus he approaches the supreme destination.",
+  "He alone sees truly who sees the Lord the same in every creature — who sees the Deathless in the hearts of all that die.",
+  "He who sees all beings in his own Self, and his own Self in all beings, loses all fear.",
+  "Humility, modesty, nonviolence, tolerance, simplicity, approaching the true teacher, cleanliness, steadiness, self-control — these are declared to be knowledge.",
+  "The Supreme Soul is described as eternal, all-pervading, unchangeable, immovable, and eternally the same.",
+
+  // ── Ch 14 — Gunatraya Vibhaga Yoga ──
+  "Calmness, gentleness, silence, self-restraint, and purity — these are the disciplines of the mind.",
+  "The three modes — goodness, passion, and ignorance — bind the eternal living entity to the body.",
+  "That which at the beginning seems like nectar but at the end is like poison — that is the pleasure born of passion.",
+  "That pleasure derived from self-discipline — seeming like poison at first but like nectar at the end — is the happiness born of goodness.",
+  "He who serves Me with the yoga of devotion transcends these three modes and becomes fit for liberation.",
+  "When the lamp of knowledge shines through all the doorways of the body, it may be perceived that goodness is predominant.",
+
+  // ── Ch 15 — Purushottama Yoga ──
+  "That supreme abode is not illuminated by the sun, the moon, or fire — those who reach it never return.",
+  "I am the heat of the sun; I send and withhold the rain; I am immortality and I am death.",
+  "The light of the sun, which illuminates the whole world — know that light to be Mine.",
+  "I enter into each planet, and by My energy they stay in orbit; I become the moon and thereby supply the juice of life.",
+  "By devotion, he knows Me in truth — who and what I am. Knowing Me truly, he enters into Me.",
+  "I am the indwelling Self of all — seated in the heart of every living being. I am the beginning, the middle, and the end of all that lives.",
+
+  // ── Ch 16 — Daivasura Sampad Vibhaga Yoga ──
+  "There are three gates leading to hell — lust, anger, and greed. Every sane man should give these up, for they lead to the degradation of the soul.",
+  "Fearlessness, purity of heart, perseverance in wisdom and yoga, charity, self-control, nonviolence — these are the divine qualities.",
+  "Pride, arrogance, conceit, anger, harshness, and ignorance — these belong to those of demoniac nature.",
+  "Be fearless and pure. Never waver in your determination or dedication to the spiritual life. Give freely. Be self-controlled, sincere, truthful, and full of the desire to serve.",
+
+  // ── Ch 17 — Shraddhatraya Vibhaga Yoga ──
+  "A gift is pure when it is given from the heart to the right person at the right time.",
+  "Austerity of speech consists of speaking truthfully and beneficially, not causing distress, and regularly reciting scripture.",
+  "Cleanliness, simplicity, celibacy, and nonviolence — these are the austerities of the body.",
+
+  // ── Ch 18 — Moksha Sannyasa Yoga ──
+  "The wise man lets go of all results, whether good or bad, and focuses solely on action.",
   "In any way that men love Me, in that same way they find My love.",
+  "Thinking of Me, you will overcome all obstacles by My grace. But if you act from pride, refusing to listen, you will be lost.",
+  "Better is one's own dharma, though imperfectly performed, than the dharma of another well performed.",
+  "Surrender all actions to Me; with wisdom fixed on the Self, free from desire and selfishness, fight — let your grief be gone.",
+  "Wherever there is the Lord of Yoga, and wherever there is the master of archery, there will be prosperity, victory, and glory.",
+  "Abandon all varieties of dharma and simply surrender unto Me. I shall deliver you from all sinful reactions. Do not fear.",
+  "He who is not envious but is a kind friend to all living entities, who is free from false ego, equal in both happiness and distress, who is always satisfied and engaged in devotional service — such a person is very dear to Me.",
+  "Knowledge is better than mere ritualistic practice; meditation is better than knowledge; renunciation of the fruit of action is better than meditation — from such renunciation, peace immediately follows.",
+  "Death is certain for the born, and rebirth is certain for the dead. Therefore, grieve not over what is inevitable.",
+  "Do your duty to the best of your ability, with your mind attached to the Lord, abandoning worry and selfish attachment to the results, and remaining calm in both success and failure.",
+  "Whatever happened, happened for the good. Whatever is happening, is happening for the good. Whatever will happen, will also happen for the good. Do not grieve for the past or worry for the future; focus on the present.",
   "Action is your domain. Results are in Mine.",
+  "Through discipline, the mind becomes steady. The steady mind finds peace. The peaceful mind finds joy.",
+  "Self-knowledge is the highest wisdom. Seek it through discipline, devotion, and surrender.",
+  "Even the most sinful, if they worship Me with exclusive devotion, must be regarded as righteous, for they have rightly resolved.",
   "Having attained Me, these great souls do not again take birth in this miserable world.",
-  "Abandon all varieties of dharma and simply surrender unto Me. I shall deliver you.",
-  "Wherever there is the Lord of Yoga, and wherever there is the master of archery, there will be prosperity, victory, and glory."
+  "I am the source of all spiritual and material worlds. Everything emanates from Me. The wise who know this engage in My devotional service with all their hearts.",
+  "He who knows Me as unborn, as the beginningless, as the Supreme Lord of all the worlds — he, undeluded among men, is freed from all sins.",
+  "The Lord dwells in the hearts of all creatures, causing all creatures to revolve by His power as if mounted on a machine.",
+  "Taking refuge in Me alone, by His grace you will attain supreme peace and the eternal abode.",
+  "Fix your mind on Me, be devoted to Me, worship Me, bow down to Me — so shall you come to Me. I promise you truly, for you are dear to Me."
 ];
 
 function showGitaQuote(d) {
@@ -1356,9 +1543,10 @@ function makeCard(d) {
   const count = s.marks.filter(Boolean).length;
   const done  = count === CHANTS && s.temple;
 
-  const future = isFuture(d);
+  const future  = isFuture(d);
+  const isToday = !future && s.date && s.date === todayISO();
   const card = document.createElement('div');
-  card.className = 'day-card' + (done ? ' completed' : '') + (future ? ' future' : '');
+  card.className = 'day-card' + (done ? ' completed' : '') + (future ? ' future' : '') + (isToday && !done ? ' today' : '');
   card.id = 'card' + d;
 
   // ── card header ──
@@ -1369,16 +1557,11 @@ function makeCard(d) {
   badge.className = 'day-badge';
   badge.textContent = d;
 
-  const countBadge = document.createElement('div');
-  countBadge.className = 'card-count-badge';
-  countBadge.id = 'count' + d;
-  countBadge.textContent = count + '/21';
-
   const info = document.createElement('div');
   info.className = 'card-header-info';
   const dayLine = document.createElement('div');
   dayLine.className = 'day-line';
-  dayLine.textContent = 'Day ' + d + ' ➡️';
+  dayLine.textContent = 'Day ' + d;
   const dateWrap = document.createElement('span');
   dateWrap.className = 'day-date-txt';
   dateWrap.id = 'datetxt' + d;
@@ -1408,6 +1591,13 @@ function makeCard(d) {
   dayLine.appendChild(dateWrap);
   info.appendChild(dayLine);
 
+  if (isToday && !done) {
+    const todayTag = document.createElement('div');
+    todayTag.className = 'today-pill';
+    todayTag.textContent = 'Today';
+    info.appendChild(todayTag);
+  }
+
   const templeBtn = document.createElement('button');
   templeBtn.className = 'temple-btn' + (s.temple ? ' done' : '');
   templeBtn.id = 'templebtn' + d;
@@ -1421,7 +1611,6 @@ function makeCard(d) {
   });
 
   hdr.appendChild(badge);
-  hdr.appendChild(countBadge);
   hdr.appendChild(info);
   hdr.appendChild(templeBtn);
   card.appendChild(hdr);
@@ -1462,9 +1651,10 @@ function makeCard(d) {
 function fmtDate(iso) {
   if (!iso) return '';
   const [yy, m, dd] = iso.split('-').map(Number);
+  const dt     = new Date(yy, m - 1, dd);
+  const days   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  // return dd + ' ' + months[m - 1];
-  return  months[m - 1] + ' ' + dd + ', ' + yy;
+  return days[dt.getDay()] + ', ' + months[m - 1] + ' ' + dd + ', ' + yy;
 }
 
 function todayISO() {
@@ -1478,6 +1668,12 @@ function isFuture(d) {
   const s = state['d' + d];
   if (!s || !s.date) return false; // no date assigned → allow
   return s.date > todayISO();
+}
+
+function isPast(d) {
+  const s = state['d' + d];
+  if (!s || !s.date) return false; // no date assigned → allow
+  return s.date < todayISO();
 }
 
 function completeDay(d) {
@@ -1505,7 +1701,6 @@ function refreshCard(d) {
   const s = state[k];
   const grid = document.getElementById('grid' + d);
   const card = document.getElementById('card' + d);
-  const countEl = document.getElementById('count' + d);
   if (!grid || !card) return;
 
   const wasCompleted = card.classList.contains('completed');
@@ -1516,7 +1711,6 @@ function refreshCard(d) {
     if (s.marks[i]) { el.classList.add('done'); count++; }
     else el.classList.remove('done');
   });
-  countEl.textContent = count + '/21';
 
   const done = count === CHANTS && s.temple;
   if (done) card.classList.add('completed');
