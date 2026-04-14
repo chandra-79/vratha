@@ -520,6 +520,42 @@
       box-shadow: var(--shadow);
     }
 
+    .manthram-english-panel {
+      display: none; padding: 0 12px 14px;
+    }
+    .manthram-english-panel.open { display: block; }
+    .manthram-english-card {
+      background: linear-gradient(150deg, #fffcf5, #fff8e8);
+      border: 1.5px solid var(--gold);
+      border-radius: 12px;
+      padding: 16px 18px;
+      box-shadow: var(--shadow);
+      font-size: 0.82rem;
+      line-height: 1.75;
+      color: var(--text);
+    }
+    .manthram-english-card .mantra-section-title {
+      font-family: 'Cinzel', Georgia, serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--saffron-d);
+      letter-spacing: 0.5px;
+      margin: 14px 0 6px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid rgba(240,192,96,0.5);
+    }
+    .manthram-english-card .mantra-section-title:first-child { margin-top: 0; }
+    .manthram-english-card .mantra-verse {
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .manthram-english-card .mantra-verse span.pipe { color: var(--muted); }
+    .manthram-english-card .mantra-moola {
+      font-weight: 600;
+      color: var(--saffron-d);
+      margin-top: 4px;
+    }
+
     .audio-panel {
       display: none;
       padding: 10px 12px;
@@ -760,6 +796,7 @@
       background: linear-gradient(150deg, #fffcf5, #fff8e8, #fff3d8);
       border-radius: 20px;
       max-width: 420px; width: 100%;
+      max-height: 90vh; overflow-y: auto;
       padding: 28px 24px 24px;
       box-shadow: 0 16px 48px rgba(0,0,0,.35);
       border: 2px solid var(--gold);
@@ -774,7 +811,7 @@
       padding: 8px 12px; text-align: left;
       background: rgba(255,193,7,.07); border-radius: 0 8px 8px 0;
     }
-    .quote-source { font-size: 0.7rem; color: var(--muted); margin-bottom: 18px; }
+    .quote-source { font-size: 0.7rem; color: var(--muted); margin-bottom: 6px; }
     .quote-close-btn {
       padding: 10px 32px;
       background: linear-gradient(135deg, var(--saffron-l), var(--saffron));
@@ -784,6 +821,42 @@
       transition: opacity .2s;
     }
     .quote-close-btn:hover { opacity: .88; }
+
+    /* quote verse metadata */
+    .quote-verse-meta {
+      display: flex; align-items: center; justify-content: center;
+      gap: 6px; flex-wrap: wrap; margin-bottom: 4px;
+    }
+    .quote-chapter-badge {
+      background: linear-gradient(135deg, var(--saffron-l), var(--saffron));
+      color: white; font-size: 0.62rem; font-weight: 700; letter-spacing: 1px;
+      padding: 3px 9px; border-radius: 999px; text-transform: uppercase;
+    }
+    .quote-verse-num {
+      font-size: 0.68rem; color: var(--muted); font-weight: 600;
+      background: var(--gold-l); border: 1px solid var(--gold);
+      padding: 2px 8px; border-radius: 999px;
+    }
+    .quote-chapter-name {
+      font-size: 0.63rem; color: var(--muted); font-style: italic;
+      width: 100%; text-align: center; margin-bottom: 12px; letter-spacing: 0.3px;
+    }
+    .quote-context {
+      font-size: 0.71rem; color: var(--muted); line-height: 1.65;
+      margin: 8px 0 16px; text-align: left;
+      border-top: 1px solid rgba(240,192,96,0.5); padding-top: 10px;
+    }
+    .quote-actions {
+      display: flex; gap: 8px; justify-content: center; margin-bottom: 10px;
+    }
+    .quote-share-btn {
+      padding: 8px 18px;
+      background: rgba(230,81,0,.1);
+      color: var(--saffron-d); border: 1.5px solid var(--saffron);
+      border-radius: 10px; font-size: 0.78rem; font-weight: 600; cursor: pointer;
+      transition: background .2s;
+    }
+    .quote-share-btn:hover { background: rgba(230,81,0,.2); }
 
     /* onboard modal (tooltip-like) */
     .onboard-modal .note { font-size:0.95rem; color:var(--text); line-height:1.5; margin:6px 0; }
@@ -872,6 +945,7 @@
 <!-- ── QUICK LINKS ── -->
 <div class="quick-links">
   <button class="qbtn" id="qImgBtn" onclick="toggleManthramImage()">📜 Manthram (Telugu)</button>
+  <button class="qbtn" id="qEngBtn" onclick="toggleManthramEnglish()">📖 Manthram (English)</button>
   <button class="qbtn" id="qAudioBtn" onclick="toggleAudioPanel()">🔊 Play Manthram (21×)</button>
 </div>
 
@@ -879,9 +953,28 @@
   <img src="Manthram.png" alt="Manthram in Telugu"/>
 </div>
 
+<div class="manthram-english-panel" id="manthramEnglishPanel">
+  <div class="manthram-english-card">
+    <div class="mantra-section-title">Vighnu Naashaka Ganapati Stotram</div>
+    <div class="mantra-verse">Param Dhaama Param Brahmaa Paresham Parameeshvaram <span class="pipe">|</span><br>Vighnu Nighnukaram Shaantam Pushtam Kaantamanantakam <span class="pipe">||</span></div>
+    <div class="mantra-verse">Suraasurendrai: Siddhendrai: Stutam Stomi Paraatmaram <span class="pipe">|</span><br>Surapadma Dinesham Cha Ganesham Mangalayanam <span class="pipe">||</span></div>
+    <div class="mantra-verse">Idam Stotram Mahaapunyam Vighnashoka Haaram Param <span class="pipe">|</span><br>Ya: Paret Praatarutthaya Sarva Vighnat Pramuchyate <span class="pipe">||</span></div>
+
+    <div class="mantra-section-title">Mahalakshmi Anugraha Vighnu Raja Stotram</div>
+    <div class="mantra-verse">Om Namo Vighnu Rajaaya Sarva Saukhya Pradaayine <span class="pipe">|</span><br>Dushtaarishta Vinaashaaya Paraaya Paramaatmane <span class="pipe">|</span></div>
+    <div class="mantra-verse">Lambodharam Mahaveeryam Naagayajnopa Shobhitam <span class="pipe">|</span><br>Ardha Chandradharam Devam Vighnu Vyooha Vinaashanam <span class="pipe">||</span></div>
+    <div class="mantra-verse">Om Hrom &ndash; Hreem &ndash; Hroom &ndash; Haim &ndash; Hraum &ndash; Hra: Herambaya Namo Nama: <span class="pipe">|</span></div>
+    <div class="mantra-verse">Sarva Siddhi Pradokasatyam Siddhi Buddhi Pradobhava <span class="pipe">||</span><br>Chintitaartha Pradasvam Hi Satatam Modakapriya: <span class="pipe">|</span><br>Sindooraroona Vastraischa Poojito Varadaayaka: <span class="pipe">||</span></div>
+    <div class="mantra-verse">Idam Ganapati Stotram Ya: Pared Bhaktimaan Nara: <span class="pipe">|</span><br>Tasya Dehaancha Gehaancha Swayam Lakshmeer Na Munchati <span class="pipe">||</span></div>
+
+    <div class="mantra-section-title">Guru Ganapati Moola Mantra</div>
+    <div class="mantra-moola">Om Gam Ganapataye Sarva Vighnu Haaraaya &ndash; Sarvaaya &ndash; Sarva Gurave Lambodaraaya &ndash; Hreem Gam Nama: <span class="pipe">||</span></div>
+  </div>
+</div>
+
 <div class="audio-panel" id="audioPanel">
   <audio id="manthramAudio" src="Manthram.mpeg" controls preload="auto"></audio>
-  <div class="audio-count" id="audioCount" role="status" aria-live="polite">Chanting: 0 / 21</div>
+  <div class="audio-count" id="audioCount" role="status" aria-live="polite">Chanting Counter: 0 / 21</div>
   <button class="audio-reset-btn" onclick="resetAudio()">↺ Reset count</button>
 </div>
 
@@ -982,9 +1075,15 @@
   <div class="quote-box">
     <span class="quote-om">🕉</span>
     <div class="quote-day-label" id="quoteDayLabel">Day 1 Complete 🙏</div>
+    <div class="quote-verse-meta">
+      <span class="quote-chapter-badge" id="quoteChapterBadge">Chapter 2</span>
+      <span class="quote-verse-num" id="quoteVerseNum">Verse 47</span>
+    </div>
+    <div class="quote-chapter-name" id="quoteChapterName">Sankhya Yoga</div>
     <div class="quote-text" id="quoteText"></div>
     <div class="quote-source">— Bhagavad Gita</div>
-    <button class="qbtn" onclick="captureProgress()">📸 Share Progress</button>
+    <div class="quote-context" id="quoteContext"></div>
+    <button class="quote-share-btn" style="margin-bottom:10px" onclick="captureProgress()">📸 Share Progress</button>
     <button class="quote-close-btn" onclick="closeGitaQuote()">🙏 Jai Ganapati!</button>
   </div>
 </div>
@@ -1063,18 +1162,57 @@ function captureProgress() {
   const pct  = Math.round((doneD / DAYS) * 100);
   const dLeft = DAYS - doneD;
 
-  // ── Layout constants ──
+  const q = _currentQuote; // null if opened from footer before any day completed
+
+  // ── Grid: smaller cells, 8 cols → 6 rows ──
   const W = 480, PAD = 24;
-  const COLS = 7, CELL = 44, CGAP = 7;
-  const GROW = Math.ceil(DAYS / COLS);                          // 7 rows
-  const GRID_W = COLS * CELL + (COLS - 1) * CGAP;              // 350
-  const GRID_H = GROW * CELL + (GROW - 1) * CGAP;              // 350
+  const COLS = 8, CELL = 30, CGAP = 4;
+  const GROW   = Math.ceil(DAYS / COLS);                   // 6 rows
+  const GRID_W = COLS * CELL + (COLS - 1) * CGAP;         // 268
+  const GRID_H = GROW * CELL + (GROW - 1) * CGAP;         // 200
   const GRID_X = (W - GRID_W) / 2;
-  // Section heights
-  const S_BORDER = 6, S_PAD = 20, S_HDR = 78, S_STATS = 70,
-        S_BAR = 38, S_FOOTER = 46, S_GAP = 14;
-  const H = S_BORDER + S_PAD + S_HDR + S_GAP + S_STATS + S_GAP +
-            S_BAR + S_GAP + GRID_H + S_GAP + S_FOOTER + S_PAD;
+
+  // ── Pre-measure quote text on an off-screen canvas ──
+  // Quote text-layout constants (used in both height calc and drawing)
+  const Q_CARD_PAD = 10; // inside-card top & bottom padding
+  const Q_CARD_GAP = 20; // gap between card bottom and context block
+  const Q_CTX_LEAD = 12; // extra top lead before context so ascenders clear the card
+  const Q_LINE_H   = 22; // quote line-height (13 px font)
+  const CTX_LINE_H = 18; // context line-height (10.5 px font)
+
+  let qLines = [], ctxLines = [], qH = 0, ctxH = 0;
+  if (q) {
+    const tmp = document.createElement('canvas');
+    const tc  = tmp.getContext('2d');
+    const innerW = W - PAD * 2 - 20; // available inside card (left-bar indent + right margin)
+    tc.font = 'italic 13px Georgia, serif';
+    qLines = _wrapTextLines(tc, '\u201C' + q.text + '\u201D', innerW);
+    qH = qLines.length * Q_LINE_H;
+    tc.font = '10.5px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
+    ctxLines = _wrapTextLines(tc, q.context, W - PAD * 2);
+    ctxH = ctxLines.length * CTX_LINE_H;
+  }
+
+  // ── Fixed section heights ──
+  const S_BORDER = 6, S_PAD = 20, S_HDR = 78, S_STATS = 62,
+        S_BAR = 36, S_GAP = 12;
+  // Quote block height (0 when no quote)
+  const Q_BLOCK = q
+    ? 1 + S_GAP                          // divider + gap
+      + 16 + 6                           // blessing label + gap
+      + 22 + 4                           // badge row + gap
+      + 16 + S_GAP                       // chapter name + gap
+      + (qH + Q_CARD_PAD * 2) + Q_CARD_GAP  // quote card (text + padding) + gap
+      + Q_CTX_LEAD + ctxH + S_GAP       // context lead + text + gap
+    : 0;
+  const S_FOOTER = 34;
+  const H = S_BORDER + S_PAD
+    + S_HDR + S_GAP
+    + S_STATS + S_GAP
+    + S_BAR + S_GAP
+    + GRID_H + S_GAP
+    + Q_BLOCK
+    + S_FOOTER + S_PAD + S_BORDER;
 
   const dpr = Math.min(window.devicePixelRatio || 1, 3);
   const canvas = document.createElement('canvas');
@@ -1090,7 +1228,7 @@ function captureProgress() {
   ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, W, H);
 
-  // Saffron gradient (reused for both borders)
+  // Saffron gradient (reused)
   const sfGrad = ctx.createLinearGradient(0, 0, W, 0);
   sfGrad.addColorStop(0, '#ff8f00');
   sfGrad.addColorStop(0.5, '#e65100');
@@ -1100,23 +1238,23 @@ function captureProgress() {
   ctx.fillStyle = sfGrad;
   ctx.fillRect(0, 0, W, S_BORDER);
 
-  let y = S_BORDER + S_PAD; // = 26
+  let y = S_BORDER + S_PAD;
 
   // ── Header ──
-  ctx.font = '30px serif';
+  ctx.font = '28px serif';
   ctx.textAlign = 'center';
   ctx.fillStyle = '#3b1f00';
-  ctx.fillText('🕉', W / 2, y + 28);
+  ctx.fillText('\uD83D\uDD49', W / 2, y + 26);
 
-  ctx.font = 'bold 17px Georgia, serif';
+  ctx.font = 'bold 16px Georgia, serif';
   ctx.fillStyle = '#bf360c';
-  ctx.fillText('Ganapati Vratha Tracker', W / 2, y + 52);
+  ctx.fillText('Ganapati Vratha Tracker', W / 2, y + 48);
 
-  ctx.font = '12px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
+  ctx.font = '11px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
   ctx.fillStyle = '#8d5524';
-  ctx.fillText('48-Day Sacred Penance  ·  21 Chantings Daily', W / 2, y + 70);
+  ctx.fillText('48-Day Sacred Penance  \u00B7  21 Chantings Daily', W / 2, y + 66);
 
-  y += S_HDR + S_GAP; // 118
+  y += S_HDR + S_GAP;
 
   // ── Stats boxes ──
   const stats = [
@@ -1125,52 +1263,47 @@ function captureProgress() {
     { num: totalC,  lbl: 'CHANTINGS'  },
     { num: dLeft,   lbl: 'REMAINING'  },
   ];
-  const boxW = Math.floor((W - PAD * 2 - 8 * 3) / 4); // ≈ 100
+  const boxW = Math.floor((W - PAD * 2 - 8 * 3) / 4);
   for (let i = 0; i < 4; i++) {
     const bx = PAD + i * (boxW + 8);
     ctx.fillStyle = '#fffcf5';
-    _rrect(ctx, bx, y, boxW, 62, 8); ctx.fill();
-    // top accent stripe
+    _rrect(ctx, bx, y, boxW, 54, 8); ctx.fill();
     ctx.fillStyle = '#e65100';
     ctx.fillRect(bx + 12, y, boxW - 24, 3);
-    // number
-    ctx.font = 'bold 24px Georgia, serif';
+    ctx.font = 'bold 22px Georgia, serif';
     ctx.fillStyle = '#e65100';
     ctx.textAlign = 'center';
-    ctx.fillText(String(stats[i].num), bx + boxW / 2, y + 38);
-    // label
-    ctx.font = '9px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
+    ctx.fillText(String(stats[i].num), bx + boxW / 2, y + 33);
+    ctx.font = '8.5px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
     ctx.fillStyle = '#8d5524';
-    ctx.fillText(stats[i].lbl, bx + boxW / 2, y + 54);
+    ctx.fillText(stats[i].lbl, bx + boxW / 2, y + 47);
   }
-  y += S_STATS + S_GAP; // 202
+  y += S_STATS + S_GAP;
 
   // ── Progress bar ──
-  const barX = PAD, barW = W - PAD * 2, barH = 10, barR = 5;
+  const barX = PAD, barW = W - PAD * 2, barH = 9, barR = 4;
   ctx.fillStyle = 'rgba(0,0,0,.12)';
   _rrect(ctx, barX, y, barW, barH, barR); ctx.fill();
   if (pct > 0) {
     const fw = Math.max(barR * 2, barW * pct / 100);
     const fGrad = ctx.createLinearGradient(barX, 0, barX + fw, 0);
-    fGrad.addColorStop(0,   '#ffe082');
-    fGrad.addColorStop(0.5, '#ffd740');
-    fGrad.addColorStop(1,   '#ffab00');
+    fGrad.addColorStop(0, '#ffe082'); fGrad.addColorStop(0.5, '#ffd740'); fGrad.addColorStop(1, '#ffab00');
     ctx.fillStyle = fGrad;
     _rrect(ctx, barX, y, fw, barH, barR); ctx.fill();
   }
-  ctx.font = '11px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
+  ctx.font = '10px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
   ctx.fillStyle = '#3b1f00';
   ctx.textAlign = 'center';
-  ctx.fillText(doneD + ' of ' + DAYS + ' days complete (' + pct + '%) \uD83D\uDE4F', W / 2, y + barH + 20);
-  y += S_BAR + S_GAP; // 254
+  ctx.fillText(doneD + ' of ' + DAYS + ' days complete (' + pct + '%) \uD83D\uDE4F', W / 2, y + barH + 17);
+  y += S_BAR + S_GAP;
 
-  // ── Day grid ──
+  // ── Day grid (smaller) ──
   for (let d = 1; d <= DAYS; d++) {
     const col = (d - 1) % COLS;
     const row = Math.floor((d - 1) / COLS);
-    const cx = GRID_X + col * (CELL + CGAP) + CELL / 2;
-    const cy = y + row * (CELL + CGAP) + CELL / 2;
-    const r  = CELL / 2 - 3;
+    const cx  = GRID_X + col * (CELL + CGAP) + CELL / 2;
+    const cy  = y + row * (CELL + CGAP) + CELL / 2;
+    const r   = CELL / 2 - 2;
 
     const s    = state['d' + d];
     const cnt  = s ? s.marks.filter(Boolean).length : 0;
@@ -1180,44 +1313,117 @@ function captureProgress() {
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
 
     if (done) {
-      // filled saffron circle
       const cGrad = ctx.createRadialGradient(cx - r * .25, cy - r * .25, r * .1, cx, cy, r);
-      cGrad.addColorStop(0,   '#ff7043');
-      cGrad.addColorStop(0.6, '#e64a19');
-      cGrad.addColorStop(1,   '#bf360c');
-      ctx.fillStyle = cGrad;
-      ctx.fill();
-      ctx.font = 'bold 11px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
+      cGrad.addColorStop(0, '#ff7043'); cGrad.addColorStop(0.6, '#e64a19'); cGrad.addColorStop(1, '#bf360c');
+      ctx.fillStyle = cGrad; ctx.fill();
+      ctx.font = 'bold 9px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
       ctx.fillStyle = 'rgba(255,255,255,.92)';
       ctx.textAlign = 'center';
-      ctx.fillText(String(d), cx, cy + 4);
+      ctx.fillText(String(d), cx, cy + 3);
     } else {
-      // empty / pending circle
-      ctx.fillStyle = '#ede0cc';
-      ctx.fill();
-      ctx.strokeStyle = '#c8a87a';
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-      ctx.font = '10px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
+      ctx.fillStyle = '#ede0cc'; ctx.fill();
+      ctx.strokeStyle = '#c8a87a'; ctx.lineWidth = 1.2; ctx.stroke();
+      ctx.font = '8px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
       ctx.fillStyle = '#b09070';
       ctx.textAlign = 'center';
-      ctx.fillText(String(d), cx, cy + 4);
+      ctx.fillText(String(d), cx, cy + 3);
     }
   }
-  y += GRID_H + S_GAP; // 618
+  y += GRID_H + S_GAP;
+
+  // ── Quote section ──
+  if (q) {
+    // Divider
+    const divGrad = ctx.createLinearGradient(PAD, 0, W - PAD, 0);
+    divGrad.addColorStop(0, 'transparent');
+    divGrad.addColorStop(0.25, '#f0c060');
+    divGrad.addColorStop(0.5,  '#e65100');
+    divGrad.addColorStop(0.75, '#f0c060');
+    divGrad.addColorStop(1, 'transparent');
+    ctx.strokeStyle = divGrad; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(W - PAD, y); ctx.stroke();
+    y += 1 + S_GAP;
+
+    // "TODAY'S BLESSING" label
+    ctx.font = 'bold 10px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
+    ctx.fillStyle = '#e65100';
+    ctx.textAlign = 'center';
+    ctx.fillText('\u2736  TODAY\u2019S BLESSING  \u2736', W / 2, y);
+    y += 16 + 6;
+
+    // Chapter badge + Verse pill
+    ctx.font = 'bold 9.5px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
+    const chText = 'Chapter ' + q.chapter;
+    const vsText = 'Verse ' + q.verse;
+    const chW = ctx.measureText(chText).width + 16;
+    const vsW = ctx.measureText(vsText).width + 16;
+    const totalBW = chW + 6 + vsW;
+    let bx = (W - totalBW) / 2;
+
+    _rrect(ctx, bx, y - 12, chW, 18, 9);
+    ctx.fillStyle = sfGrad; ctx.fill();
+    ctx.fillStyle = 'white'; ctx.textAlign = 'center';
+    ctx.fillText(chText, bx + chW / 2, y + 2);
+
+    bx += chW + 6;
+    _rrect(ctx, bx, y - 12, vsW, 18, 9);
+    ctx.fillStyle = '#fff8e0'; ctx.fill();
+    ctx.strokeStyle = '#f0c060'; ctx.lineWidth = 1; ctx.stroke();
+    ctx.fillStyle = '#8d5524';
+    ctx.fillText(vsText, bx + vsW / 2, y + 2);
+    y += 22 + 4;
+
+    // Chapter name
+    ctx.font = 'italic 10px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
+    ctx.fillStyle = '#a0693a';
+    ctx.textAlign = 'center';
+    ctx.fillText(q.chapterName, W / 2, y);
+    y += 16 + S_GAP;
+
+    // ── Quote text card ──
+    const qCardH = qH + Q_CARD_PAD * 2;
+    const qCardX = PAD, qCardW = W - PAD * 2;
+    _rrect(ctx, qCardX, y, qCardW, qCardH, 7);
+    ctx.fillStyle = 'rgba(255,193,7,0.09)'; ctx.fill();
+    ctx.strokeStyle = 'rgba(230,81,0,0.22)'; ctx.lineWidth = 1; ctx.stroke();
+    // Left accent bar (flush with card)
+    ctx.fillStyle = '#e65100';
+    ctx.fillRect(qCardX, y, 3, qCardH);
+
+    // Quote lines — baseline starts at card-top + padding + cap-height
+    ctx.font = 'italic 13px Georgia, serif';
+    ctx.fillStyle = '#2d1600';
+    ctx.textAlign = 'left';
+    const qTextX = PAD + 11; // inside bar (3px) + gutter (8px)
+    const qFirstBaseline = y + Q_CARD_PAD + 12; // 12 ≈ cap-height for 13px Georgia
+    for (let i = 0; i < qLines.length; i++) {
+      ctx.fillText(qLines[i], qTextX, qFirstBaseline + i * Q_LINE_H);
+    }
+    y += qCardH + Q_CARD_GAP; // card bottom + explicit gap
+
+    // ── Context text ──
+    // Q_CTX_LEAD pushes the first baseline down so ascenders clear the card gap
+    ctx.font = '10.5px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
+    ctx.fillStyle = '#7a4a20';
+    ctx.textAlign = 'left';
+    const ctxFirstBaseline = y + Q_CTX_LEAD;
+    for (let i = 0; i < ctxLines.length; i++) {
+      ctx.fillText(ctxLines[i], PAD, ctxFirstBaseline + i * CTX_LINE_H);
+    }
+    y += Q_CTX_LEAD + ctxH + S_GAP;
+  }
 
   // ── Footer ──
-  ctx.strokeStyle = '#f0c060';
-  ctx.lineWidth = 1;
+  ctx.strokeStyle = '#f0c060'; ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(W - PAD, y); ctx.stroke();
 
   const now = new Date();
   const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  ctx.font = '11px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
+  ctx.font = '10px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
   ctx.fillStyle = '#8d5524';
   ctx.textAlign = 'center';
   ctx.fillText('Ganapati Vratha Progress  \u00B7  ' +
-    now.getDate() + ' ' + MONTHS[now.getMonth()] + ' ' + now.getFullYear(), W / 2, y + 18);
+    now.getDate() + ' ' + MONTHS[now.getMonth()] + ' ' + now.getFullYear(), W / 2, y + 16);
 
   // Bottom border
   ctx.fillStyle = sfGrad;
@@ -1272,200 +1478,845 @@ function showToast(msg, ms = 2200) {
   setTimeout(() => { t.style.display = 'none'; }, ms);
 }
 
-// ── GITA QUOTES (one per day, 48 total) ──
+// ── GITA QUOTES — with Chapter, Verse & Context ──
 const GITA_QUOTES = [
-  // ── Ch 1 — Arjuna Vishada Yoga ──
-  "Arise, O conqueror of enemies! Shake off this trivial weakness of heart.",
-  "The grief that clouds your mind is unworthy of you. Stand up and face your duty.",
 
-  // ── Ch 2 — Sankhya Yoga ──
-  "You have the right to work, but never to the fruit of work.",
-  "Work is your responsibility, not the fruit. Focus on the effort, not the reward.",
-  "Never was there a time when I did not exist, nor you, nor all these beings; nor will there be any time when we do not exist.",
-  "For the soul there is neither birth nor death at any time. It is unborn, eternal, ever-existing, and primeval.",
-  "Just as a person puts on new garments, giving up old ones, the soul similarly accepts new material bodies, giving up the old and useless ones.",
-  "Weapons cannot cut the soul, nor can fire burn it; water cannot wet it, nor wind dry it.",
-  "The soul is unbreakable, insoluble, unevaporatable, and unchangeable — it is eternal, all-pervading, immovable, and primeval.",
-  "You grieve for those who should not be grieved for; yet you speak words of wisdom. The wise grieve neither for the living nor for the dead.",
-  "Fear not what is not real, never was and never will be. What is real, always was and cannot be destroyed.",
-  "Even a little effort toward spiritual awareness will protect you from the greatest fear.",
-  "No effort on this path is wasted. Even a little progress saves you from the greatest fear.",
-  "When a man dwells in his mind on the objects of sense, attachment to them is produced. From attachment springs desire, and from desire comes anger.",
-  "From anger, complete delusion arises; from delusion, bewilderment of memory. When memory is bewildered, intelligence is lost; and when intelligence is lost, one falls down again.",
-  "The self-controlled soul, who moves amongst sense objects, free from either attachment or repulsion, attains eternal peace.",
-  "He who is not disturbed by the incessant flow of desires — that enter like rivers into the ocean which is ever being filled but is always still — can alone achieve peace.",
-  "A person is elevated in yoga when, having renounced all material desires, he neither acts for sense gratification nor engages in fruitive activities.",
-  "The sage who is not disturbed by pain, who does not long for pleasure, who is free from passion, fear, and anger — he is called a man of steady wisdom.",
-  "He whose mind is untroubled even amidst threefold miseries, who is not elated by happiness, and who is free from attachment, fear, and anger, is called a sage of steady wisdom.",
-  "When a man has shed all desires, he lives in the grasp of the soul and reaches — even in this life — the peace of Brahman.",
-  "A man is disciplined when he keeps his mind untroubled and free from all anxiety.",
+  // ── Chapter 2 — Sankhya Yoga ──
+  { text: "Arise, O conqueror of enemies! Shake off this trivial weakness of heart.",
+    chapter: 2, chapterName: "Sankhya Yoga", verse: "2:3",
+    context: "Krishna's first words to grief-stricken Arjuna, who has collapsed on the Kurukshetra battlefield, unable to raise his bow against his kinsmen." },
 
-  // ── Ch 3 — Karma Yoga ──
-  "Perform your obligatory duty, for action is indeed better than inaction.",
-  "Not by refraining from action does man attain freedom from action. Not by mere renunciation does he attain supreme perfection.",
-  "No one can remain inactive even for a moment. All are driven helplessly to action by the modes of material nature.",
-  "He who does his duty without attachment, surrendering the results to the Lord, is unaffected by sinful action, as the lotus leaf is untouched by water.",
-  "Whatever action is performed by a great man, common men follow in his footsteps.",
-  "Let right deeds be thy motive, not the fruit which comes from them.",
-  "Through selfless service, you will always be fruitful and find the fulfillment of your desires.",
-  "It is better to perform one's own duty imperfectly than to perform another's duty perfectly. It is better to die in one's own duty than to follow the path of another.",
+  { text: "The grief that clouds your mind is unworthy of you. Stand up and face your duty.",
+    chapter: 2, chapterName: "Sankhya Yoga", verse: "2:3",
+    context: "Krishna rebukes Arjuna's despondency as unbecoming of a warrior — a call to rise above sorrow and fulfil one's sacred duty." },
 
-  // ── Ch 4 — Jnana Karma Sanyasa Yoga ──
-  "Whenever and wherever there is a decline of righteousness and a rise of evil, I manifest Myself.",
-  "To deliver the pious and annihilate the wicked, and to reestablish the principles of dharma, I appear in every age.",
-  "Those who understand the divine nature of My birth and activities do not take birth again upon leaving the body — they come to Me.",
-  "Whatever path men travel is My path. No matter where they walk, it leads to Me.",
-  "The fire of knowledge burns to ashes all karma — all baggage of past action.",
-  "Even if you are the most sinful of all sinners, you shall cross over all sin by the raft of knowledge.",
-  "As the blazing fire reduces wood to ashes, the fire of transcendental knowledge reduces all reactions to material activities to ashes.",
-  "One who sees inaction in action, and action in inaction, is intelligent among men.",
-  "Better indeed is knowledge than mechanical practice.",
+  { text: "You have the right to work, but never to the fruit of work.",
+    chapter: 2, chapterName: "Sankhya Yoga", verse: "2:47",
+    context: "The cornerstone teaching of Nishkama Karma — perform your duty without craving outcomes. Action belongs to us; results belong to the Divine." },
 
-  // ── Ch 5 — Karma Sanyasa Yoga ──
-  "Seek refuge in the attitude of detachment and you will amass the wealth of spiritual awareness.",
-  "The peace of God is with them whose mind and soul are in harmony, who are free from desire and wrath, who know their own soul.",
-  "There is nothing lost or wasted in this life.",
-  "He who performs his duty without attachment, surrendering the results to God, is not affected by sinful action, as the lotus leaf is untouched by water.",
-  "The senses, mind, and intellect are said to be the seat of desire; through them, desire deludes the embodied soul.",
+  { text: "Work is your responsibility, not the fruit. Focus on the effort, not the reward.",
+    chapter: 2, chapterName: "Sankhya Yoga", verse: "2:47",
+    context: "The essence of Karma Yoga: act with full dedication, surrendering all attachment to results. This liberates the soul from the cycle of karma." },
 
-  // ── Ch 6 — Dhyana Yoga ──
-  "Little by little, through patience and repeated effort, the mind will become stilled in the Self.",
-  "When meditation is mastered, the mind is unwavering like the flame of a lamp in a windless place.",
-  "One who has control over the mind is tranquil in heat and cold, in pleasure and pain, and in honor and dishonor.",
-  "The mind is restless and difficult to restrain, but it is subdued by practice and detachment.",
-  "Lift yourself by yourself; do not allow yourself to be lowered by yourself. The self alone is its own friend, and the self alone is its own enemy.",
-  "For one who has conquered the mind, the mind is the best of friends. But for one who has failed to do so, the mind remains the greatest enemy.",
-  "The yogi who is satisfied with knowledge and wisdom, who has conquered the senses — to whom a lump of earth, a stone, and gold are the same — is said to be in yoga.",
-  "Yoga is the journey of the self, through the self, to the self.",
-  "One who sees Me in all things, and all things in Me — I am never lost to him, nor is he ever lost to Me.",
-  "The illumined soul, whose heart has been stilled in meditation, sees the Self in all beings and all beings in the Self — equal-minded toward all.",
-  "He who renounces the fruit of action and whose mind is free — that wise man neither rejoices when he gains the good, nor grieves when he gets the bad.",
-  "When the mind, controlled and disciplined, rests in the Self alone, without longing for any pleasure — then it is called yoga.",
+  { text: "Never was there a time when I did not exist, nor you, nor all these beings; nor will there be any time when we do not exist.",
+    chapter: 2, chapterName: "Sankhya Yoga", verse: "2:12",
+    context: "Krishna reveals the eternal nature of the Self (Atman) to console Arjuna — the soul is beyond time, never truly born and never truly dying." },
 
-  // ── Ch 7 — Jnana Vijnana Yoga ──
-  "Man is made by his belief. As he believes, so he is.",
-  "Out of many thousands, perhaps one strives for perfection; and of those who have achieved it, perhaps one truly knows Me.",
-  "Faith is the very essence of man. What his faith is, he is.",
-  "I am the taste of pure water, the light of the sun and the moon; I am the syllable Om in the Vedic mantras.",
-  "I am the sweet fragrance in the earth and the heat in fire; I am the life of all that lives.",
-  "Know that all states of being — goodness, passion, or ignorance — are manifested by My energy. I am, in one sense, everything; but I am independent, never controlled by them.",
-  "This divine energy of Mine, consisting of the three modes of material nature, is difficult to overcome. But those who have surrendered unto Me can easily cross beyond it.",
-  "Four kinds of pious men worship Me — the distressed, the seeker of knowledge, the seeker of wealth, and the wise. Of these, the wise man who is always engaged in My service is the best.",
+  { text: "For the soul there is neither birth nor death at any time. It is unborn, eternal, ever-existing, and primeval.",
+    chapter: 2, chapterName: "Sankhya Yoga", verse: "2:20",
+    context: "Krishna teaches the immortality of the Atman — the eternal self that was never born and will never die — to free Arjuna from fear of 'killing' his kinsmen." },
 
-  // ── Ch 8 — Akshara Brahma Yoga ──
-  "Whoever, at the time of death, gives up the body remembering Me alone, reaches My state. Of this there is no doubt.",
-  "I am easily attained by the person who always remembers Me, attached to nothing else.",
-  "There are two ways of passing from this world — one in light and one in darkness. Those who pass in light do not return to be born again.",
-  "From the highest planet in the material world down to the lowest, all are places of misery where repeated birth and death take place. But one who attains My abode never takes birth again.",
+  { text: "Just as a person puts on new garments, giving up old ones, the soul similarly accepts new material bodies, giving up the old and useless ones.",
+    chapter: 2, chapterName: "Sankhya Yoga", verse: "2:22",
+    context: "The analogy of changing clothes to explain reincarnation — the soul discards one body for another as naturally as one changes garments." },
 
-  // ── Ch 9 — Raja Vidya Raja Guhya Yoga ──
-  "Whatever you do, whatever you eat, whatever you offer or give away, whatever austerities you practice — do that as an offering to Me.",
-  "Whatever I am offered in devotion with a pure heart — a leaf, a flower, fruit, or water — I accept with joy.",
-  "Fix your mind on Me, be devoted to Me, worship Me, bow down to Me. So shall you come to Me. I promise you truly, for you are dear to Me.",
-  "Those who worship Me with devotion — they are in Me, and I am also in them.",
-  "Having attained Me, these great souls do not again take birth in this miserable world, full of pain, for they have attained the highest perfection.",
-  "My devotee is never lost.",
-  "For those who worship Me with devotion, meditating on My form, I carry what they lack and preserve what they have.",
-  "Even those devoted to other gods worship Me alone, though not in the ordained way.",
-  "Great souls, being of My divine nature, worship Me with an unwavering mind, knowing Me as the imperishable source of all beings.",
-  "He who offers Me in pure devotion a leaf, a flower, a fruit, or even water — I accept that offering of love from the pure of heart.",
-  "Even if a person of very evil conduct worships Me with exclusive devotion, he must be considered righteous, for he has rightly resolved.",
+  { text: "Weapons cannot cut the soul, nor can fire burn it; water cannot wet it, nor wind dry it.",
+    chapter: 2, chapterName: "Sankhya Yoga", verse: "2:23",
+    context: "Krishna shows the four elements — earth, fire, water, air — are all powerless against the immortal soul. The Atman is beyond all physical forces." },
 
-  // ── Ch 10 — Vibhuti Yoga ──
-  "I am the beginning, the middle, and the end of all creation.",
-  "I am the strength of the strong, devoid of passion and desire.",
-  "The power of God is with you at all times; through the activities of mind, senses, breathing, and emotions.",
-  "With a single fragment of Myself I pervade and support this entire universe.",
-  "Of all that is material and spiritual in this world, know for certain that I am both its origin and dissolution.",
-  "There is no truth superior to Me. Everything rests upon Me, as pearls are strung on a thread.",
-  "I am all-devouring death, and I am the generating principle of all that is yet to be.",
-  "I am time, the destroyer of all; I have come to consume the world.",
-  "I am the silence of the unknowable, and the wisdom of the wise.",
-  "Among all trees I am the sacred fig; among sages I am Narada. I am the source of all creation, and all things exist within Me.",
-  "I am the Self, O Arjuna, seated in the hearts of all creatures. I am the beginning, the middle, and the end of all beings.",
+  { text: "The soul is unbreakable, insoluble, unevaporatable, and unchangeable — it is eternal, all-pervading, immovable, and primeval.",
+    chapter: 2, chapterName: "Sankhya Yoga", verse: "2:24",
+    context: "The indestructible nature of the Atman — it transcends all change, movement, and dissolution. Knowing this, why grieve?" },
 
-  // ── Ch 11 — Vishwarupa Darshana Yoga ──
-  "Arise and attain glory. Conquer your enemies and enjoy the kingdom. By Me alone are these warriors already slain; be merely an instrument.",
-  "Those who see with eyes of love see My presence everywhere — in every face, every creature, every moment.",
-  "I am time, the great destroyer of the world. Here I have come to annihilate all people. With the exception of you, all the soldiers on both sides will be slain.",
+  { text: "You grieve for those who should not be grieved for; yet you speak words of wisdom. The wise grieve neither for the living nor for the dead.",
+    chapter: 2, chapterName: "Sankhya Yoga", verse: "2:11",
+    context: "Krishna's opening diagnosis: Arjuna's grief contradicts the wisdom he claims. The enlightened see the deathlessness of all souls." },
 
-  // ── Ch 12 — Bhakti Yoga ──
-  "He who envies no being, who is friendly and compassionate to all, who is free from possessiveness and ego — that devotee is very dear to Me.",
-  "He who neither rejoices nor grieves, who neither laments nor desires, who renounces both auspicious and inauspicious things — such a devotee is very dear to Me.",
-  "He who has let go of hatred, who treats all beings with kindness and compassion — he is dear to Me.",
-  "He who is the same to friend and foe, in honor and dishonor, in heat and cold, in pleasure and pain — who is free from attachment — he is very dear to Me.",
-  "Free from all thoughts of 'I' and 'mine', a man finds utter peace.",
-  "Better than knowledge is meditation; better than meditation is renunciation of the fruit of action — from renunciation, peace immediately follows.",
-  "He who treats alike honor and dishonor, friend and foe, giving up all projects — is said to have transcended the modes of nature.",
+  { text: "Fear not what is not real, never was and never will be. What is real, always was and cannot be destroyed.",
+    chapter: 2, chapterName: "Sankhya Yoga", verse: "2:16",
+    context: "Krishna distinguishes the temporary (asat — the unreal body) from the eternal (sat — the Real Self). Fear belongs only to the unreal." },
 
-  // ── Ch 13 — Kshetra Kshetrajna Vibhaga Yoga ──
-  "He who sees the Supreme Lord existing equally everywhere and in all beings, does not degrade himself by his mind — thus he approaches the supreme destination.",
-  "He alone sees truly who sees the Lord the same in every creature — who sees the Deathless in the hearts of all that die.",
-  "He who sees all beings in his own Self, and his own Self in all beings, loses all fear.",
-  "Humility, modesty, nonviolence, tolerance, simplicity, approaching the true teacher, cleanliness, steadiness, self-control — these are declared to be knowledge.",
-  "The Supreme Soul is described as eternal, all-pervading, unchangeable, immovable, and eternally the same.",
+  { text: "Even a little effort toward spiritual awareness will protect you from the greatest fear.",
+    chapter: 2, chapterName: "Sankhya Yoga", verse: "2:40",
+    context: "Yoga's most comforting promise: even small steps on the path are never wasted — every sincere effort protects one from the greatest dangers." },
 
-  // ── Ch 14 — Gunatraya Vibhaga Yoga ──
-  "Calmness, gentleness, silence, self-restraint, and purity — these are the disciplines of the mind.",
-  "The three modes — goodness, passion, and ignorance — bind the eternal living entity to the body.",
-  "That which at the beginning seems like nectar but at the end is like poison — that is the pleasure born of passion.",
-  "That pleasure derived from self-discipline — seeming like poison at first but like nectar at the end — is the happiness born of goodness.",
-  "He who serves Me with the yoga of devotion transcends these three modes and becomes fit for liberation.",
-  "When the lamp of knowledge shines through all the doorways of the body, it may be perceived that goodness is predominant.",
+  { text: "No effort on this path is wasted. Even a little progress saves you from the greatest fear.",
+    chapter: 2, chapterName: "Sankhya Yoga", verse: "2:40",
+    context: "Unlike worldly pursuits where incomplete effort yields nothing, every step on the yoga path is carried forward — spiritually, nothing is ever lost." },
 
-  // ── Ch 15 — Purushottama Yoga ──
-  "That supreme abode is not illuminated by the sun, the moon, or fire — those who reach it never return.",
-  "I am the heat of the sun; I send and withhold the rain; I am immortality and I am death.",
-  "The light of the sun, which illuminates the whole world — know that light to be Mine.",
-  "I enter into each planet, and by My energy they stay in orbit; I become the moon and thereby supply the juice of life.",
-  "By devotion, he knows Me in truth — who and what I am. Knowing Me truly, he enters into Me.",
-  "I am the indwelling Self of all — seated in the heart of every living being. I am the beginning, the middle, and the end of all that lives.",
+  { text: "When a man dwells in his mind on the objects of sense, attachment to them is produced. From attachment springs desire, and from desire comes anger.",
+    chapter: 2, chapterName: "Sankhya Yoga", verse: "2:62",
+    context: "Krishna traces the chain of spiritual downfall: sensory thought → attachment → desire → anger — a warning to guard the mind at its roots." },
 
-  // ── Ch 16 — Daivasura Sampad Vibhaga Yoga ──
-  "There are three gates leading to hell — lust, anger, and greed. Every sane man should give these up, for they lead to the degradation of the soul.",
-  "Fearlessness, purity of heart, perseverance in wisdom and yoga, charity, self-control, nonviolence — these are the divine qualities.",
-  "Pride, arrogance, conceit, anger, harshness, and ignorance — these belong to those of demoniac nature.",
-  "Be fearless and pure. Never waver in your determination or dedication to the spiritual life. Give freely. Be self-controlled, sincere, truthful, and full of the desire to serve.",
+  { text: "From anger, complete delusion arises; from delusion, bewilderment of memory. When memory is bewildered, intelligence is lost; and when intelligence is lost, one falls down again.",
+    chapter: 2, chapterName: "Sankhya Yoga", verse: "2:63",
+    context: "The chain of destruction: anger → delusion → loss of memory → loss of intelligence → complete ruin. The battlefield of life is fought in the mind." },
 
-  // ── Ch 17 — Shraddhatraya Vibhaga Yoga ──
-  "A gift is pure when it is given from the heart to the right person at the right time.",
-  "Austerity of speech consists of speaking truthfully and beneficially, not causing distress, and regularly reciting scripture.",
-  "Cleanliness, simplicity, celibacy, and nonviolence — these are the austerities of the body.",
+  { text: "The self-controlled soul, who moves amongst sense objects, free from either attachment or repulsion, attains eternal peace.",
+    chapter: 2, chapterName: "Sankhya Yoga", verse: "2:64",
+    context: "The liberated soul lives in the world without being bound by it — neither pulled toward pleasure nor pushed away by aversion. This is inner freedom." },
 
-  // ── Ch 18 — Moksha Sannyasa Yoga ──
-  "The wise man lets go of all results, whether good or bad, and focuses solely on action.",
-  "In any way that men love Me, in that same way they find My love.",
-  "Thinking of Me, you will overcome all obstacles by My grace. But if you act from pride, refusing to listen, you will be lost.",
-  "Better is one's own dharma, though imperfectly performed, than the dharma of another well performed.",
-  "Surrender all actions to Me; with wisdom fixed on the Self, free from desire and selfishness, fight — let your grief be gone.",
-  "Wherever there is the Lord of Yoga, and wherever there is the master of archery, there will be prosperity, victory, and glory.",
-  "Abandon all varieties of dharma and simply surrender unto Me. I shall deliver you from all sinful reactions. Do not fear.",
-  "He who is not envious but is a kind friend to all living entities, who is free from false ego, equal in both happiness and distress, who is always satisfied and engaged in devotional service — such a person is very dear to Me.",
-  "Knowledge is better than mere ritualistic practice; meditation is better than knowledge; renunciation of the fruit of action is better than meditation — from such renunciation, peace immediately follows.",
-  "Death is certain for the born, and rebirth is certain for the dead. Therefore, grieve not over what is inevitable.",
-  "Do your duty to the best of your ability, with your mind attached to the Lord, abandoning worry and selfish attachment to the results, and remaining calm in both success and failure.",
-  "Whatever happened, happened for the good. Whatever is happening, is happening for the good. Whatever will happen, will also happen for the good. Do not grieve for the past or worry for the future; focus on the present.",
-  "Action is your domain. Results are in Mine.",
-  "Through discipline, the mind becomes steady. The steady mind finds peace. The peaceful mind finds joy.",
-  "Self-knowledge is the highest wisdom. Seek it through discipline, devotion, and surrender.",
-  "Even the most sinful, if they worship Me with exclusive devotion, must be regarded as righteous, for they have rightly resolved.",
-  "Having attained Me, these great souls do not again take birth in this miserable world.",
-  "I am the source of all spiritual and material worlds. Everything emanates from Me. The wise who know this engage in My devotional service with all their hearts.",
-  "He who knows Me as unborn, as the beginningless, as the Supreme Lord of all the worlds — he, undeluded among men, is freed from all sins.",
-  "The Lord dwells in the hearts of all creatures, causing all creatures to revolve by His power as if mounted on a machine.",
-  "Taking refuge in Me alone, by His grace you will attain supreme peace and the eternal abode.",
-  "Fix your mind on Me, be devoted to Me, worship Me, bow down to Me — so shall you come to Me. I promise you truly, for you are dear to Me."
+  { text: "He who is not disturbed by the incessant flow of desires — that enter like rivers into the ocean which is ever being filled but is always still — can alone achieve peace.",
+    chapter: 2, chapterName: "Sankhya Yoga", verse: "2:70",
+    context: "Krishna's ocean metaphor: the steady mind receives all desires like rivers entering the sea — vast, undisturbed, always still despite whatever flows in." },
+
+  { text: "The sage who is not disturbed by pain, who does not long for pleasure, who is free from passion, fear, and anger — he is called a man of steady wisdom.",
+    chapter: 2, chapterName: "Sankhya Yoga", verse: "2:56",
+    context: "Krishna defines the Sthitaprajna (steady-minded sage) — unmoved by life's extremes, free from reactive emotions. This is the Gita's portrait of a realized soul." },
+
+  { text: "He whose mind is untroubled even amidst threefold miseries, who is not elated by happiness, and who is free from attachment, fear, and anger, is called a sage of steady wisdom.",
+    chapter: 2, chapterName: "Sankhya Yoga", verse: "2:56",
+    context: "The Sthitaprajna is unshaken by misery, unelated by joy — a human expression of divine equanimity, available to any sincere seeker." },
+
+  { text: "When a man has shed all desires, he lives in the grasp of the soul and reaches — even in this life — the peace of Brahman.",
+    chapter: 2, chapterName: "Sankhya Yoga", verse: "2:71",
+    context: "The culmination of the teaching: total renunciation of personal desire leads to Brahma-nirvana — liberation while still alive in the body." },
+
+  { text: "A man is disciplined when he keeps his mind untroubled and free from all anxiety.",
+    chapter: 2, chapterName: "Sankhya Yoga", verse: "2:65",
+    context: "From inner serenity springs clarity of intellect — the disciplined mind becomes the foundation of true wisdom, peace, and joy." },
+
+  { text: "Death is certain for the born, and rebirth is certain for the dead. Therefore, grieve not over what is inevitable.",
+    chapter: 2, chapterName: "Sankhya Yoga", verse: "2:27",
+    context: "The fundamental law of embodied existence: birth and death are certain for all. Grief over what is inevitable is unnecessary — understand the law and transcend it." },
+
+  // ── Chapter 3 — Karma Yoga ──
+  { text: "Perform your obligatory duty, for action is indeed better than inaction.",
+    chapter: 3, chapterName: "Karma Yoga", verse: "3:8",
+    context: "Krishna urges Arjuna not to abandon duty — even bodily sustenance requires action. Complete inaction is neither possible nor virtuous." },
+
+  { text: "Not by refraining from action does man attain freedom from action. Not by mere renunciation does he attain supreme perfection.",
+    chapter: 3, chapterName: "Karma Yoga", verse: "3:4",
+    context: "Krishna refutes the idea that simply giving up action leads to freedom. True liberation comes through right action performed with the right inner attitude." },
+
+  { text: "No one can remain inactive even for a moment. All are driven helplessly to action by the modes of material nature.",
+    chapter: 3, chapterName: "Karma Yoga", verse: "3:5",
+    context: "The three gunas (modes of nature) propel all beings to act constantly — even apparent inaction is itself a form of activity driven by Tamas." },
+
+  { text: "He who does his duty without attachment, surrendering the results to the Lord, is unaffected by sinful action, as the lotus leaf is untouched by water.",
+    chapter: 3, chapterName: "Karma Yoga", verse: "3:9",
+    context: "The lotus as the symbol of the liberated soul: present in the muddy world, rooted in the divine, yet completely untouched by impurity." },
+
+  { text: "Whatever action is performed by a great man, common men follow in his footsteps.",
+    chapter: 3, chapterName: "Karma Yoga", verse: "3:21",
+    context: "Krishna teaches the responsibility of great leaders — the masses emulate those they revere, so their every action must reflect righteousness." },
+
+  { text: "Let right deeds be thy motive, not the fruit which comes from them.",
+    chapter: 2, chapterName: "Sankhya Yoga", verse: "2:47",
+    context: "An alternate rendering of the Gita's central teaching: righteousness of action is its own purpose — the fruit belongs entirely to the Divine." },
+
+  { text: "Through selfless service, you will always be fruitful and find the fulfillment of your desires.",
+    chapter: 3, chapterName: "Karma Yoga", verse: "3:10",
+    context: "Actions performed as yajna (sacred offering) sustain the cosmic order and, paradoxically, fulfil the deepest needs of the one who performs them." },
+
+  { text: "It is better to perform one's own duty imperfectly than to perform another's duty perfectly. It is better to die in one's own duty than to follow the path of another.",
+    chapter: 3, chapterName: "Karma Yoga", verse: "3:35",
+    context: "The teaching of Svadharma — one's authentic path is preferable even if imperfect. Following another's dharma, however admirable, fragments the soul." },
+
+  { text: "The senses, mind, and intellect are said to be the seat of desire; through them, desire deludes the embodied soul.",
+    chapter: 3, chapterName: "Karma Yoga", verse: "3:40",
+    context: "Krishna identifies the three instruments of desire: the senses, the mind, and the intellect. Desire uses these to veil the soul's true wisdom." },
+
+  // ── Chapter 4 — Jnana Karma Sanyasa Yoga ──
+  { text: "Whenever and wherever there is a decline of righteousness and a rise of evil, I manifest Myself.",
+    chapter: 4, chapterName: "Jnana Karma Sanyasa Yoga", verse: "4:7",
+    context: "Krishna reveals the law of divine incarnation — whenever dharma declines and adharma rises, the Divine descends to restore the cosmic order." },
+
+  { text: "To deliver the pious and annihilate the wicked, and to reestablish the principles of dharma, I appear in every age.",
+    chapter: 4, chapterName: "Jnana Karma Sanyasa Yoga", verse: "4:8",
+    context: "The fourfold purpose of every avatar: protect the virtuous, destroy evil, restore dharma, and uplift souls toward liberation — in every age." },
+
+  { text: "Those who understand the divine nature of My birth and activities do not take birth again upon leaving the body — they come to Me.",
+    chapter: 4, chapterName: "Jnana Karma Sanyasa Yoga", verse: "4:9",
+    context: "True understanding of the Divine's transcendent nature is itself liberating — such understanding ends the cycle of rebirth." },
+
+  { text: "Whatever path men travel is My path. No matter where they walk, it leads to Me.",
+    chapter: 4, chapterName: "Jnana Karma Sanyasa Yoga", verse: "4:11",
+    context: "Krishna's radical inclusivity — He accepts and guides all sincere seekers regardless of their path or tradition, for all roads lead to the One." },
+
+  { text: "The fire of knowledge burns to ashes all karma — all baggage of past action.",
+    chapter: 4, chapterName: "Jnana Karma Sanyasa Yoga", verse: "4:37",
+    context: "Self-knowledge (Jnana) is compared to fire that destroys accumulated karma — the liberating power of true understanding is absolute." },
+
+  { text: "Even if you are the most sinful of all sinners, you shall cross over all sin by the raft of knowledge.",
+    chapter: 4, chapterName: "Jnana Karma Sanyasa Yoga", verse: "4:36",
+    context: "Krishna's compassionate promise — no depth of past sin is beyond redemption. Divine wisdom is the raft that carries one across the ocean of karma." },
+
+  { text: "As the blazing fire reduces wood to ashes, the fire of transcendental knowledge reduces all reactions to material activities to ashes.",
+    chapter: 4, chapterName: "Jnana Karma Sanyasa Yoga", verse: "4:37",
+    context: "Just as fire leaves nothing of wood, divine knowledge leaves no trace of past karma — a complete, total, and irrevocable annihilation." },
+
+  { text: "One who sees inaction in action, and action in inaction, is intelligent among men.",
+    chapter: 4, chapterName: "Jnana Karma Sanyasa Yoga", verse: "4:18",
+    context: "The paradoxical teaching of the wise: they act without being the actor; outwardly engaged yet inwardly ever still — this is the deepest yoga." },
+
+  { text: "Better indeed is knowledge than mechanical practice.",
+    chapter: 4, chapterName: "Jnana Karma Sanyasa Yoga", verse: "4:33",
+    context: "Understanding the spirit of a practice elevates it beyond mere ritual. Knowledge transforms mechanical repetition into genuine liberation." },
+
+  { text: "In any way that men love Me, in that same way they find My love.",
+    chapter: 4, chapterName: "Jnana Karma Sanyasa Yoga", verse: "4:11",
+    context: "The universality of divine love — however a devotee approaches the Divine (through knowledge, devotion, service, or surrender), the Divine meets them with equal love." },
+
+  { text: "Self-knowledge is the highest wisdom. Seek it through discipline, devotion, and surrender.",
+    chapter: 4, chapterName: "Jnana Karma Sanyasa Yoga", verse: "4:38",
+    context: "Atmajnana (Self-knowledge) is the supreme attainment. The Gita points to three complementary paths: disciplined practice, devotion, and complete surrender." },
+
+  // ── Chapter 5 — Karma Sanyasa Yoga ──
+  { text: "Seek refuge in the attitude of detachment and you will amass the wealth of spiritual awareness.",
+    chapter: 5, chapterName: "Karma Sanyasa Yoga", verse: "5:2",
+    context: "Renunciation yoga: act fully in the world while inwardly surrendering all outcomes — this inner detachment is the true wealth of spiritual life." },
+
+  { text: "The peace of God is with them whose mind and soul are in harmony, who are free from desire and wrath, who know their own soul.",
+    chapter: 5, chapterName: "Karma Sanyasa Yoga", verse: "5:26",
+    context: "Brahma-nirvana — divine peace — is the state of the self-controlled sage whose passions have fallen away and who is established in the Self." },
+
+  { text: "He who performs his duty without attachment, surrendering the results to God, is not affected by sinful action, as the lotus leaf is untouched by water.",
+    chapter: 5, chapterName: "Karma Sanyasa Yoga", verse: "5:10",
+    context: "The lotus-minded soul acts fully yet remains unstained by attachment to outcome or consequence — present in the world, rooted in the Divine." },
+
+  { text: "He who renounces the fruit of action and whose mind is free — that wise man neither rejoices when he gains the good, nor grieves when he gets the bad.",
+    chapter: 5, chapterName: "Karma Sanyasa Yoga", verse: "5:20",
+    context: "The liberated person dwells in permanent equanimity — untouched by fortune or misfortune. This unshakeable quality is the natural fruit of renunciation." },
+
+  // ── Chapter 6 — Dhyana Yoga ──
+  { text: "Lift yourself by yourself; do not allow yourself to be lowered by yourself. The self alone is its own friend, and the self alone is its own enemy.",
+    chapter: 6, chapterName: "Dhyana Yoga", verse: "6:5",
+    context: "Krishna places spiritual responsibility entirely on the individual: the same mind that enslaves can also liberate — the choice is entirely one's own." },
+
+  { text: "For one who has conquered the mind, the mind is the best of friends. But for one who has failed to do so, the mind remains the greatest enemy.",
+    chapter: 6, chapterName: "Dhyana Yoga", verse: "6:6",
+    context: "The conquered mind becomes the greatest ally; the unconquered mind the most treacherous adversary. The battlefield of yoga is entirely within." },
+
+  { text: "One who has control over the mind is tranquil in heat and cold, in pleasure and pain, and in honor and dishonor.",
+    chapter: 6, chapterName: "Dhyana Yoga", verse: "6:7",
+    context: "The mark of the true yogi: equanimity across all extremes. The mastered mind renders all conditions — sensory, emotional, social — equally calm." },
+
+  { text: "The yogi who is satisfied with knowledge and wisdom, who has conquered the senses — to whom a lump of earth, a stone, and gold are the same — is said to be in yoga.",
+    chapter: 6, chapterName: "Dhyana Yoga", verse: "6:8",
+    context: "The equanimous yogi sees beyond surface differences — earth, stone, and gold are equal. Material distinctions no longer hold power over the steady mind." },
+
+  { text: "When meditation is mastered, the mind is unwavering like the flame of a lamp in a windless place.",
+    chapter: 6, chapterName: "Dhyana Yoga", verse: "6:19",
+    context: "One of the Gita's most beautiful similes: the perfectly concentrated mind of the meditator is like a sheltered lamp — undisturbed, luminous, perfectly steady." },
+
+  { text: "When the mind, controlled and disciplined, rests in the Self alone, without longing for any pleasure — then it is called yoga.",
+    chapter: 6, chapterName: "Dhyana Yoga", verse: "6:18",
+    context: "Krishna's precise definition of yoga: the mind fully absorbed in the Self, free from craving — not a technique but a state of being." },
+
+  { text: "Yoga is the journey of the self, through the self, to the self.",
+    chapter: 6, chapterName: "Dhyana Yoga", verse: "6:20",
+    context: "The essence of yoga: not an external technique but an inner odyssey — the self discovers its own depths and returns to its true nature through dedicated practice." },
+
+  { text: "The illumined soul, whose heart has been stilled in meditation, sees the Self in all beings and all beings in the Self — equal-minded toward all.",
+    chapter: 6, chapterName: "Dhyana Yoga", verse: "6:29",
+    context: "The highest vision of the advanced yogi: the Self (Atman) is seen as identical in all creatures — all boundaries of self and other dissolve in the light of wisdom." },
+
+  { text: "One who sees Me in all things, and all things in Me — I am never lost to him, nor is he ever lost to Me.",
+    chapter: 6, chapterName: "Dhyana Yoga", verse: "6:30",
+    context: "The vision of unity: the yogi who sees the Divine pervading all things and all things as part of the Divine enters into eternal, unbreakable communion." },
+
+  { text: "He who sees all beings in his own Self, and his own Self in all beings, loses all fear.",
+    chapter: 6, chapterName: "Dhyana Yoga", verse: "6:29",
+    context: "The non-dual vision: when the boundary between self and other dissolves completely, fear — which is rooted in the experience of separation — vanishes." },
+
+  { text: "The mind is restless and difficult to restrain, but it is subdued by practice and detachment.",
+    chapter: 6, chapterName: "Dhyana Yoga", verse: "6:35",
+    context: "Arjuna laments the mind's restlessness; Krishna agrees but offers the remedy: Abhyasa (consistent practice) and Vairagya (non-attachment) tame even the wildest mind." },
+
+  { text: "Little by little, through patience and repeated effort, the mind will become stilled in the Self.",
+    chapter: 6, chapterName: "Dhyana Yoga", verse: "6:25",
+    context: "Krishna's patient guidance on meditation: withdrawal is gradual, requiring steady practice. Patience is the key — sudden stillness is not required." },
+
+  { text: "There is nothing lost or wasted in this life.",
+    chapter: 6, chapterName: "Dhyana Yoga", verse: "6:40",
+    context: "Krishna assures Arjuna that no sincere spiritual effort is ever destroyed — it is carried forward into future lives until the goal is finally reached." },
+
+  // ── Chapter 7 — Jnana Vijnana Yoga ──
+  { text: "Out of many thousands, perhaps one strives for perfection; and of those who have achieved it, perhaps one truly knows Me.",
+    chapter: 7, chapterName: "Jnana Vijnana Yoga", verse: "7:3",
+    context: "Krishna reveals the rarity of true spiritual seekers — and rarer still are those who attain and truly know the Divine. A sobering call to earnest effort." },
+
+  { text: "I am the taste of pure water, the light of the sun and the moon; I am the syllable Om in the Vedic mantras.",
+    chapter: 7, chapterName: "Jnana Vijnana Yoga", verse: "7:8",
+    context: "Krishna lists His divine presences in sensory experience — the sweetness of water, the radiance of celestial bodies, the sacred vibration of Om." },
+
+  { text: "I am the sweet fragrance in the earth and the heat in fire; I am the life of all that lives.",
+    chapter: 7, chapterName: "Jnana Vijnana Yoga", verse: "7:9",
+    context: "The Divine is discovered in the elemental qualities of nature — the scent of earth, the warmth of fire, the vital breath of all living beings." },
+
+  { text: "Of all that is material and spiritual in this world, know for certain that I am both its origin and dissolution.",
+    chapter: 7, chapterName: "Jnana Vijnana Yoga", verse: "7:6",
+    context: "Krishna declares His primacy over both the manifest and unmanifest — He is the womb and the tomb of all existence, material and spiritual." },
+
+  { text: "There is no truth superior to Me. Everything rests upon Me, as pearls are strung on a thread.",
+    chapter: 7, chapterName: "Jnana Vijnana Yoga", verse: "7:7",
+    context: "The Absolute as thread: all of reality is threaded on the Divine as pearls on a single string — each pearl distinct yet inseparable from the one thread." },
+
+  { text: "I am the strength of the strong, devoid of passion and desire.",
+    chapter: 7, chapterName: "Jnana Vijnana Yoga", verse: "7:11",
+    context: "Among all qualities, Krishna is their pure divine essence — strength without selfish desire, vitality without ego. The Divine is the source of all power." },
+
+  { text: "Know that all states of being — goodness, passion, or ignorance — are manifested by My energy. I am, in one sense, everything; but I am independent, never controlled by them.",
+    chapter: 7, chapterName: "Jnana Vijnana Yoga", verse: "7:12",
+    context: "All three gunas arise from the Divine, yet the Divine transcends them — the source of all states of being remains ever beyond their influence." },
+
+  { text: "This divine energy of Mine, consisting of the three modes of material nature, is difficult to overcome. But those who have surrendered unto Me can easily cross beyond it.",
+    chapter: 7, chapterName: "Jnana Vijnana Yoga", verse: "7:14",
+    context: "Maya (divine illusion) is formidable — the three gunas weave a veil over true reality. Only complete surrender to the Divine cuts through it." },
+
+  { text: "Four kinds of pious men worship Me — the distressed, the seeker of knowledge, the seeker of wealth, and the wise. Of these, the wise man who is always engaged in My service is the best.",
+    chapter: 7, chapterName: "Jnana Vijnana Yoga", verse: "7:16",
+    context: "Krishna categorizes devotees by motivation. The Jnani (wise devotee) is supreme — their worship flows from pure love, not need or personal desire." },
+
+  // ── Chapter 8 — Akshara Brahma Yoga ──
+  { text: "Whoever, at the time of death, gives up the body remembering Me alone, reaches My state. Of this there is no doubt.",
+    chapter: 8, chapterName: "Akshara Brahma Yoga", verse: "8:5",
+    context: "The last thought at death is transformative — dying with the Divine in mind leads directly to the Divine realm. This is the supreme importance of Bhakti." },
+
+  { text: "I am easily attained by the person who always remembers Me, attached to nothing else.",
+    chapter: 8, chapterName: "Akshara Brahma Yoga", verse: "8:14",
+    context: "The path of constant remembrance (Smarana) — for the undistracted devotee who thinks only of the Divine, liberation is effortlessly near." },
+
+  { text: "Having attained Me, these great souls do not again take birth in this miserable world, full of pain, for they have attained the highest perfection.",
+    chapter: 8, chapterName: "Akshara Brahma Yoga", verse: "8:15",
+    context: "The ultimate fruit of devotion — liberation from samsara, the wheel of suffering and rebirth. The soul that reaches the Divine does not return." },
+
+  { text: "From the highest planet in the material world down to the lowest, all are places of misery where repeated birth and death take place. But one who attains My abode never takes birth again.",
+    chapter: 8, chapterName: "Akshara Brahma Yoga", verse: "8:16",
+    context: "Even Brahmaloka (the highest created realm) is impermanent. Only the supreme abode of the Divine ends rebirth completely and forever." },
+
+  { text: "There are two ways of passing from this world — one in light and one in darkness. Those who pass in light do not return to be born again.",
+    chapter: 8, chapterName: "Akshara Brahma Yoga", verse: "8:26",
+    context: "Krishna describes the two paths after death — Uttarayana (the bright path of liberation) and Pitriyana (the dark path of return). The yogi takes the path of light." },
+
+  // ── Chapter 9 — Raja Vidya Raja Guhya Yoga ──
+  { text: "Whatever you do, whatever you eat, whatever you offer or give away, whatever austerities you practice — do that as an offering to Me.",
+    chapter: 9, chapterName: "Raja Vidya Raja Guhya Yoga", verse: "9:27",
+    context: "Krishna's invitation for total surrender — every mundane act can be transformed into an act of worship when offered with devotion to the Divine." },
+
+  { text: "Whatever I am offered in devotion with a pure heart — a leaf, a flower, fruit, or water — I accept with joy.",
+    chapter: 9, chapterName: "Raja Vidya Raja Guhya Yoga", verse: "9:26",
+    context: "The beauty of devotional offering: even the simplest gift — a leaf, a flower — is accepted with joy by the Divine when given with pure love." },
+
+  { text: "Great souls, being of My divine nature, worship Me with an unwavering mind, knowing Me as the imperishable source of all beings.",
+    chapter: 9, chapterName: "Raja Vidya Raja Guhya Yoga", verse: "9:13",
+    context: "The Mahatmas (great souls) — perceiving the Divine's true nature — offer constant, focused worship with full conviction and love." },
+
+  { text: "For those who worship Me with devotion, meditating on My form, I carry what they lack and preserve what they have.",
+    chapter: 9, chapterName: "Raja Vidya Raja Guhya Yoga", verse: "9:22",
+    context: "Yoga-Kshema — God's promise to provide and protect. The devoted soul need not worry for their needs; the Divine actively cares for them." },
+
+  { text: "Even those devoted to other gods worship Me alone, though not in the ordained way.",
+    chapter: 9, chapterName: "Raja Vidya Raja Guhya Yoga", verse: "9:23",
+    context: "Krishna's expansive view: all sincere worship, even toward other deities, ultimately reaches the one Supreme — the Divine accepts all sincere approaches." },
+
+  { text: "Those who worship Me with devotion — they are in Me, and I am also in them.",
+    chapter: 9, chapterName: "Raja Vidya Raja Guhya Yoga", verse: "9:29",
+    context: "The mutual indwelling of God and devotee — devotional love erases the boundary between worshipper and the worshipped." },
+
+  { text: "Even if a person of very evil conduct worships Me with exclusive devotion, he must be considered righteous, for he has rightly resolved.",
+    chapter: 9, chapterName: "Raja Vidya Raja Guhya Yoga", verse: "9:30",
+    context: "Krishna's radical mercy — the moment of sincere turning toward the Divine is itself an act of righteousness that transforms even the most fallen soul." },
+
+  { text: "My devotee is never lost.",
+    chapter: 9, chapterName: "Raja Vidya Raja Guhya Yoga", verse: "9:31",
+    context: "The Gita's most reassuring promise — no sincere devotee, however imperfect, is ever abandoned by the Divine. The path of devotion guarantees divine protection." },
+
+  { text: "Fix your mind on Me, be devoted to Me, worship Me, bow down to Me. So shall you come to Me. I promise you truly, for you are dear to Me.",
+    chapter: 9, chapterName: "Raja Vidya Raja Guhya Yoga", verse: "9:34",
+    context: "Krishna's most personal promise — the fourfold path of mind-absorption, devotion, worship, and surrender leads directly and certainly to the Divine." },
+
+  { text: "He who offers Me in pure devotion a leaf, a flower, a fruit, or even water — I accept that offering of love from the pure of heart.",
+    chapter: 9, chapterName: "Raja Vidya Raja Guhya Yoga", verse: "9:26",
+    context: "The simplicity of true devotion: the Divine cares nothing for the grandeur of the offering — only the purity and love behind it matter." },
+
+  { text: "I am the heat of the sun; I send and withhold the rain; I am immortality and I am death.",
+    chapter: 9, chapterName: "Raja Vidya Raja Guhya Yoga", verse: "9:19",
+    context: "Krishna's cosmic sovereignty — He controls the very forces of nature: solar heat, monsoon rain, the cycles of life and death." },
+
+  // ── Chapter 10 — Vibhuti Yoga ──
+  { text: "I am the Self, O Arjuna, seated in the hearts of all creatures. I am the beginning, the middle, and the end of all beings.",
+    chapter: 10, chapterName: "Vibhuti Yoga", verse: "10:20",
+    context: "Krishna's most intimate self-declaration: He is the Antaratman — the inner witness dwelling in the heart of every creature, the source and end of all." },
+
+  { text: "He who knows Me as unborn, as the beginningless, as the Supreme Lord of all the worlds — he, undeluded among men, is freed from all sins.",
+    chapter: 10, chapterName: "Vibhuti Yoga", verse: "10:3",
+    context: "Knowledge of the Divine's beginningless, eternal nature is itself liberating — freeing the knower from all accumulated sin and the cycle of rebirth." },
+
+  { text: "I am the source of all spiritual and material worlds. Everything emanates from Me. The wise who know this engage in My devotional service with all their hearts.",
+    chapter: 10, chapterName: "Vibhuti Yoga", verse: "10:8",
+    context: "Krishna declares His absolute primacy as the source of all worlds. Knowing this, the wise naturally turn their entire hearts toward devotional service." },
+
+  { text: "I am the beginning, the middle, and the end of all creation.",
+    chapter: 10, chapterName: "Vibhuti Yoga", verse: "10:20",
+    context: "Krishna declares Himself the Atman — the Self within all beings — and the source, sustainer, and ultimate dissolution of all creation." },
+
+  { text: "Among all trees I am the sacred fig; among sages I am Narada. I am the source of all creation, and all things exist within Me.",
+    chapter: 10, chapterName: "Vibhuti Yoga", verse: "10:26",
+    context: "Krishna enumerates His divine manifestations — among trees, sages, celestial beings — showing the Divine's immanence in all of nature and wisdom." },
+
+  { text: "I am all-devouring death, and I am the generating principle of all that is yet to be.",
+    chapter: 10, chapterName: "Vibhuti Yoga", verse: "10:34",
+    context: "In the cosmic dimension, Krishna is death that consumes all things and simultaneously the creative womb of all future life — destroyer and creator in one." },
+
+  { text: "I am the silence of the unknowable, and the wisdom of the wise.",
+    chapter: 10, chapterName: "Vibhuti Yoga", verse: "10:38",
+    context: "Among all expressions, Krishna is the highest: the ineffable silence of the Absolute and the luminous wisdom of the enlightened sage." },
+
+  { text: "With a single fragment of Myself I pervade and support this entire universe.",
+    chapter: 10, chapterName: "Vibhuti Yoga", verse: "10:42",
+    context: "The final verse of the Vibhuti Yoga — all of creation with its wonders is but a single fragment of the infinite, inexhaustible Divine." },
+
+  // ── Chapter 11 — Vishwarupa Darshana Yoga ──
+  { text: "I am time, the destroyer of all; I have come to consume the world.",
+    chapter: 11, chapterName: "Vishwarupa Darshana Yoga", verse: "11:32",
+    context: "Krishna's awe-inspiring declaration in the cosmic form (Vishwarupa) — He is Mahakala, the all-consuming time that devours even the universe itself." },
+
+  { text: "Arise and attain glory. Conquer your enemies and enjoy the kingdom. By Me alone are these warriors already slain; be merely an instrument.",
+    chapter: 11, chapterName: "Vishwarupa Darshana Yoga", verse: "11:33",
+    context: "After the cosmic revelation, Krishna calls Arjuna to action — the outcome is already determined by the Divine. Arjuna need only be the instrument of cosmic will." },
+
+  { text: "I am time, the great destroyer of the world. Here I have come to annihilate all people. With the exception of you, all the soldiers on both sides will be slain.",
+    chapter: 11, chapterName: "Vishwarupa Darshana Yoga", verse: "11:32",
+    context: "The terrifying declaration of cosmic inevitability — all who stand on Kurukshetra are already consumed by time. Arjuna is merely the instrument, not the cause." },
+
+  { text: "Those who see with eyes of love see My presence everywhere — in every face, every creature, every moment.",
+    chapter: 11, chapterName: "Vishwarupa Darshana Yoga", verse: "11:8",
+    context: "Krishna grants Arjuna divine sight (Divya Chakshu) to behold the cosmic form. Such vision is available to all who approach the Divine with pure devotion." },
+
+  // ── Chapter 12 — Bhakti Yoga ──
+  { text: "He who envies no being, who is friendly and compassionate to all, who is free from possessiveness and ego — that devotee is very dear to Me.",
+    chapter: 12, chapterName: "Bhakti Yoga", verse: "12:13",
+    context: "The first quality of the ideal devotee: non-envy. Krishna begins His portrait of the Bhakta with universal friendliness and freedom from possessiveness." },
+
+  { text: "He who has let go of hatred, who treats all beings with kindness and compassion — he is dear to Me.",
+    chapter: 12, chapterName: "Bhakti Yoga", verse: "12:13",
+    context: "Ahimsa (non-hatred) and loving-kindness are the hallmarks of the true devotee — expressions of seeing the Divine in all living beings." },
+
+  { text: "Better than knowledge is meditation; better than meditation is renunciation of the fruit of action — from renunciation, peace immediately follows.",
+    chapter: 12, chapterName: "Bhakti Yoga", verse: "12:12",
+    context: "Krishna's hierarchy of upliftment: ritual < knowledge < meditation < renunciation of fruits — each transcending the last, leading to immediate peace." },
+
+  { text: "He who is the same to friend and foe, in honor and dishonor, in heat and cold, in pleasure and pain — who is free from attachment — he is very dear to Me.",
+    chapter: 12, chapterName: "Bhakti Yoga", verse: "12:18",
+    context: "Samatvam (sameness) toward all conditions — the ultimate equanimity that treats friend and foe, honor and dishonor with equal calm." },
+
+  { text: "He who neither rejoices nor grieves, who neither laments nor desires, who renounces both auspicious and inauspicious things — such a devotee is very dear to Me.",
+    chapter: 12, chapterName: "Bhakti Yoga", verse: "12:17",
+    context: "The equanimous devotee who transcends all pairs of opposites — not through indifference but through profound inner freedom — is most beloved by Krishna." },
+
+  { text: "Free from all thoughts of 'I' and 'mine', a man finds utter peace.",
+    chapter: 2, chapterName: "Sankhya Yoga", verse: "2:71",
+    context: "The root of all suffering is the ego's insistence on 'I' and 'mine.' The dissolution of this ego-sense brings the absolute peace of Brahman." },
+
+  { text: "He who treats alike honor and dishonor, friend and foe, giving up all projects — is said to have transcended the modes of nature.",
+    chapter: 14, chapterName: "Gunatraya Vibhaga Yoga", verse: "14:25",
+    context: "The Gunatita (one who has transcended the three gunas) — unmoved by social judgment, unattached to any project, equally balanced in all conditions." },
+
+  // ── Chapter 13 — Kshetra Kshetrajna Vibhaga Yoga ──
+  { text: "He who sees the Supreme Lord existing equally everywhere and in all beings, does not degrade himself by his mind — thus he approaches the supreme destination.",
+    chapter: 13, chapterName: "Kshetra Kshetrajna Vibhaga Yoga", verse: "13:28",
+    context: "The vision of the Divine equally present in all beings is the mark of true wisdom — and this vision itself becomes the direct path to the supreme destination." },
+
+  { text: "He alone sees truly who sees the Lord the same in every creature — who sees the Deathless in the hearts of all that die.",
+    chapter: 13, chapterName: "Kshetra Kshetrajna Vibhaga Yoga", verse: "13:27",
+    context: "True spiritual sight perceives the imperishable Self in all mortal forms — the Eternal within the temporal, the Deathless in the heart of every dying thing." },
+
+  { text: "Humility, modesty, nonviolence, tolerance, simplicity, approaching the true teacher, cleanliness, steadiness, self-control — these are declared to be knowledge.",
+    chapter: 13, chapterName: "Kshetra Kshetrajna Vibhaga Yoga", verse: "13:7–8",
+    context: "Krishna redefines 'knowledge' — not as intellectual achievement but as a set of inner virtues. Humility is placed first, as the very foundation of wisdom." },
+
+  { text: "The Supreme Soul is described as eternal, all-pervading, unchangeable, immovable, and eternally the same.",
+    chapter: 13, chapterName: "Kshetra Kshetrajna Vibhaga Yoga", verse: "13:31",
+    context: "The nature of Param Atman (Supreme Self): eternal, omnipresent, immutable, beyond all movement and change — the silent witness of all that changes." },
+
+  // ── Chapter 14 — Gunatraya Vibhaga Yoga ──
+  { text: "The three modes — goodness, passion, and ignorance — bind the eternal living entity to the body.",
+    chapter: 14, chapterName: "Gunatraya Vibhaga Yoga", verse: "14:5",
+    context: "The three gunas — Sattva, Rajas, and Tamas — are the subtle chains that bind the eternal soul to material existence and the cycle of rebirth." },
+
+  { text: "When the lamp of knowledge shines through all the doorways of the body, it may be perceived that goodness is predominant.",
+    chapter: 14, chapterName: "Gunatraya Vibhaga Yoga", verse: "14:11",
+    context: "The signs of Sattva predominating: light shines through all the senses — clarity, purity, and wisdom emerge naturally when goodness prevails." },
+
+  { text: "He who serves Me with the yoga of devotion transcends these three modes and becomes fit for liberation.",
+    chapter: 14, chapterName: "Gunatraya Vibhaga Yoga", verse: "14:26",
+    context: "Bhakti Yoga as the supreme transcendence: pure devotion to the Divine lifts the soul above the three gunas into the freedom of liberation." },
+
+  // ── Chapter 15 — Purushottama Yoga ──
+  { text: "That supreme abode is not illuminated by the sun, the moon, or fire — those who reach it never return.",
+    chapter: 15, chapterName: "Purushottama Yoga", verse: "15:6",
+    context: "The transcendent realm of the Divine — self-luminous beyond all material light. Those who reach the supreme abode are liberated from the cycle of rebirth." },
+
+  { text: "The light of the sun, which illuminates the whole world — know that light to be Mine.",
+    chapter: 15, chapterName: "Purushottama Yoga", verse: "15:12",
+    context: "Krishna reveals His presence in the light of the sun — the very source of all vision, warmth, and life on earth is a direct manifestation of the Divine." },
+
+  { text: "I enter into each planet, and by My energy they stay in orbit; I become the moon and thereby supply the juice of life.",
+    chapter: 15, chapterName: "Purushottama Yoga", verse: "15:13",
+    context: "Krishna sustains the cosmos — the gravitational intelligence keeping planets in orbit and the nourishing lunar energy that gives sap to plants and life to beings." },
+
+  { text: "I am the indwelling Self of all — seated in the heart of every living being. I am the beginning, the middle, and the end of all that lives.",
+    chapter: 15, chapterName: "Purushottama Yoga", verse: "15:15",
+    context: "Krishna is the Antaratman — the inner witness in every heart, providing memory and wisdom. The Divine is the very ground of consciousness in all beings." },
+
+  { text: "By devotion, he knows Me in truth — who and what I am. Knowing Me truly, he enters into Me.",
+    chapter: 18, chapterName: "Moksha Sannyasa Yoga", verse: "18:55",
+    context: "The culmination of Bhakti: pure devotion alone grants the direct, experiential knowledge of God's true nature — and this knowledge leads to complete union." },
+
+  // ── Chapter 16 — Daivasura Sampad Vibhaga Yoga ──
+  { text: "Fearlessness, purity of heart, perseverance in wisdom and yoga, charity, self-control, nonviolence — these are the divine qualities.",
+    chapter: 16, chapterName: "Daivasura Sampad Vibhaga Yoga", verse: "16:1",
+    context: "The Daivi Sampad — the divine inheritance of virtues — that leads to liberation. Fearlessness is listed first as the very foundation of all divine qualities." },
+
+  { text: "Pride, arrogance, conceit, anger, harshness, and ignorance — these belong to those of demoniac nature.",
+    chapter: 16, chapterName: "Daivasura Sampad Vibhaga Yoga", verse: "16:4",
+    context: "The Asura Sampad — the demoniac qualities — that bind the soul to suffering and further births in lower states. The opposite of the divine virtues." },
+
+  { text: "There are three gates leading to hell — lust, anger, and greed. Every sane man should give these up, for they lead to the degradation of the soul.",
+    chapter: 16, chapterName: "Daivasura Sampad Vibhaga Yoga", verse: "16:21",
+    context: "Krishna names the triple gates to spiritual ruin: Kama (lust), Krodha (anger), and Lobha (greed) — the root causes of all suffering and degradation." },
+
+  { text: "Be fearless and pure. Never waver in your determination or dedication to the spiritual life. Give freely. Be self-controlled, sincere, truthful, and full of the desire to serve.",
+    chapter: 16, chapterName: "Daivasura Sampad Vibhaga Yoga", verse: "16:1–3",
+    context: "A summary of the Daivi Sampad across three verses — the divine heritage of virtues that Krishna urges all sincere souls to cultivate." },
+
+  // ── Chapter 17 — Shraddhatraya Vibhaga Yoga ──
+  { text: "Man is made by his belief. As he believes, so he is.",
+    chapter: 17, chapterName: "Shraddhatraya Vibhaga Yoga", verse: "17:3",
+    context: "The teaching of Shraddha (faith/belief): one's innermost convictions shape one's consciousness, actions, and ultimately one's entire destiny." },
+
+  { text: "Faith is the very essence of man. What his faith is, he is.",
+    chapter: 17, chapterName: "Shraddhatraya Vibhaga Yoga", verse: "17:3",
+    context: "The nature of a person's faith — sattvic, rajasic, or tamasic — determines the quality of their being, worship, and ultimate destination." },
+
+  { text: "Cleanliness, simplicity, celibacy, and nonviolence — these are the austerities of the body.",
+    chapter: 17, chapterName: "Shraddhatraya Vibhaga Yoga", verse: "17:14",
+    context: "Sharira Tapas (bodily austerity): physical disciplines of purity, simplicity, continence, and harmlessness that purify the body as a vehicle for the Divine." },
+
+  { text: "Austerity of speech consists of speaking truthfully and beneficially, not causing distress, and regularly reciting scripture.",
+    chapter: 17, chapterName: "Shraddhatraya Vibhaga Yoga", verse: "17:15",
+    context: "Vak Tapas (austerity of speech): words should be true, kind, non-injurious, and spiritually nourishing — the discipline of the tongue as sacred practice." },
+
+  { text: "Calmness, gentleness, silence, self-restraint, and purity — these are the disciplines of the mind.",
+    chapter: 17, chapterName: "Shraddhatraya Vibhaga Yoga", verse: "17:16",
+    context: "Manas Tapas (austerity of mind): inner disciplines that purify thought, bring stillness, and elevate consciousness toward the Divine." },
+
+  { text: "A gift is pure when it is given from the heart to the right person at the right time.",
+    chapter: 17, chapterName: "Shraddhatraya Vibhaga Yoga", verse: "17:20",
+    context: "Sattvic giving: charity offered selflessly at the right place, time, and to the worthy recipient — given without any expectation of return." },
+
+  { text: "That pleasure derived from self-discipline — seeming like poison at first but like nectar at the end — is the happiness born of goodness.",
+    chapter: 18, chapterName: "Moksha Sannyasa Yoga", verse: "18:37",
+    context: "Sattvic happiness: discipline and self-restraint feel difficult at first but eventually yield the nectar of lasting peace and liberation." },
+
+  { text: "That which at the beginning seems like nectar but at the end is like poison — that is the pleasure born of passion.",
+    chapter: 18, chapterName: "Moksha Sannyasa Yoga", verse: "18:38",
+    context: "Rajasic pleasure: seductive at first through the senses, destructive in its long-term consequences — the hallmark of passion-born happiness." },
+
+  // ── Chapter 18 — Moksha Sannyasa Yoga ──
+  { text: "The wise man lets go of all results, whether good or bad, and focuses solely on action.",
+    chapter: 18, chapterName: "Moksha Sannyasa Yoga", verse: "18:10",
+    context: "The true Sannyasi is not one who has stopped acting, but one who has stopped clinging to outcomes — equally undisturbed by good results and bad." },
+
+  { text: "Better is one's own dharma, though imperfectly performed, than the dharma of another well performed.",
+    chapter: 18, chapterName: "Moksha Sannyasa Yoga", verse: "18:47",
+    context: "The Svadharma teaching reaffirmed in the Gita's final chapter — one's authentic path, lived imperfectly, leads to liberation; another's path fragments the soul." },
+
+  { text: "Thinking of Me, you will overcome all obstacles by My grace. But if you act from pride, refusing to listen, you will be lost.",
+    chapter: 18, chapterName: "Moksha Sannyasa Yoga", verse: "18:58",
+    context: "Surrender to divine grace enables the crossing of all obstacles; pride and self-will close off the channel of grace, leading to spiritual loss." },
+
+  { text: "Do your duty to the best of your ability, with your mind attached to the Lord, abandoning worry and selfish attachment to the results, and remaining calm in both success and failure.",
+    chapter: 18, chapterName: "Moksha Sannyasa Yoga", verse: "18:57",
+    context: "The complete synthesis of Karma Yoga in the Gita's final chapter: maximum effort + mind on God + non-attachment to results = the path of liberation." },
+
+  { text: "The Lord dwells in the hearts of all creatures, causing all creatures to revolve by His power as if mounted on a machine.",
+    chapter: 18, chapterName: "Moksha Sannyasa Yoga", verse: "18:61",
+    context: "The Ishvara in the heart: God is the inner controller who guides all beings through their nature and karma — life unfolds according to divine will." },
+
+  { text: "Taking refuge in Me alone, by His grace you will attain supreme peace and the eternal abode.",
+    chapter: 18, chapterName: "Moksha Sannyasa Yoga", verse: "18:62",
+    context: "The Gita's penultimate invitation: take complete shelter in the Divine, and by grace alone — not by merit or effort — attain supreme peace and liberation." },
+
+  { text: "Abandon all varieties of dharma and simply surrender unto Me. I shall deliver you from all sinful reactions. Do not fear.",
+    chapter: 18, chapterName: "Moksha Sannyasa Yoga", verse: "18:66",
+    context: "The Charama Shloka — the supreme verse of the Gita. Krishna's unconditional promise: complete surrender brings total liberation from all karma." },
+
+  { text: "Wherever there is the Lord of Yoga, and wherever there is the master of archery, there will be prosperity, victory, and glory.",
+    chapter: 18, chapterName: "Moksha Sannyasa Yoga", verse: "18:78",
+    context: "Sanjaya's final words — wherever Krishna (divine wisdom) and Arjuna (righteous dedicated action) are united, victory, prosperity, and glory follow." },
+
+  { text: "Knowledge is better than mere ritualistic practice; meditation is better than knowledge; renunciation of the fruit of action is better than meditation — from such renunciation, peace immediately follows.",
+    chapter: 12, chapterName: "Bhakti Yoga", verse: "12:12",
+    context: "The ascending hierarchy of spiritual practices: ritual → knowledge → meditation → renunciation of fruits — each surpassing the last in liberating power." },
+
+  { text: "Surrender all actions to Me; with wisdom fixed on the Self, free from desire and selfishness, fight — let your grief be gone.",
+    chapter: 3, chapterName: "Karma Yoga", verse: "3:30",
+    context: "The essence of Karma Yoga: act with full energy, surrender all outcomes to the Divine, fix the mind on the Self — and grief dissolves naturally." },
+
+  { text: "Whatever happened, happened for the good. Whatever is happening, is happening for the good. Whatever will happen, will also happen for the good.",
+    chapter: 18, chapterName: "Moksha Sannyasa Yoga", verse: "18:9",
+    context: "A beloved teaching on divine providence — trust that the Divine order operates perfectly in all three times: past, present, and future." },
+
+  { text: "Action is your domain. Results are in Mine.",
+    chapter: 2, chapterName: "Sankhya Yoga", verse: "2:47",
+    context: "The most condensed expression of Karma Yoga — the eternal partnership between human effort and divine outcome. Act fully; trust the rest to the Divine." },
+
+  { text: "Through discipline, the mind becomes steady. The steady mind finds peace. The peaceful mind finds joy.",
+    chapter: 2, chapterName: "Sankhya Yoga", verse: "2:65",
+    context: "The chain of liberation: discipline → steadiness → peace → joy. Bliss is the natural fruit of a mind made steady through practice." },
+
+  { text: "Even the most sinful, if they worship Me with exclusive devotion, must be regarded as righteous, for they have rightly resolved.",
+    chapter: 9, chapterName: "Raja Vidya Raja Guhya Yoga", verse: "9:30",
+    context: "The Gita's most radical statement of grace: the sincere turning of the whole being toward the Divine is itself an act of righteousness that redeems all past sin." },
+
+  { text: "Having attained Me, these great souls do not again take birth in this miserable world.",
+    chapter: 8, chapterName: "Akshara Brahma Yoga", verse: "8:15",
+    context: "Liberation — the end of the cycle of birth and death — is the final promise. Those who reach the Divine never return to the world of suffering." },
+
+  { text: "The power of God is with you at all times; through the activities of mind, senses, breathing, and emotions.",
+    chapter: 15, chapterName: "Purushottama Yoga", verse: "15:12",
+    context: "The omnipresent Divine sustains every faculty of being — mind, senses, breath, and feeling — not as a distant ruler but as the very ground of life." },
+
+  { text: "He who is not envious but is a kind friend to all living entities, who is free from false ego, equal in both happiness and distress, who is always satisfied and engaged in devotional service — such a person is very dear to Me.",
+    chapter: 12, chapterName: "Bhakti Yoga", verse: "12:13–14",
+    context: "Krishna's portrait of the ideal devotee — one of the Gita's most beloved descriptions of saintly character, combining compassion, humility, and devotion." },
+
+  { text: "Fix your mind on Me, be devoted to Me, worship Me, bow down to Me — so shall you come to Me. I promise you truly, for you are dear to Me.",
+    chapter: 9, chapterName: "Raja Vidya Raja Guhya Yoga", verse: "9:34",
+    context: "Krishna's most intimate, personal promise — the fourfold instruction of mind, devotion, worship, and surrender leads directly and certainly to the Divine." }
 ];
 
+let _currentQuote = null;
+
 function showGitaQuote(d) {
-  const quote = GITA_QUOTES[(d - 1) % GITA_QUOTES.length];
-  document.getElementById('quoteDayLabel').textContent = 'Day ' + d + ' Complete — Jai Ganapati! 🙏';
-  document.getElementById('quoteText').textContent = quote;
+  const q = GITA_QUOTES[(d - 1) % GITA_QUOTES.length];
+  _currentQuote = q;
+  document.getElementById('quoteDayLabel').textContent = 'Day ' + d + ' Complete — Jai Ganapati! \uD83D\uDE4F';
+  document.getElementById('quoteText').textContent = '\u201C' + q.text + '\u201D';
+  document.getElementById('quoteChapterBadge').textContent = 'Chapter ' + q.chapter;
+  document.getElementById('quoteVerseNum').textContent = 'Verse ' + q.verse;
+  document.getElementById('quoteChapterName').textContent = q.chapterName;
+  document.getElementById('quoteContext').textContent = q.context;
   document.getElementById('quoteOverlay').classList.add('open');
 }
 
 function closeGitaQuote() {
   document.getElementById('quoteOverlay').classList.remove('open');
+}
+
+// ── Quote Screenshot ──
+function _wrapTextLines(ctx, text, maxW) {
+  const words = text.split(' ');
+  const lines = [];
+  let line = '';
+  for (const word of words) {
+    const test = line ? line + ' ' + word : word;
+    if (ctx.measureText(test).width > maxW && line) { lines.push(line); line = word; }
+    else { line = test; }
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+
+function captureQuote() {
+  const q = _currentQuote;
+  if (!q) return;
+
+  const W = 480, PAD = 32, dpr = Math.min(window.devicePixelRatio || 1, 3);
+  const innerW = W - PAD * 2;
+
+  // ── Measure text heights on a temp canvas ──
+  const tmp = document.createElement('canvas');
+  tmp.width = W * dpr; tmp.height = 10;
+  const tc = tmp.getContext('2d'); tc.scale(dpr, dpr);
+
+  tc.font = 'italic 17px Georgia, serif';
+  const qLines = _wrapTextLines(tc, '\u201C' + q.text + '\u201D', innerW - 16);
+  const qH = qLines.length * 28;
+
+  tc.font = '12px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
+  const ctxLines = _wrapTextLines(tc, q.context, innerW);
+  const ctxH = ctxLines.length * 20;
+
+  // ── Layout ──
+  const BORDER = 6, VPAD = 28;
+  const H = BORDER + VPAD
+    + 52          // Om
+    + 10          // gap
+    + 26          // "BHAGAVAD GITA"
+    + 8           // gap
+    + 26          // chapter badge row
+    + 6           // gap
+    + 20          // chapter name
+    + 18          // gap
+    + 1 + 14      // divider + gap
+    + qH + 16     // quote + gap
+    + 1 + 16      // divider + gap
+    + ctxH + 20   // context + gap
+    + 1 + 14      // footer divider + gap
+    + 20          // footer text
+    + VPAD + BORDER;
+
+  const canvas = document.createElement('canvas');
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  // ── Background ──
+  const bg = ctx.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0,   '#fffcf5');
+  bg.addColorStop(0.5, '#fff8e8');
+  bg.addColorStop(1,   '#fdf0d8');
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+
+  // Subtle radial warmth
+  const warm = ctx.createRadialGradient(W * 0.15, H * 0.2, 0, W * 0.15, H * 0.2, W * 0.6);
+  warm.addColorStop(0, 'rgba(255,193,7,0.07)');
+  warm.addColorStop(1, 'transparent');
+  ctx.fillStyle = warm; ctx.fillRect(0, 0, W, H);
+
+  // ── Saffron gradient (reused) ──
+  const sf = ctx.createLinearGradient(0, 0, W, 0);
+  sf.addColorStop(0,   '#ff8f00');
+  sf.addColorStop(0.5, '#e65100');
+  sf.addColorStop(1,   '#bf360c');
+
+  // Top border
+  ctx.fillStyle = sf; ctx.fillRect(0, 0, W, BORDER);
+
+  // Decorative dots on borders
+  ctx.fillStyle = 'rgba(255,213,0,0.6)';
+  for (let i = 0; i < 5; i++) {
+    ctx.beginPath(); ctx.arc(PAD + i * (innerW / 4), BORDER + 3, 2, 0, Math.PI * 2); ctx.fill();
+  }
+
+  let y = BORDER + VPAD;
+
+  // ── Om ──
+  ctx.font = '38px serif';
+  ctx.textAlign = 'center';
+  ctx.shadowColor = 'rgba(255,165,0,0.7)';
+  ctx.shadowBlur = 14;
+  ctx.fillStyle = '#e65100';
+  ctx.fillText('\uD83D\uDD49', W / 2, y + 36);
+  ctx.shadowBlur = 0;
+  y += 52 + 10;
+
+  // ── "BHAGAVAD GITA" ──
+  ctx.font = 'bold 15px Georgia, serif';
+  ctx.letterSpacing = '3px';
+  const hdr = ctx.createLinearGradient(PAD, 0, W - PAD, 0);
+  hdr.addColorStop(0, '#bf360c'); hdr.addColorStop(0.5, '#e65100'); hdr.addColorStop(1, '#bf360c');
+  ctx.fillStyle = hdr;
+  ctx.fillText('✦  BHAGAVAD GITA  ✦', W / 2, y);
+  ctx.letterSpacing = '0px';
+  y += 26 + 8;
+
+  // ── Chapter badge + Verse pill ──
+  const chText = 'Chapter ' + q.chapter;
+  const vsText = 'Verse ' + q.verse;
+  ctx.font = 'bold 11px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
+  const chW = ctx.measureText(chText).width + 20;
+  const vsW = ctx.measureText(vsText).width + 20;
+  const totalBadgeW = chW + 8 + vsW;
+  let bx = (W - totalBadgeW) / 2;
+
+  // Chapter badge (filled saffron pill)
+  _rrect(ctx, bx, y - 14, chW, 22, 11);
+  ctx.fillStyle = sf; ctx.fill();
+  ctx.fillStyle = 'white';
+  ctx.textAlign = 'center';
+  ctx.fillText(chText, bx + chW / 2, y + 3);
+
+  bx += chW + 8;
+  // Verse pill (outlined gold)
+  _rrect(ctx, bx, y - 14, vsW, 22, 11);
+  ctx.fillStyle = '#fff8e0'; ctx.fill();
+  ctx.strokeStyle = '#f0c060'; ctx.lineWidth = 1.5; ctx.stroke();
+  ctx.fillStyle = '#8d5524';
+  ctx.fillText(vsText, bx + vsW / 2, y + 3);
+
+  y += 26 + 6;
+
+  // ── Chapter name ──
+  ctx.font = 'italic 12px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
+  ctx.fillStyle = '#a0693a';
+  ctx.textAlign = 'center';
+  ctx.fillText(q.chapterName, W / 2, y);
+  y += 20 + 18;
+
+  // ── Divider ──
+  const divGrad = ctx.createLinearGradient(PAD, 0, W - PAD, 0);
+  divGrad.addColorStop(0, 'transparent');
+  divGrad.addColorStop(0.3, '#f0c060');
+  divGrad.addColorStop(0.5, '#e65100');
+  divGrad.addColorStop(0.7, '#f0c060');
+  divGrad.addColorStop(1, 'transparent');
+  ctx.strokeStyle = divGrad; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(W - PAD, y); ctx.stroke();
+  y += 1 + 14;
+
+  // ── Quote ──
+  ctx.font = 'italic 17px Georgia, serif';
+  ctx.fillStyle = '#3b1f00';
+  ctx.textAlign = 'left';
+
+  // Quote background card
+  _rrect(ctx, PAD - 8, y - 8, innerW + 16, qH + 16, 8);
+  ctx.fillStyle = 'rgba(255,193,7,0.08)'; ctx.fill();
+  ctx.strokeStyle = 'rgba(230,81,0,0.25)'; ctx.lineWidth = 1; ctx.stroke();
+
+  // Left accent bar
+  ctx.fillStyle = '#e65100';
+  ctx.fillRect(PAD - 8, y - 8, 4, qH + 16);
+
+  ctx.fillStyle = '#2d1600';
+  for (let i = 0; i < qLines.length; i++) {
+    ctx.fillText(qLines[i], PAD + 8, y + 14 + i * 28);
+  }
+  y += qH + 16;
+
+  // ── Divider ──
+  ctx.strokeStyle = divGrad;
+  ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(W - PAD, y); ctx.stroke();
+  y += 1 + 16;
+
+  // ── Context ──
+  ctx.font = '12px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
+  ctx.fillStyle = '#8d5524';
+  ctx.textAlign = 'left';
+  for (let i = 0; i < ctxLines.length; i++) {
+    ctx.fillText(ctxLines[i], PAD, y + i * 20);
+  }
+  y += ctxH + 20;
+
+  // ── Footer divider ──
+  ctx.strokeStyle = 'rgba(240,192,96,0.5)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(W - PAD, y); ctx.stroke();
+  y += 1 + 14;
+
+  // ── Footer ──
+  ctx.font = '11px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
+  ctx.fillStyle = '#a0693a';
+  ctx.textAlign = 'center';
+  ctx.fillText('\uD83D\uDD49  Ganapati Vratha Tracker  \u00B7  48 Days of Sacred Penance', W / 2, y);
+
+  // Bottom decorative dots
+  ctx.fillStyle = 'rgba(255,213,0,0.6)';
+  for (let i = 0; i < 5; i++) {
+    ctx.beginPath(); ctx.arc(PAD + i * (innerW / 4), H - BORDER - 3, 2, 0, Math.PI * 2); ctx.fill();
+  }
+
+  // Bottom border
+  ctx.fillStyle = sf; ctx.fillRect(0, H - BORDER, W, BORDER);
+
+  // ── Share or download ──
+  canvas.toBlob(async (blob) => {
+    const file = new File([blob], 'gita-verse-' + q.chapter + '-' + q.verse.replace(':', '-') + '.png', { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
+      try {
+        await navigator.share({ files: [file], title: 'Bhagavad Gita — Chapter ' + q.chapter + ', Verse ' + q.verse, text: q.text });
+        showToast('Shared!');
+      } catch(e) {
+        if (e.name !== 'AbortError') _downloadCanvas(canvas, file.name);
+      }
+    } else {
+      _downloadCanvas(canvas, file.name);
+    }
+  }, 'image/png');
 }
 // register service worker for PWA/offline
 if ('serviceWorker' in navigator) {
@@ -1914,6 +2765,17 @@ let audioLoopCount = 0;
 function toggleManthramImage() {
   document.getElementById('manthramImagePanel').classList.toggle('open');
   document.getElementById('qImgBtn').classList.toggle('active');
+  // close English if open
+  document.getElementById('manthramEnglishPanel').classList.remove('open');
+  document.getElementById('qEngBtn').classList.remove('active');
+}
+
+function toggleManthramEnglish() {
+  document.getElementById('manthramEnglishPanel').classList.toggle('open');
+  document.getElementById('qEngBtn').classList.toggle('active');
+  // close Telugu if open
+  document.getElementById('manthramImagePanel').classList.remove('open');
+  document.getElementById('qImgBtn').classList.remove('active');
 }
 
 function toggleAudioPanel() {
@@ -1922,7 +2784,7 @@ function toggleAudioPanel() {
   document.getElementById('qAudioBtn').classList.toggle('active');
   if (panel.classList.contains('open')) {
     audioLoopCount = 0;
-    document.getElementById('audioCount').textContent = 'Chanting: 0 / 21';
+    document.getElementById('audioCount').textContent = 'Chanting Counter: 0 / 21';
   }
 }
 
@@ -1931,7 +2793,7 @@ function resetAudio() {
   audio.pause();
   audio.currentTime = 0;
   audioLoopCount = 0;
-  document.getElementById('audioCount').textContent = 'Chanting: 0 / 21';
+  document.getElementById('audioCount').textContent = 'Chanting Counter: 0 / 21';
 }
 
 // Helpers: map today's ISO date to a day number in the state
@@ -1977,7 +2839,7 @@ function applyAudioMarksToToday(count) {
     audioLoopCount++;
     // update UI and map to today's marks
     if (audioLoopCount < CHANTS) {
-      document.getElementById('audioCount').textContent = 'Chanting: ' + audioLoopCount + ' / ' + CHANTS;
+      document.getElementById('audioCount').textContent = 'Chanting Counter: ' + audioLoopCount + ' / ' + CHANTS;
       applyAudioMarksToToday(audioLoopCount);
       audio.currentTime = 0;
       audio.play();
@@ -1990,9 +2852,9 @@ function applyAudioMarksToToday(count) {
   });
   audio.addEventListener('play', function() {
     if (audioLoopCount === 0) {
-      document.getElementById('audioCount').textContent = 'Chanting: 0 / ' + CHANTS;
+      document.getElementById('audioCount').textContent = 'Chanting Counter: 0 / ' + CHANTS;
     } else {
-      document.getElementById('audioCount').textContent = 'Chanting: ' + audioLoopCount + ' / ' + CHANTS;
+      document.getElementById('audioCount').textContent = 'Chanting Counter: ' + audioLoopCount + ' / ' + CHANTS;
     }
   });
 })();
