@@ -19,8 +19,13 @@
   <link rel="canonical" href="https://chandra-79.github.io/vratha"/>
   <title>🕉 Ganapati Vratha Tracker — 48 Days</title>
 
+  <!-- Favicon / PWA icons -->
+  <link rel="icon" type="image/svg+xml" href="icon.svg"/>
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"/>
+  <link rel="apple-touch-icon" href="icon-192.png"/>
+
   <!-- PWA manifest inline -->
-  <link rel="manifest" href="data:application/json,%7B%22name%22%3A%22Ganapati%20Vratha%22%2C%22short_name%22%3A%22Vratha%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23fdf6ec%22%2C%22theme_color%22%3A%22%23e65100%22%7D"/>
+  <link rel="manifest" href="data:application/json,%7B%22name%22%3A%22Ganapati%20Vratha%22%2C%22short_name%22%3A%22Vratha%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23fdf6ec%22%2C%22theme_color%22%3A%22%23e65100%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22icon-192.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D"/>
 
   <!-- Devotional heading font -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -358,6 +363,28 @@
       background: linear-gradient(135deg, #ff8f00, #e65100);
       color: white; border-radius: 10px;
       padding: 2px 7px; margin-top: 3px;
+    }
+
+    /* ── TODAY CARD — selective mark interactivity ── */
+    /* Completed marks locked — prevent accidental unchecking */
+    .day-card.today .marks-grid .mark.done {
+      pointer-events: none;
+      cursor: default;
+    }
+    /* Marks not yet reached — locked until prior ones done */
+    .day-card.today .marks-grid .mark:not(.done):not(.next-mark) {
+      pointer-events: none;
+      opacity: 0.32;
+      cursor: default;
+    }
+    /* The single next mark to tap — pulse highlight */
+    .day-card.today .marks-grid .mark.next-mark {
+      box-shadow: 0 0 0 3px rgba(230,81,0,.45);
+      animation: pulseNext 1.8s ease-in-out infinite;
+    }
+    @keyframes pulseNext {
+      0%,100% { box-shadow: 0 0 0 2px rgba(230,81,0,.3); }
+      50%      { box-shadow: 0 0 0 6px rgba(230,81,0,.55); }
     }
 
     /* ── FUTURE DAY (locked) ── */
@@ -2337,6 +2364,15 @@ function buildCards() {
   updateStats();
 }
 
+function applyNextMark(grid, marks) {
+  const els = grid.querySelectorAll('.mark');
+  const nextIdx = marks.indexOf(false);
+  els.forEach((el, i) => {
+    el.classList.remove('next-mark');
+    if (i === nextIdx) el.classList.add('next-mark');
+  });
+}
+
 function makeCard(d) {
   const k = 'd' + d;
   const s = state[k];
@@ -2443,6 +2479,7 @@ function makeCard(d) {
     mk.addEventListener('touchend', e => { e.preventDefault(); toggleMark(d, m); });
     grid.appendChild(mk);
   }
+  if (isToday && !done) applyNextMark(grid, s.marks);
   card.appendChild(grid);
   return card;
 }
@@ -2548,6 +2585,11 @@ function refreshCard(d) {
     el.setAttribute('aria-pressed', s.marks[i] ? 'true' : 'false');
     el.setAttribute('aria-label', 'Chanting ' + (i + 1) + (s.marks[i] ? ' completed' : ' pending'));
   });
+
+  // re-apply next-mark highlighting for today card
+  const isToday2 = !future && s.date && s.date === todayISO();
+  if (isToday2 && !done) applyNextMark(grid, s.marks);
+  else marks.forEach(el => el.classList.remove('next-mark'));
 }
 
 // Date edit helpers

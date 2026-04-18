@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Outer saffron disc -->
+  <circle cx="256" cy="256" r="256" fill="#e65100"/>
+
+  <!-- Gold decorative ring -->
+  <circle cx="256" cy="256" r="236" fill="none" stroke="#ffcc80" stroke-width="6"/>
+
+  <!-- Inner warm cream ring -->
+  <circle cx="256" cy="256" r="222" fill="#fff3e0" opacity="0.12"/>
+
+  <!-- Decorative dot border (8 petals like lotus) -->
+  <g fill="#ffcc80" opacity="0.7">
+    <circle cx="256" cy="34"  r="7"/>
+    <circle cx="256" cy="478" r="7"/>
+    <circle cx="34"  cy="256" r="7"/>
+    <circle cx="478" cy="256" r="7"/>
+    <circle cx="96"  cy="96"  r="6"/>
+    <circle cx="416" cy="96"  r="6"/>
+    <circle cx="96"  cy="416" r="6"/>
+    <circle cx="416" cy="416" r="6"/>
+  </g>
+
+  <!-- OM symbol hand-drawn in SVG paths (white) -->
+  <!-- Large OM (ॐ) glyph approximated with text -->
+  <text
+    x="256" y="330"
+    text-anchor="middle"
+    font-size="240"
+    font-family="serif"
+    fill="#ffffff"
+    opacity="1"
+  >ॐ</text>
+
+  <!-- Subtle gold glow under the Om -->
+  <ellipse cx="256" cy="350" rx="110" ry="18" fill="#ffcc80" opacity="0.18"/>
+
+  <!-- Small decorative line below -->
+  <rect x="176" y="375" width="160" height="4" rx="2" fill="#ffcc80" opacity="0.6"/>
+
+  <!-- Top small lamp/diya flame shape -->
+  <ellipse cx="256" cy="60" rx="14" ry="10" fill="#ffcc80" opacity="0.9"/>
+  <polygon points="256,42 248,60 264,60" fill="#ffcc80" opacity="0.9"/>
+</svg>
