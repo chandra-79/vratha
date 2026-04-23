@@ -937,7 +937,8 @@
 <div class="quick-links">
   <button class="qbtn" id="qImgBtn" onclick="toggleManthramImage()">📜 Manthram (Telugu)</button>
   <button class="qbtn" id="qEngBtn" onclick="toggleManthramEnglish()">📖 Manthram (English)</button>
-  <button class="qbtn" id="qAudioBtn" onclick="toggleAudioPanel()">🔊 Play Manthram (21×)</button>
+  <button class="qbtn" id="qAudioBtn" onclick="toggleAudioPanel()">🔊 Play Manthram V1 (21×)</button>
+  <button class="qbtn" id="qAudioBtn" onclick="toggleAudioPanel()">🔊 Play Manthram V2 (21×)</button>
 </div>
 
 <div class="manthram-image-panel" id="manthramImagePanel">
@@ -950,6 +951,11 @@
 
 <div class="audio-panel" id="audioPanel">
   <audio id="manthramAudio" src="Manthram.mpeg" controls preload="auto"></audio>
+  <div class="audio-count" id="audioCount" role="status" aria-live="polite">Chanting Counter: 0 / 21</div>
+  <button class="audio-reset-btn" onclick="resetAudio()">↺ Reset count</button>
+</div>
+<div class="audio-panel" id="audioPanel">
+  <audio id="manthramAudio" src="Manthram_Variation.mp3" controls preload="auto"></audio>
   <div class="audio-count" id="audioCount" role="status" aria-live="polite">Chanting Counter: 0 / 21</div>
   <button class="audio-reset-btn" onclick="resetAudio()">↺ Reset count</button>
 </div>
