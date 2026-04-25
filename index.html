@@ -937,8 +937,8 @@
 <div class="quick-links">
   <button class="qbtn" id="qImgBtn" onclick="toggleManthramImage()">📜 Manthram (Telugu)</button>
   <button class="qbtn" id="qEngBtn" onclick="toggleManthramEnglish()">📖 Manthram (English)</button>
-  <button class="qbtn" id="qAudioBtn" onclick="toggleAudioPanel()">🔊 Play Manthram V1 (21×)</button>
-  <button class="qbtn" id="qAudioBtn" onclick="toggleAudioPanel()">🔊 Play Manthram V2 (21×)</button>
+  <button class="qbtn" id="qAudioBtn1" onclick="toggleAudioPanel(1)">🔊 Play Manthram V1 (21×)</button>
+  <button class="qbtn" id="qAudioBtn2" onclick="toggleAudioPanel(2)">🔊 Play Manthram V2 (21×)</button>
 </div>
 
 <div class="manthram-image-panel" id="manthramImagePanel">
@@ -949,15 +949,15 @@
   <img src="Manthram_English.png" alt="Manthram in English"/>
 </div>
 
-<div class="audio-panel" id="audioPanel">
-  <audio id="manthramAudio" src="Manthram.mpeg" controls preload="auto"></audio>
-  <div class="audio-count" id="audioCount" role="status" aria-live="polite">Chanting Counter: 0 / 21</div>
-  <button class="audio-reset-btn" onclick="resetAudio()">↺ Reset count</button>
+<div class="audio-panel" id="audioPanel1">
+  <audio id="manthramAudio1" src="Manthram.mpeg" controls preload="auto"></audio>
+  <div class="audio-count" id="audioCount1" role="status" aria-live="polite">Chanting Counter: 0 / 21</div>
+  <button class="audio-reset-btn" onclick="resetAudio(1)">↺ Reset count</button>
 </div>
-<div class="audio-panel" id="audioPanel">
-  <audio id="manthramAudio" src="Manthram_Variation.mp3" controls preload="auto"></audio>
-  <div class="audio-count" id="audioCount" role="status" aria-live="polite">Chanting Counter: 0 / 21</div>
-  <button class="audio-reset-btn" onclick="resetAudio()">↺ Reset count</button>
+<div class="audio-panel" id="audioPanel2">
+  <audio id="manthramAudio2" src="Manthram_Variation.mp3" controls preload="auto"></audio>
+  <div class="audio-count" id="audioCount2" role="status" aria-live="polite">Chanting Counter: 0 / 21</div>
+  <button class="audio-reset-btn" onclick="resetAudio(2)">↺ Reset count</button>
 </div>
 
 <!-- ── CARDS ── -->
@@ -2757,7 +2757,7 @@ function scrollToToday() {
 
 
 // ── QUICK LINKS ──
-let audioLoopCount = 0;
+let audioLoopCount = [0, 0, 0]; // index 1 = V1, index 2 = V2
 
 function toggleManthramImage() {
   document.getElementById('manthramImagePanel').classList.toggle('open');
@@ -2775,22 +2775,30 @@ function toggleManthramEnglish() {
   document.getElementById('qImgBtn').classList.remove('active');
 }
 
-function toggleAudioPanel() {
-  const panel = document.getElementById('audioPanel');
+function toggleAudioPanel(n) {
+  const other = n === 1 ? 2 : 1;
+  const panel = document.getElementById('audioPanel' + n);
+  const otherPanel = document.getElementById('audioPanel' + other);
+  const otherAudio = document.getElementById('manthramAudio' + other);
+
+  // Close and pause the other panel
+  otherPanel.classList.remove('open');
+  document.getElementById('qAudioBtn' + other).classList.remove('active');
+  otherAudio.pause();
+
   panel.classList.toggle('open');
-  document.getElementById('qAudioBtn').classList.toggle('active');
-  if (panel.classList.contains('open')) {
-    audioLoopCount = 0;
-    document.getElementById('audioCount').textContent = 'Chanting Counter: 0 / 21';
+  document.getElementById('qAudioBtn' + n).classList.toggle('active');
+  if (!panel.classList.contains('open')) {
+    document.getElementById('manthramAudio' + n).pause();
   }
 }
 
-function resetAudio() {
-  const audio = document.getElementById('manthramAudio');
+function resetAudio(n) {
+  const audio = document.getElementById('manthramAudio' + n);
   audio.pause();
   audio.currentTime = 0;
-  audioLoopCount = 0;
-  document.getElementById('audioCount').textContent = 'Chanting Counter: 0 / 21';
+  audioLoopCount[n] = 0;
+  document.getElementById('audioCount' + n).textContent = 'Chanting Counter: 0 / 21';
 }
 
 // Helpers: map today's ISO date to a day number in the state
@@ -2831,28 +2839,27 @@ function applyAudioMarksToToday(count) {
 }
 
 (function initAudio() {
-  const audio = document.getElementById('manthramAudio');
-  audio.addEventListener('ended', function() {
-    audioLoopCount++;
-    // update UI and map to today's marks
-    if (audioLoopCount < CHANTS) {
-      document.getElementById('audioCount').textContent = 'Chanting Counter: ' + audioLoopCount + ' / ' + CHANTS;
-      applyAudioMarksToToday(audioLoopCount);
-      audio.currentTime = 0;
-      audio.play();
-    } else {
-      // final (21st) chant
-      applyAudioMarksToToday(CHANTS);
-      document.getElementById('audioCount').textContent = '✓ Completed 21 chantings 🙏';
-      audioLoopCount = 0;
-    }
-  });
-  audio.addEventListener('play', function() {
-    if (audioLoopCount === 0) {
-      document.getElementById('audioCount').textContent = 'Chanting Counter: 0 / ' + CHANTS;
-    } else {
-      document.getElementById('audioCount').textContent = 'Chanting Counter: ' + audioLoopCount + ' / ' + CHANTS;
-    }
+  [1, 2].forEach(function(n) {
+    const audio = document.getElementById('manthramAudio' + n);
+    audio.addEventListener('ended', function() {
+      audioLoopCount[n]++;
+      if (audioLoopCount[n] < CHANTS) {
+        document.getElementById('audioCount' + n).textContent = 'Chanting Counter: ' + audioLoopCount[n] + ' / ' + CHANTS;
+        applyAudioMarksToToday(audioLoopCount[n]);
+        audio.currentTime = 0;
+        audio.play();
+      } else {
+        applyAudioMarksToToday(CHANTS);
+        document.getElementById('audioCount' + n).textContent = '✓ Completed 21 chantings 🙏';
+        audioLoopCount[n] = 0;
+      }
+    });
+    audio.addEventListener('play', function() {
+      const count = audioLoopCount[n];
+      document.getElementById('audioCount' + n).textContent = count === 0
+        ? 'Chanting Counter: 0 / ' + CHANTS
+        : 'Chanting Counter: ' + count + ' / ' + CHANTS;
+    });
   });
 })();
 
