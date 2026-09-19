@@ -25,14 +25,16 @@ function getDayForToday() {
 }
 function dayCount(d) { return d ? state['d' + d].marks.filter(Boolean).length : 0; }
 function announce(message) { $('practiceAnnouncement').textContent = message; }
-function isDayComplete(day) { return day.temple && day.marks.every(Boolean); }
+function isDayComplete(day, config = getPracticeConfig(state)) { return dayIsComplete(day, config); }
 
 async function changeDay(d, mutate, message = 'Progress saved', options = {}) {
   const cycle = state.cycleId || null;
+  const configVersion = JSON.stringify(getPracticeConfig(state));
   const practice = activePractice;
   return practiceLock(() => {
     if (activePractice !== practice) return false;
     syncTrackerState();
+    if (JSON.stringify(getPracticeConfig(state)) !== configVersion) { showToast('Practice goals changed. Please try again.'); return false; }
     if ((state.cycleId || null) !== cycle) { showToast('The cycle changed in another tab. Please try again.'); return false; }
     if (!d || !state['d' + d] || isFuture(d)) return false;
     const before = JSON.stringify(state['d' + d]);
@@ -59,7 +61,7 @@ async function countChant() {
   if (changed) {
     if (!sessionStarted) sessionStarted = Date.now();
     feedback(dayCount(d) === CHANTS);
-    if ([7, 14, 21].includes(dayCount(d))) announce(dayCount(d) + ' of 21 chants completed');
+    if ([Math.ceil(CHANTS/3), Math.ceil(CHANTS*2/3), CHANTS].includes(dayCount(d))) announce(dayCount(d) + ' of ' + CHANTS + ' chants completed');
   }
   return changed;
 }
@@ -88,20 +90,20 @@ function renderCompanion() {
   const count = dayCount(d);
   const day = d ? state['d' + d] : null;
   $('todayHeading').textContent = PRACTICES[activePractice].name + ' · Today’s practice';
-  $('todaySubtitle').textContent = d ? 'Day ' + d + ' of 48 · ' + fmtDate(todayISO()) : fmtDate(todayISO());
-  $('practiceHint').textContent = !d ? 'Choose a start date above to schedule your practice.' : count === CHANTS ? (day.temple ? 'Today’s practice is complete. Take a quiet moment.' : '21 chants complete. Record your temple visit when ready.') : 'One repetition. One tap.';
+  $('todaySubtitle').textContent = d ? 'Day ' + d + ' of ' + DAYS + ' · ' + fmtDate(todayISO()) : fmtDate(todayISO());
+  $('practiceHint').textContent = !d ? 'Choose a start date above to schedule your practice.' : count === CHANTS ? (isDayComplete(day) ? 'Today’s practice is complete. Take a quiet moment.' : CHANTS + ' chants complete. Record your temple visit when ready.') : 'One repetition. One tap.';
   $('dailyCount').textContent = $('focusCount').textContent = count;
   ['dailyTap','focusTap'].forEach(id => {
     $(id).style.setProperty('--progress', (count / CHANTS * 360) + 'deg');
     $(id).disabled = !d || count >= CHANTS;
-    $(id).setAttribute('aria-label', count + ' of 21 chants completed. Count one chant');
+    $(id).setAttribute('aria-label', count + ' of ' + CHANTS + ' chants completed. Count one chant');
   });
   $('focusLaunch').disabled = !d;
   $('dailyTemple').disabled = !d;
   $('dailyTemple').textContent = day?.temple ? '✓ Temple visited' : 'Record temple visit';
   $('dailyTemple').setAttribute('aria-pressed', String(Boolean(day?.temple)));
   $('focusDay').textContent = d ? PRACTICES[activePractice].name + ' · Day ' + d + ' · ' + fmtDate(todayISO()) : 'No day scheduled for today';
-  $('focusHint').textContent = count === CHANTS ? 'Your 21 chants are complete. 🙏' : 'Tap the circle or press Space.';
+  $('focusHint').textContent = count === CHANTS ? 'Your ' + CHANTS + ' chants are complete. 🙏' : 'Tap the circle or press Space.';
   $('dailyNote').disabled = $('saveNote').disabled = !d;
   if (noteDay !== d || !noteDirty) { $('dailyNote').value = day?.note || ''; noteDay = d; noteDirty = false; }
   if (undoEntry && (JSON.stringify(state['d'+undoEntry.d]) !== undoEntry.after || (state.cycleId || null) !== undoEntry.cycle)) undoEntry = null;
@@ -110,7 +112,8 @@ function renderCompanion() {
   let complete = 0;
   const grid = $('journeyGrid');
   // Preserve focus while updating calendar tiles after a cross-tab save.
-  if (!grid.children.length) {
+  if (grid.children.length !== DAYS) {
+    grid.replaceChildren();
     for (let i = 1; i <= DAYS; i++) {
       const button = document.createElement('button');
       button.className = 'journey-day'; button.type = 'button';
@@ -129,15 +132,19 @@ function renderCompanion() {
     button.dataset.status = status;
     button.firstElementChild.textContent = i;
     button.lastElementChild.textContent = { complete: '✓', partial: '◐', future: '·', empty: '○' }[status];
-    button.setAttribute('aria-label', 'Day ' + i + ', ' + (entry.date ? fmtDate(entry.date) + ', ' : '') + n + ' of 21 chants, ' + (entry.temple ? 'temple visited' : 'temple not recorded'));
+    button.setAttribute('aria-label', 'Day ' + i + ', ' + (entry.date ? fmtDate(entry.date) + ', ' : '') + n + ' of ' + CHANTS + ' chants, ' + (entry.temple ? 'temple visited' : 'temple not recorded'));
     if (i === d) button.setAttribute('aria-current', 'date'); else button.removeAttribute('aria-current');
   }
-  $('journeySummary').textContent = complete + ' of 48 complete';
+  $('journeySummary').textContent = complete + ' of ' + DAYS + ' complete';
   $('lastBackup').textContent = state.lastBackup ? 'Last backup: ' + new Date(state.lastBackup).toLocaleString() : 'No backup downloaded yet.';
   renderArchives();
   renderAudioControls();
+  renderGoalSettings();
+  renderInsights();
 }
 function revealDay(d) {
+  detailDay = d;
+  buildCards();
   $('dayDetails').open = true;
   const card = $('card' + d);
   card.focus({preventScroll:true});
@@ -152,6 +159,7 @@ function openDayEditor(d) {
   if (isFuture(d)) return;
   editingDay = d;
   $('editDayHeading').textContent = 'Correct day ' + d;
+  $('editChants').max = CHANTS;
   $('editChants').value = dayCount(d);
   $('editTemple').checked = state['d' + d].temple;
   $('editNote').value = state['d' + d].note || '';
@@ -198,8 +206,8 @@ function renderAudioControls() {
   const playing = Boolean(audioRun);
   $('audioToggle').textContent = playing ? 'Ⅱ Pause' : '▶ Play';
   $('focusAudio').textContent = playing ? 'Ⅱ Pause audio' : '▶ Audio';
-  $('audioToggle').disabled = $('focusAudio').disabled = !d || count >= CHANTS;
-  [1,2].forEach(n => { $('audioCount'+n).textContent = 'Today: ' + count + ' / 21'; });
+  $('audioToggle').disabled = $('focusAudio').disabled = !practiceAudioReady || !d || count >= CHANTS;
+  [1,2].forEach(n => { $('audioCount'+n).textContent = 'Today: ' + count + ' / ' + CHANTS; });
   if (count >= CHANTS && audioRun) stopGuidedAudio();
 }
 function stopGuidedAudio() {
@@ -218,7 +226,7 @@ async function toggleGuidedAudio() {
   if (audioRun) { stopGuidedAudio(); return; }
   syncTrackerState();
   const d = getDayForToday();
-  if (!d || dayCount(d) >= CHANTS) return;
+  if (!practiceAudioReady || !d || dayCount(d) >= CHANTS) return;
   const audio = currentAudio();
   if (audio.ended) audio.currentTime = 0;
   audioRun = { d, date: todayISO(), cycle:state.cycleId || null, practice:activePractice, audio };
@@ -253,15 +261,32 @@ async function toggleGuidedAudio() {
 });
 function resetAudio(n) { stopGuidedAudio(); $('manthramAudio'+n).currentTime = 0; }
 
-function validDay(day) {
-  return day && typeof day === 'object' && Array.isArray(day.marks) && day.marks.length === CHANTS && day.marks.every(v => typeof v === 'boolean') && typeof day.temple === 'boolean' && typeof day.date === 'string' && (!day.date || /^\d{4}-\d{2}-\d{2}$/.test(day.date)) && (day.note === undefined || (typeof day.note === 'string' && day.note.length <= 2000));
+function validISODate(value) {
+  if(typeof value!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(value))return false;
+  const date=new Date(value+'T00:00:00Z');
+  return Number.isFinite(date.getTime())&&date.toISOString().slice(0,10)===value;
+}
+function validDay(day, chants = 21) {
+  return day && typeof day === 'object' && Array.isArray(day.marks) && day.marks.length === chants && day.marks.every(v => typeof v === 'boolean') && typeof day.temple === 'boolean' && typeof day.date === 'string' && (!day.date || validISODate(day.date)) && (day.note === undefined || (typeof day.note === 'string' && day.note.length <= 2000));
 }
 function validBackup(data) {
   if (!data || typeof data !== 'object' || Array.isArray(data)) return false;
-  if (data.practiceId !== undefined && !Object.hasOwn(PRACTICES, data.practiceId)) return false;
+  if (data.customPractice !== undefined && (!validCustomPractice(data.customPractice) || data.practiceId !== data.customPractice.id)) return false;
+  if (data.practiceId !== undefined && !Object.hasOwn(PRACTICES, data.practiceId) && !data.customPractice) return false;
+  if (data.practiceId?.startsWith('custom_') && !data.customPractice && !PRACTICES[data.practiceId]?.custom) return false;
+  if (data.datesFixed !== undefined && typeof data.datesFixed !== 'boolean') return false;
+  if (data.cycleId !== undefined && (typeof data.cycleId !== 'string' || data.cycleId.length > 100)) return false;
+  if (data.updatedAt !== undefined && (!Number.isSafeInteger(data.updatedAt) || data.updatedAt < 0)) return false;
+  if (data.lastBackup !== undefined && (typeof data.lastBackup !== 'string' || !Number.isFinite(Date.parse(data.lastBackup)))) return false;
+  if (data.config !== undefined && !validConfig(data.config)) return false;
+  const config = getPracticeConfig(data);
   const keys = Object.keys(data).filter(k => /^d\d+$/.test(k));
-  if (!keys.length || keys.some(k => Number(k.slice(1)) < 1 || Number(k.slice(1)) > DAYS || !validDay(data[k]))) return false;
-  if (data.archives !== undefined && (!Array.isArray(data.archives) || data.archives.some(a => !a || typeof a.endedAt !== 'string' || !a.days || !Array.from({length:DAYS}, (_,i) => a.days['d'+(i+1)]).every(validDay)))) return false;
+  if (!keys.length || keys.some(k => Number(k.slice(1)) < 1 || Number(k.slice(1)) > config.days || !validDay(data[k], config.chants))) return false;
+  if (data.archives !== undefined && (!Array.isArray(data.archives) || data.archives.some(a => {
+    if(!a || typeof a.endedAt !== 'string' || !a.days || (a.config!==undefined&&!validConfig(a.config))) return true;
+    const archivedConfig=getPracticeConfig(a);
+    return !Array.from({length:archivedConfig.days}, (_,i) => a.days['d'+(i+1)]).every(day=>validDay(day,archivedConfig.chants));
+  }))) return false;
   return true;
 }
 function downloadFile(name, content, type) {
@@ -278,21 +303,22 @@ function downloadReminder() {
   if (end && end < start) { showToast('This cycle has ended. Start a new cycle for reminders.'); return; }
   const count = end ? Math.round((Date.parse(end) - Date.parse(start))/86400000)+1 : DAYS;
   const stamp = new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
-  const lines = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Vratha//Daily Practice//EN','BEGIN:VEVENT','UID:vratha-'+Date.now()+'@ajnacs.com','DTSTAMP:'+stamp,'DTSTART:'+start.replace(/-/g,'')+'T'+time.replace(':','')+'00','DURATION:PT10M','RRULE:FREQ=DAILY;COUNT='+count,'SUMMARY:'+PRACTICES[activePractice].name+' — daily practice','DESCRIPTION:Chant 21 times and record your temple visit.','BEGIN:VALARM','TRIGGER:PT0M','ACTION:DISPLAY','DESCRIPTION:Time for your '+PRACTICES[activePractice].name+' practice','END:VALARM','END:VEVENT','END:VCALENDAR'];
+  const calendarName=PRACTICES[activePractice].name.replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\r?\n/g,'\\n');
+  const lines = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Vratha//Daily Practice//EN','BEGIN:VEVENT','UID:vratha-'+Date.now()+'@ajnacs.com','DTSTAMP:'+stamp,'DTSTART:'+start.replace(/-/g,'')+'T'+time.replace(':','')+'00','DURATION:PT10M','RRULE:FREQ=DAILY;COUNT='+count,'SUMMARY:'+calendarName+' — daily practice','DESCRIPTION:Chant '+CHANTS+' times'+(getPracticeConfig(state).templeRequired?' and record your temple visit.':'.'),'BEGIN:VALARM','TRIGGER:PT0M','ACTION:DISPLAY','DESCRIPTION:Time for your '+calendarName+' practice','END:VALARM','END:VEVENT','END:VCALENDAR'];
   downloadFile('vratha-reminder.ics', lines.join('\r\n')+'\r\n','text/calendar;charset=utf-8');
   showToast('Open the downloaded reminder in your calendar app.');
 }
 async function archiveAndRestart() {
   const date = $('nextCycleDate').value;
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) { showToast('Choose the next cycle’s start date.'); return; }
-  if (!confirm('Save this cycle to your archive and start a new 48-day cycle on '+fmtDate(date)+'?')) return;
+  if (!confirm('Save this cycle to your archive and start a new '+DAYS+'-day cycle on '+fmtDate(date)+'?')) return;
   stopGuidedAudio();
   await practiceLock(() => {
     syncTrackerState();
     const days = {};
     for (let d=1;d<=DAYS;d++) { ensureDay(d); days['d'+d] = structuredClone(state['d'+d]); }
-    const archives = [...(state.archives || []), {id:Date.now().toString(), endedAt:new Date().toISOString(), days}];
-    state = {archives, cycleId:Date.now().toString(), lastBackup:state.lastBackup, sharedCountMigrated:true};
+    const archives = [...(state.archives || []), {id:Date.now().toString(), endedAt:new Date().toISOString(), config:{...getPracticeConfig(state)}, days}];
+    state = {config:{...getPracticeConfig(state)}, archives, cycleId:Date.now().toString(), lastBackup:state.lastBackup, sharedCountMigrated:true};
     undoEntry = null; noteDirty = false; sessionStarted = null;
     $('sessionTime').textContent = 'Session · 00:00';
     $('startDate').value = date;
@@ -310,15 +336,16 @@ function renderArchives() {
   $('archiveList').replaceChildren();
   for (const archive of [...archives].reverse()) {
     const details = document.createElement('details'), summary = document.createElement('summary');
-    const days = Object.values(archive.days), complete = days.filter(isDayComplete).length;
-    summary.textContent = (archive.days.d1.date ? fmtDate(archive.days.d1.date) : 'Unscheduled cycle')+' · '+complete+'/48 days complete';
+    const config=getPracticeConfig(archive);
+    const days = Object.values(archive.days), complete = days.filter(day=>isDayComplete(day,config)).length;
+    summary.textContent = (archive.days.d1.date ? fmtDate(archive.days.d1.date) : 'Unscheduled cycle')+' · '+complete+'/'+config.days+' days complete · '+config.chants+' chants/day';
     details.appendChild(summary);
     const exportButton = document.createElement('button'); exportButton.textContent = 'Download this cycle';
-    exportButton.addEventListener('click', () => downloadFile('vratha-archive-'+archive.id+'.json',JSON.stringify({...archive.days,datesFixed:true,practiceId:activePractice},null,2),'application/json'));
+    exportButton.addEventListener('click', () => downloadPracticeBackup({...archive.days,config,datesFixed:true},activePractice,'vratha-archive-'+archive.id+'.json'));
     details.appendChild(exportButton);
-    for (let d=1;d<=DAYS;d++) {
+    for (let d=1;d<=config.days;d++) {
       const day=archive.days['d'+d], row=document.createElement('p'); row.className='archive-entry';
-      row.textContent='Day '+d+' · '+(day.date || 'No date')+' · '+day.marks.filter(Boolean).length+'/21 · '+(day.temple?'Temple visited':'Temple not recorded')+(day.note?' — '+day.note:'');
+      row.textContent='Day '+d+' · '+(day.date || 'No date')+' · '+day.marks.filter(Boolean).length+'/'+config.chants+' · '+(day.temple?'Temple visited':'Temple not recorded')+(day.note?' — '+day.note:'');
       details.appendChild(row);
     }
     $('archiveList').appendChild(details);
@@ -347,12 +374,15 @@ function renderReader() {
   const language = $('readerLanguage').value;
   $('readerHeading').textContent = practice.title;
   $('readerText').replaceChildren();
-  $('readerText').lang = language === 'te' ? 'te' : language === 'sa' ? 'sa' : 'en';
-  const sections = activePractice === 'ganapati' ? (mantraText[language] || mantraText.en) : [[practice.title, practice[language] || practice.en]];
+  $('readerLanguage').disabled=Boolean(practice.custom);
+  $('readerText').lang = practice.custom ? '' : language === 'te' ? 'te' : language === 'sa' ? 'sa' : 'en';
+  const sections = activePractice === 'ganapati' ? (mantraText[language] || mantraText.en) : [[practice.title, practice.custom ? (practice.en || 'Open your reading sheets below, or listen to your recording.') : (practice[language] || practice.en)]];
   for (const [title, text] of sections) {
     const h = document.createElement('h3'), p = document.createElement('p');
     h.textContent = title; p.textContent = text; $('readerText').append(h, p);
   }
+  if(practice.custom && practice.meaning) {const p=document.createElement('p');p.textContent=practice.meaning;$('readerText').appendChild(p);}
+  renderReaderAttachments();
   if (practice.source) {
     const link = document.createElement('a');
     link.href = practice.source; link.target = '_blank'; link.rel = 'noopener noreferrer';
@@ -412,26 +442,33 @@ document.addEventListener('keydown', event => {
 });
 
 function configurePractice() {
+  applyPracticeConfig();
+  detailDay = getDayForToday() || 1;
   const practice = PRACTICES[activePractice], ganapati = activePractice === 'ganapati';
+  refreshPracticePicker();
   $('practiceSelect').value = activePractice;
   document.title = practice.name + ' · Naam Jaap & Vratha Tracker';
   $('mantraPreview').hidden = ganapati;
   $('mantraScript').textContent = practice.sa || '';
-  $('mantraTransliteration').textContent = practice.en || '';
+  $('mantraTransliteration').dir=practice.custom?'auto':'ltr';
+  $('mantraTransliteration').textContent = practice.en || (practice.custom ? 'Your personal practice. Open the reader for your sheets, or listen to your recording.' : '');
   $('focusMantra').textContent = practice.en || '';
   $('focusMantra').hidden = ganapati;
   const version = ganapati && preferences.version === '2' ? '2' : '1';
   $('audioVersion').replaceChildren();
-  const first = new Option(ganapati ? 'Manthram V1' : 'Spoken guide', '1');
+  const first = new Option(ganapati ? 'Manthram V1' : practice.custom ? 'Your recording' : 'Spoken guide', '1');
   $('audioVersion').add(first);
   if (ganapati) $('audioVersion').add(new Option('Manthram V2','2'));
   $('audioVersion').value = version;
   [1,2].forEach(n => {
     const audio = $('manthramAudio'+n);
-    audio.pause(); audio.src = n === 2 ? (practice.audio2 || practice.audio) : practice.audio;
+    audio.pause();
+    if(practice.audio)audio.src = n === 2 ? (practice.audio2 || practice.audio) : practice.audio;
+    else audio.removeAttribute('src');
     audio.load();
   });
   $('audioHint').textContent = ganapati ? 'Each finished recording adds one chant to today’s count.' : 'Synthetic spoken guide · Each full mantra adds one chant. Not a traditional sung recitation.';
+  configurePracticeMedia();
   $('readerLanguage').querySelector('option[value="sa"]').disabled = ganapati;
   if (ganapati && $('readerLanguage').value === 'sa') $('readerLanguage').value = 'en';
   document.querySelector('.about-section').hidden = !ganapati;
@@ -454,6 +491,8 @@ async function switchPractice(id, options = {}) {
       LS_KEY = practiceStorageKey(id); COOKIE_KEY = practiceCookieKey(id);
       try { sessionStorage.setItem('vratha_active_practice',id); } catch (_) {}
       state = loadState();
+      applyPracticeConfig();
+      detailDay = getDayForToday() || 1;
       undoEntry = null; sessionStarted = null; editingDay = null;
       document.querySelectorAll('.practice-dialog[open]').forEach(dialog => dialog.close());
       closeGitaQuote();
@@ -462,6 +501,90 @@ async function switchPractice(id, options = {}) {
       announce(PRACTICES[id].name + ' practice selected');
     });
   } finally { $('practiceSelect').disabled = false; }
+}
+
+let settingsSignature = '';
+function renderGoalSettings() {
+  const config=getPracticeConfig(state), signature=activePractice+JSON.stringify(config);
+  if(signature!==settingsSignature) {
+    settingsSignature=signature;
+    $('configChants').value=config.chants; $('configDays').value=config.days; $('configTemple').checked=config.templeRequired;
+    $('configMessage').textContent='';
+  }
+  $('configPracticeName').textContent=PRACTICES[activePractice].name;
+  $('goalProjection').textContent=(config.chants*config.days).toLocaleString()+' chants across '+config.days+' days.';
+  $('journeyHeading').textContent='Your '+DAYS+'-day journey';
+  document.querySelector('.header-title p').textContent=DAYS+'-Day Practice · '+CHANTS+' Chantings Daily';
+  document.querySelectorAll('.chant-ring small').forEach(el=>el.textContent='of '+CHANTS+' chants');
+  // At larger goals, use a smooth ring instead of indistinguishable bead segments.
+  $('focusTap').classList.toggle('smooth-ring',CHANTS>108);
+  $('focusTap').style.setProperty('--bead-angle',(360/CHANTS)+'deg');
+  $('focusTap').style.setProperty('--bead-fill',(360/CHANTS*.88)+'deg');
+}
+$('practiceConfigForm').addEventListener('submit', async event=>{
+  event.preventDefault();
+  const config={chants:Number($('configChants').value),days:Number($('configDays').value),templeRequired:$('configTemple').checked};
+  if(!validConfig(config)) { $('configMessage').textContent='Choose 1–1008 chants and 1–365 days.'; return; }
+  const practice=activePractice;
+  stopGuidedAudio();
+  await practiceLock(()=>{
+    if(practice!==activePractice)return;
+    syncTrackerState();
+    const previous=getPracticeConfig(state);
+    for(let d=1;d<=previous.days;d++) {
+      const day=state['d'+d];
+      if(!day)continue;
+      const count=day.marks.filter(Boolean).length;
+      if(count>config.chants || (d>config.days&&(count||day.temple||day.note))) {
+        $('configMessage').textContent='These settings would remove recorded progress. Use a larger target or archive this cycle before changing it.';
+        return;
+      }
+    }
+    for(let d=1;d<=config.days;d++) {
+      const key='d'+d, day=state[key];
+      if(day) {
+        // Preserve checked positions where possible; compact only if the target shrinks.
+        const count=day.marks.filter(Boolean).length;
+        day.marks=config.chants<day.marks.length?Array.from({length:config.chants},(_,i)=>i<count):day.marks.concat(Array(config.chants-day.marks.length).fill(false));
+      } else {
+        const prev=state['d'+(d-1)]?.date;
+        const date=prev?serialDate((parseInt(dateSerial(prev),36)+1).toString(36)):'';
+        state[key]={date,marks:Array(config.chants).fill(false),temple:false};
+      }
+    }
+    for(let d=config.days+1;d<=previous.days;d++) delete state['d'+d];
+    state.config=config;
+    undoEntry=null;
+    applyPracticeConfig();saveState(state);buildCards();
+    $('configMessage').textContent='Goals saved for '+PRACTICES[activePractice].name+'. Your recorded counts have been kept.';
+    announce('Practice goals saved');
+  });
+});
+function renderInsights() {
+  const config=getPracticeConfig(state);
+  const entries=Array.from({length:DAYS},(_,i)=>state['d'+(i+1)]);
+  const archived=(state.archives||[]).flatMap(a=>Object.values(a.days));
+  const total=[...entries,...archived].reduce((sum,day)=>sum+day.marks.filter(Boolean).length,0);
+  const completedDates=new Set(entries.filter(day=>dayIsComplete(day,config)&&day.date).map(day=>dateSerial(day.date)));
+  let serial=parseInt(dateSerial(todayISO()),36), streak=0;
+  if(!completedDates.has(serial.toString(36)))serial--;
+  while(completedDates.has(serial.toString(36))){streak++;serial--;}
+  $('practiceInsights').replaceChildren();
+  for(const [value,label] of [[total.toLocaleString(),'Recorded chants · all cycles'],[streak,'Current streak · days'],[(config.days*config.chants).toLocaleString(),'Current cycle target']]) {
+    const box=document.createElement('div'),number=document.createElement('strong'),caption=document.createElement('span');
+    number.textContent=value;caption.textContent=label;box.append(number,caption);$('practiceInsights').appendChild(box);
+  }
+  $('weeklyHistory').replaceChildren();
+  const today=parseInt(dateSerial(todayISO()),36);
+  for(let offset=6;offset>=0;offset--) {
+    const date=serialDate((today-offset).toString(36));
+    const count=entries.filter(day=>day.date===date).reduce((sum,day)=>sum+day.marks.filter(Boolean).length,0);
+    const item=document.createElement('div'),bar=document.createElement('span'),label=document.createElement('small'),value=document.createElement('strong');
+    item.className='history-day';item.setAttribute('aria-label',fmtDate(date)+': '+count+' chants');
+    bar.className='history-bar';bar.style.setProperty('--fill',Math.min(100,count/CHANTS*100)+'%');bar.setAttribute('aria-hidden','true');
+    label.textContent=new Date(date+'T12:00').toLocaleDateString(undefined,{weekday:'short'});value.textContent=count;
+    item.append(value,bar,label);$('weeklyHistory').appendChild(item);
+  }
 }
 
 // Retain any legacy audio progress once; daily marks are authoritative thereafter.

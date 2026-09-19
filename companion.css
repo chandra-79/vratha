@@ -134,3 +134,50 @@ summary { min-height: 44px; padding: 8px 0; font-weight: 600; }
 .mantra-source { color: var(--saffron-d); font-size: .85rem; }
 @media (max-width: 900px) { .practice-picker { grid-template-columns: 1fr 1fr; } .practice-picker p { grid-column: 1 / -1; } }
 @media (max-width: 360px) { .practice-picker { grid-template-columns: 1fr; } }
+.goal-settings { margin: 18px 0; padding-bottom: 20px; border-bottom: 1px solid var(--gold); }
+.goal-fields { display: grid; grid-template-columns: 1fr 1fr auto; align-items: end; gap: 12px; }
+.goal-fields input { width: 100%; }
+#configMessage { margin-top: 10px; font-size: .85rem; line-height: 1.5; }
+.insights-row { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+.insights-row strong { display: block; font-size: 1.6rem; color: var(--saffron-d); }
+.insights-row span { font-size: .75rem; color: var(--muted); }
+.weekly-history { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); gap: 10px; margin-top: 20px; }
+.history-day { text-align: center; font-size: .75rem; color: var(--muted); }
+.history-bar { display: block; height: 60px; background: linear-gradient(to top,var(--saffron) var(--fill),var(--gold-l) var(--fill)); border-radius: 6px; margin: 8px auto; max-width: 38px; }
+#dayDetails .cards-container { display: block; max-width: 620px; margin: auto; }
+.compact-count { grid-column: 1 / -1; }
+.focus-ring { background: repeating-conic-gradient(transparent 0deg var(--bead-fill,15deg), var(--card) var(--bead-fill,15deg) var(--bead-angle,17.142857deg)), conic-gradient(var(--saffron) var(--progress), var(--gold-l) 0); }
+.focus-ring.smooth-ring { background: conic-gradient(var(--saffron) var(--progress), var(--gold-l) 0); }
+@media(max-width:600px) { .goal-fields { grid-template-columns: 1fr 1fr; } .goal-fields button { grid-column: 1 / -1; } .insights-row { gap: 8px; } }
+
+/* Personal library and consistent artwork. */
+.brand-mark { width: 52px; height: 52px; border-radius: 14px; flex: 0 0 auto; }
+.practice-library-actions { display: flex; flex-wrap: wrap; gap: 8px; grid-column: 1 / -1; }
+.practice-identity { display: flex; gap: 18px; align-items: center; }
+.practice-identity > div { flex: 1; min-width: 0; }
+.practice-art { flex: 0 0 auto; width: 88px; height: 88px; object-fit: cover; border-radius: 20px; border: 1px solid var(--gold); background: #fff8e8; }
+.custom-form { display: grid; gap: 20px; margin-top: 20px; }
+.custom-form fieldset { min-width: 0; padding: 16px; border: 1px solid var(--gold); border-radius: 12px; display: grid; gap: 12px; }
+.custom-form legend { font-weight: 600; padding-inline: 6px; }
+.custom-form textarea { width: 100%; resize: vertical; }
+.custom-form input[type=file] { width: 100%; font-size: .85rem; }
+.custom-form .goal-fields { grid-template-columns: 1fr 1fr; }
+#customError { color: #b32121; overflow-wrap: anywhere; }
+[data-theme=dark] #customError { color: #ffb4b4; }
+#existingUploads, .practice-identity h2, #readerHeading, #todayHeading { overflow-wrap: anywhere; }
+#mantraTransliteration, .focus-mantra { display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
+.reader-attachments { display: grid; gap: 20px; margin-top: 20px; }
+.reader-attachments figure { padding: 12px; border: 1px solid var(--gold); border-radius: 12px; }
+.reader-attachments img { display: block; width: 100%; max-height: 600px; object-fit: contain; margin-bottom: 10px; }
+.reader-attachments a { display: block; color: var(--saffron-d); padding: 8px 0; min-height: 44px; overflow-wrap: anywhere; }
+.reader-attachments .attachment-download { font-size: .85rem; }
+:where(select, textarea, summary, a):focus-visible { outline: 3px solid var(--saffron-l); outline-offset: 3px; }
+@media(max-width:600px) {
+  .practice-art { width: 64px; height: 64px; border-radius: 14px; }
+  .practice-identity { gap: 12px; align-items: flex-start; }
+  .practice-identity .section-heading { gap: 6px; }
+  .brand-mark { width: 44px; height: 44px; }
+}
+@media(max-width:360px) { .practice-identity { align-items: center; } .practice-art { width: 48px; height: 48px; } .custom-form fieldset { padding: 10px; } }
+[data-theme=dark] .qbtn { color: var(--saffron-d); }
+.qbtn { transition: background .2s, box-shadow .2s; }

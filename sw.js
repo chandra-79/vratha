@@ -1,5 +1,5 @@
-const CACHE_NAME = 'vratha-cache-v4';
-const APP_ASSETS = ['./', './index.html', './companion.css', './companion.js', './practices.js', './audio/rama.m4a', './audio/hanuman.m4a', './audio/shiva.m4a', './audio/gayatri.m4a', './audio/durga.m4a', './icon.svg', './icon-192.png', './Manthram.png', './Manthram_English.png', './Manthram.mpeg', './Manthram_Variation.mp3'];
+const CACHE_NAME = 'vratha-cache-v6';
+const APP_ASSETS = ['./', './index.html', './companion.css', './companion.js', './practices.js', './custom-practices.js', './manifest.webmanifest', './assets/naam-jaap-logo.png', './assets/favicon.png', './assets/icon-192.png', './assets/icon-512.png', './assets/ganapati.svg', './assets/rama.svg', './assets/hanuman.svg', './assets/shiva.svg', './assets/gayatri.svg', './assets/durga.svg', './audio/rama.m4a', './audio/hanuman.m4a', './audio/shiva.m4a', './audio/gayatri.m4a', './audio/durga.m4a', './icon.svg', './icon-192.png', './Manthram.png', './Manthram_English.png', './Manthram.mpeg', './Manthram_Variation.mp3'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_ASSETS)).then(() => self.skipWaiting()));
 });

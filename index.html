@@ -13,19 +13,18 @@
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
   <meta name="apple-mobile-web-app-title" content="Vratha Tracker"/>
-  <meta name="description" content="Naam Jaap for Ganapati, Rama, Hanuman, Shiva, Gayatri Matha and Durga Devi — text, audio and separate daily progress."/>
+  <meta name="description" content="Mantra practice for Ganapati, Rama, Hanuman, Shiva, Gayatri Matha and Durga Devi, plus your own text, images, PDFs and audio. Independent goals and daily progress."/>
   <meta name="author" content="Chandra Lanka"/>
   <meta name="copyright" content="© 2025 Chandra Lanka — https://ajnacs.com"/>
   <link rel="canonical" href="https://chandra-79.github.io/vratha"/>
   <title>🕉 Naam Jaap &amp; Vratha Tracker</title>
 
   <!-- Favicon / PWA icons -->
-  <link rel="icon" type="image/svg+xml" href="icon.svg"/>
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"/>
-  <link rel="apple-touch-icon" href="icon-192.png"/>
+  <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon.png"/>
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png"/>
+  <link rel="apple-touch-icon" href="assets/icon-192.png"/>
 
-  <!-- PWA manifest inline -->
-  <link rel="manifest" href="data:application/json,%7B%22name%22%3A%22Naam%20Jaap%20Tracker%22%2C%22short_name%22%3A%22Vratha%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23fdf6ec%22%2C%22theme_color%22%3A%22%23e65100%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22icon-192.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D"/>
+  <link rel="manifest" href="manifest.webmanifest"/>
 
   <!-- Devotional heading font -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -942,7 +941,7 @@
 <header class="site-header" id="pageTop" tabindex="-1">
   <div class="header-top">
     <div class="header-title">
-      <span class="om">🕉</span>
+      <img class="brand-mark" src="assets/icon-192.png" width="52" height="52" alt=""/>
       <div>
         <h1>Naam Jaap &amp; Vratha Tracker</h1>
         <p>48-Day Practice · 21 Chantings Daily</p>
@@ -964,9 +963,9 @@
 
 <main id="practiceMain">
 <section class="companion-panel today-dashboard" id="todayDashboard" tabindex="-1" aria-labelledby="todayHeading">
-  <div class="practice-picker"><label for="practiceSelect">Choose your practice</label><select id="practiceSelect" onchange="switchPractice(this.value)"><option value="ganapati">Ganapati</option><option value="rama">Rama</option><option value="hanuman">Hanuman</option><option value="shiva">Shiva</option><option value="gayatri">Gayatri Matha</option><option value="durga">Durga Devi</option></select><p class="quiet">Each practice keeps its own 21-count goal, schedule, notes, and history.</p></div>
-  <div class="eyebrow">YOUR DAILY RETURN TO PRACTICE</div>
-  <div class="section-heading"><div><h2 id="todayHeading">Today’s practice</h2><p id="todaySubtitle"></p></div><span id="saveStatus" role="status">Saved on this device</span></div>
+  <div class="practice-picker"><label for="practiceSelect">Choose your practice</label><select id="practiceSelect" onchange="switchPractice(this.value)"><option value="ganapati">Ganapati</option><option value="rama">Rama</option><option value="hanuman">Hanuman</option><option value="shiva">Shiva</option><option value="gayatri">Gayatri Matha</option><option value="durga">Durga Devi</option></select><p class="quiet">Each practice keeps its own goal, duration, schedule, notes, and history.</p><div class="practice-library-actions"><button onclick="openCustomEditor()">＋ Add your mantra</button><button id="editCustomPractice" onclick="openCustomEditor(true)" hidden>Edit practice</button></div></div>
+  <div class="practice-identity"><img id="practiceArt" class="practice-art" src="assets/ganapati.svg" width="88" height="88" alt=""/><div><div class="eyebrow">YOUR DAILY RETURN TO PRACTICE</div>
+  <div class="section-heading"><div><h2 id="todayHeading">Today’s practice</h2><p id="todaySubtitle"></p></div><span id="saveStatus" role="status">Saved on this device</span></div></div></div>
   <div id="mantraPreview" class="mantra-preview" hidden><p id="mantraScript" lang="sa"></p><p id="mantraTransliteration"></p></div>
   <div class="today-layout">
     <button class="chant-ring" id="dailyTap" onclick="countChant()" aria-label="Count one chant"><span><strong id="dailyCount">0</strong><small>of 21 chants</small></span></button>
@@ -982,9 +981,10 @@
     <label class="check-label"><input type="checkbox" id="stopAfter"/> Stop after this repetition</label><p class="quiet" id="audioHint">Each finished recording adds one chant to today’s count.</p>
   </div>
 </section>
+<section class="companion-panel"><h2>Your practice at a glance</h2><div id="practiceInsights" class="insights-row"></div><div id="weeklyHistory" class="weekly-history" aria-label="Last seven days"></div></section>
 <section class="companion-panel" aria-labelledby="journeyHeading"><div class="section-heading"><div><div class="eyebrow">ONE DAY AT A TIME</div><h2 id="journeyHeading">Your 48-day journey</h2></div><span id="journeySummary"></span></div><div id="journeyGrid" class="journey-grid"></div><p class="quiet">○ Not recorded · ◐ In progress · ✓ Complete · · Upcoming</p></section>
 <details class="companion-panel settings-panel"><summary>Settings, reminders &amp; previous cycles</summary>
-  <div class="settings-grid"><section><h3>Your preferences</h3><label>Reading size <input id="readingSize" type="range" min="16" max="32" value="20" oninput="setReadingSize(this.value)"/></label><label class="check-label"><input type="checkbox" id="completionSound" onchange="saveAudioPreferences()"/> Gentle completion chime</label><label class="check-label"><input type="checkbox" id="hapticFeedback" onchange="saveAudioPreferences()"/> Vibration feedback (supported devices)</label></section>
+  <form id="practiceConfigForm" class="goal-settings"><h3>Goals for <span id="configPracticeName"></span></h3><div class="goal-fields"><label>Chants per day <input type="number" id="configChants" min="1" max="1008" required/></label><label>Number of days <input type="number" id="configDays" min="1" max="365" required/></label><button type="submit" class="primary-action">Save practice goals</button></div><div class="action-row" aria-label="Chant target presets"><span class="quiet">Quick targets</span><button type="button" onclick="document.getElementById('configChants').value=21">21</button><button type="button" onclick="document.getElementById('configChants').value=54">54</button><button type="button" onclick="document.getElementById('configChants').value=108">108</button><button type="button" onclick="document.getElementById('configChants').value=1008">1008</button></div><label class="check-label"><input type="checkbox" id="configTemple"/> Require a temple visit to complete a day</label><p class="quiet" id="goalProjection"></p><p class="quiet">Recorded counts are kept. Changing your target recalculates completion. Cookies preserve targets and daily counts; notes and archives are kept in browser storage and backups.</p><p id="configMessage" role="status"></p></form><div class="settings-grid"><section><h3>Your preferences</h3><label>Reading size <input id="readingSize" type="range" min="16" max="32" value="20" oninput="setReadingSize(this.value)"/></label><label class="check-label"><input type="checkbox" id="completionSound" onchange="saveAudioPreferences()"/> Gentle completion chime</label><label class="check-label"><input type="checkbox" id="hapticFeedback" onchange="saveAudioPreferences()"/> Vibration feedback (supported devices)</label></section>
   <section><h3>Daily reminder</h3><label>Local time <input type="time" id="reminderTime" value="07:00"/></label><button onclick="downloadReminder()">Add to my calendar</button><p class="quiet">Download a recurring reminder for your calendar app.</p></section>
   <section><h3>Keep your progress</h3><button onclick="exportJSON()">Download selected practice</button><button onclick="document.getElementById('importFileInput').click()">Restore backup</button><p class="quiet" id="lastBackup">No backup downloaded yet.</p><p class="quiet">Saved in this browser. Back up to move devices or keep a separate copy.</p></section>
   <section><h3>A new beginning</h3><label>Next cycle’s start <input type="date" id="nextCycleDate"/></label><button onclick="archiveAndRestart()">Archive this cycle &amp; start another</button><p class="quiet">Your current cycle and notes stay in the archive.</p></section></div><div id="archiveList"></div>
@@ -1061,7 +1061,7 @@
 </div>
 
 <!-- ── CARDS ── -->
-<details class="companion-panel" id="dayDetails"><summary>Day-by-day details &amp; corrections</summary><div class="cards-container" id="cardsContainer"></div></details>
+<details class="companion-panel" id="dayDetails"><summary>Selected day &amp; corrections</summary><div class="cards-container" id="cardsContainer"></div></details>
 
 <!-- ── WELCOME / IMPORT MODAL ── -->
 <div class="modal-overlay" id="welcomeModal">
@@ -1176,7 +1176,7 @@
 </nav>
 
 <dialog id="focusDialog" class="practice-dialog" aria-labelledby="focusHeading"><div class="section-heading"><h2 id="focusHeading">One chant at a time</h2><button onclick="closeFocus()" aria-label="Exit focus mode">✕</button></div><p id="focusDay" class="quiet"></p><p id="focusMantra" class="focus-mantra"></p><button class="chant-ring focus-ring" id="focusTap" onclick="countChant()" aria-label="Count one chant"><span><strong id="focusCount">0</strong><small>of 21 chants</small></span></button><p id="focusHint">Tap the circle or press Space.</p><div class="action-row"><button id="focusUndo" onclick="undoPractice()" disabled>↶ Undo</button><button id="focusAudio" onclick="toggleGuidedAudio()">▶ Audio</button></div><p class="quiet">Space counts · Backspace undoes · Escape exits</p></dialog>
-<dialog id="readerDialog" class="practice-dialog reader-dialog" aria-labelledby="readerHeading"><div class="section-heading"><h2 id="readerHeading">Ganapati Manthram</h2><button onclick="document.getElementById('readerDialog').close()" aria-label="Close reading view">✕</button></div><div class="action-row"><label>Read in <select id="readerLanguage" onchange="renderReader()"><option value="en">Transliteration</option><option value="sa">देवनागरी</option><option value="te">తెలుగు</option><option value="meaning">Meaning overview</option></select></label><label>Text size <input type="range" id="readerSize" min="16" max="32" value="20" oninput="setReadingSize(this.value)"/></label></div><div id="readerText"></div></dialog>
+<dialog id="readerDialog" class="practice-dialog reader-dialog" aria-labelledby="readerHeading"><div class="section-heading"><h2 id="readerHeading">Ganapati Manthram</h2><button onclick="document.getElementById('readerDialog').close()" aria-label="Close reading view">✕</button></div><div class="action-row"><label>Read in <select id="readerLanguage" onchange="renderReader()"><option value="en">Transliteration</option><option value="sa">देवनागरी</option><option value="te">తెలుగు</option><option value="meaning">Meaning overview</option></select></label><label>Text size <input type="range" id="readerSize" min="16" max="32" value="20" oninput="setReadingSize(this.value)"/></label></div><div id="readerText"></div><div id="readerAttachments" class="reader-attachments"></div></dialog>
 <dialog id="editDayDialog" class="practice-dialog" aria-labelledby="editDayHeading"><h2 id="editDayHeading">Correct a day</h2><form id="editDayForm"><label>Chants completed <input id="editChants" type="number" min="0" max="21" required/></label><label class="check-label"><input id="editTemple" type="checkbox"/> Temple visited</label><label>Note <textarea id="editNote" maxlength="2000" rows="4"></textarea></label><div class="action-row"><button class="primary-action" type="submit">Save correction</button><button type="button" onclick="document.getElementById('editDayDialog').close()">Cancel</button></div></form></dialog>
 <div class="sr-only" id="practiceAnnouncement" role="status" aria-live="polite"></div>
 <!-- Toast -->
@@ -1189,8 +1189,9 @@
     <div style="display:flex;gap:12px;align-items:flex-start;">
       <div class="icon">✨</div>
       <div>
+        <p class="note">Choose a practice, or use <strong>＋ Add your mantra</strong> for your own text, reading sheets and recording. Set its chant target and number of days in Settings. Download a backup to keep your progress and uploads.</p>
         <p class="note">Tap each circle to mark a chanting, then press <span class="pill">Temple</span> to record your visit for the day.</p>
-        <p class="note">On completing all 21 chants and temple visit, you will receive a verse from the Bhagavad Gita as a blessing. 🙏</p>
+        <p class="note">On completing your daily goal and any required temple visit, you will receive a verse from the Bhagavad Gita as a blessing. 🙏</p>
         <p class="note">Use <span class="pill">📸 Progress</span> in the footer to capture a shareable progress card of completed days. Use <span class="pill">🔗 Share</span> to share the tracker link. This app also supports offline use — add it to your homescreen.</p>
       </div>
     </div>
@@ -1200,6 +1201,30 @@
     </div>
   </div>
 </div>
+
+
+<dialog id="customDialog" class="practice-dialog" aria-labelledby="customHeading">
+  <div class="section-heading"><div><p class="eyebrow">YOUR PERSONAL MANTRA LIBRARY</p><h2 id="customHeading">Create your own practice</h2></div><button type="button" aria-label="Close practice editor" onclick="if(!document.getElementById('customSubmit').disabled)document.getElementById('customDialog').close()">×</button></div>
+  <p class="quiet">Add a prayer in any language, reading sheets, or your own recording. Uploads stay in this browser; include them in a backup to move devices.</p>
+  <form id="customPracticeForm" class="custom-form">
+    <label>Mantra category / name <input id="customName" maxlength="80" required placeholder="e.g. Krishna naam jaap" autocomplete="off"/></label>
+    <label>Mantra text <textarea id="customText" maxlength="20000" rows="5" placeholder="Type or paste your mantra in any language…" dir="auto"></textarea></label>
+    <label>Meaning or personal intention (optional) <textarea id="customMeaning" maxlength="2000" rows="2" dir="auto"></textarea></label>
+    <fieldset><legend>Reading &amp; listening</legend><p class="quiet">Add at least text, a reading sheet, or audio. New files replace the corresponding saved uploads.</p>
+      <label>Reading sheets — images or PDF <input id="customReferences" type="file" accept=".png,.jpg,.jpeg,.webp,.pdf" multiple aria-describedby="referenceHelp"/></label><p class="quiet" id="referenceHelp">Up to 6 PNG, JPG, WebP or PDF files · 10 MB each. Add text above for screen readers; images and PDFs are not transcribed automatically.</p>
+      <label class="check-label"><input id="removeReferences" type="checkbox"/> Remove saved reading sheets</label>
+      <label>Mantra audio <input id="customAudio" type="file" accept=".mp3,.wav,.m4a,.aac,.ogg,.webm" aria-describedby="audioUploadHelp"/></label><p class="quiet" id="audioUploadHelp">MP3, WAV, M4A, AAC, OGG or WebM · up to 25 MB. Upload one repetition: each finished playback records one chant. Playback support depends on your browser.</p>
+      <label class="check-label"><input id="removeAudio" type="checkbox"/> Remove saved recording</label>
+      <label>Cover image (optional) <input id="customCover" type="file" accept=".png,.jpg,.jpeg,.webp"/></label><p class="quiet">PNG, JPG or WebP · up to 5 MB. All uploads together: 50 MB maximum.</p>
+      <label class="check-label"><input id="removeCover" type="checkbox"/> Remove saved cover</label>
+      <p id="existingUploads" class="quiet" aria-live="polite"></p>
+    </fieldset>
+    <fieldset id="customGoals"><legend>Your practice goals</legend><div class="goal-fields"><label>Chants per day <input id="customChants" type="number" min="1" max="1008" value="21" required/></label><label>Number of days <input id="customDays" type="number" min="1" max="365" value="48" required/></label></div><label>Start date <input id="customStart" type="date" required/></label><label class="check-label"><input id="customTemple" type="checkbox"/> Require a temple visit to complete a day</label></fieldset>
+    <p id="customEditGoalsHint" class="quiet" hidden>Change chants, days, and temple requirements in Settings after saving. Your progress is kept.</p>
+    <p id="customError" role="alert"></p>
+    <div class="action-row"><button id="customSubmit" class="primary-action" type="submit">Save practice</button><button id="customDelete" class="danger-action" type="button" onclick="deleteCustomPractice()" hidden>Delete practice</button></div>
+  </form>
+</dialog>
 
 <script src="practices.js"></script>
 <script>
@@ -1279,7 +1304,7 @@ function captureProgress() {
     const c = s.marks.filter(Boolean).length;
     totalC += c;
     if (s.temple) templeV++;
-    if (c === CHANTS && s.temple) doneD++;
+    if (dayIsComplete(s,getPracticeConfig(state))) doneD++;
   }
   const pct  = Math.round((doneD / DAYS) * 100);
   const dLeft = DAYS - doneD;
@@ -1370,11 +1395,11 @@ function captureProgress() {
 
   ctx.font = 'bold 16px Georgia, serif';
   ctx.fillStyle = '#bf360c';
-  ctx.fillText(PRACTICES[activePractice].name + ' Practice', W / 2, y + 48);
+  ctx.fillText(PRACTICES[activePractice].name + ' Practice', W / 2, y + 48, W - PAD * 2);
 
   ctx.font = '11px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
   ctx.fillStyle = '#8d5524';
-  ctx.fillText('48-Day Sacred Penance  \u00B7  21 Chantings Daily', W / 2, y + 66);
+  ctx.fillText(DAYS + '-Day Practice · ' + CHANTS + ' Chantings Daily', W / 2, y + 66);
 
   y += S_HDR + S_GAP;
 
@@ -1429,7 +1454,7 @@ function captureProgress() {
 
     const s    = state['d' + d];
     const cnt  = s ? s.marks.filter(Boolean).length : 0;
-    const done = cnt === CHANTS && s && s.temple;
+    const done = dayIsComplete(s,getPracticeConfig(state));
 
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
@@ -1559,7 +1584,7 @@ function captureProgress() {
         await navigator.share({
           files: [file],
           title: 'My ' + PRACTICES[activePractice].name + ' Practice Progress',
-          text: doneD + ' of 48 days complete (' + pct + '%) \uD83D\uDE4F'
+          text: doneD + ' of ' + DAYS + ' days complete (' + pct + '%) \uD83D\uDE4F'
         });
         showToast('Shared!');
       } catch(e) {
@@ -2461,46 +2486,46 @@ function dismissOnboard(neverShow) {
 
 // Onboarding is shown only when the user explicitly requests it (Help button)
 // ── CONSTANTS ──
-const DAYS       = 48;
-const CHANTS     = 21;
+let DAYS = 48;
+let CHANTS = 21;
+let detailDay = 1;
 let LS_KEY = practiceStorageKey(activePractice);
 let COOKIE_KEY = practiceCookieKey(activePractice);
 
 // ── STORAGE: localStorage (primary) + cookie (backup) ──
 function saveState(st) {
   st.practiceId = activePractice;
-  const json = JSON.stringify(st);
-  try {
-    localStorage.setItem(LS_KEY, json);
-    const status = document.getElementById('saveStatus');
-    if (status) status.textContent = 'Saved on this device';
-  } catch(e) {
-    const status = document.getElementById('saveStatus');
-    if (status) status.textContent = 'Could not save — download a backup';
-  }
-  // compact cookie backup (expires 200 days)
-  try {
-    const d = new Date(); d.setDate(d.getDate() + 200);
-    document.cookie = COOKIE_KEY + '=' + encodeURIComponent(json)
-      + '; expires=' + d.toUTCString() + '; path=/; SameSite=Lax';
-  } catch(e) {}
+  st.updatedAt = Date.now();
+  let localSaved = false, cookieSaved = false;
+  try { localStorage.setItem(LS_KEY, JSON.stringify(st)); localSaved = true; } catch (_) {}
+  try { cookieSaved = writePracticeCookie(st); } catch (_) {}
+  practiceUpdates?.postMessage({practiceId:activePractice});
+  const status = document.getElementById('saveStatus');
+  if (status) status.textContent = localSaved && cookieSaved ? 'Saved · browser + cookie' : localSaved ? 'Saved in browser · cookies unavailable' : cookieSaved ? 'Counts saved in cookie · export notes and history' : 'Could not save — download a backup';
 }
-
 function loadState() {
-  // 1. try localStorage
+  let local = null, cookie = null;
+  try { const raw = localStorage.getItem(LS_KEY); if(raw) local=JSON.parse(raw); } catch (_) {}
   try {
-    const raw = localStorage.getItem(LS_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch(e) {}
-  // 2. fallback: cookie
-  try {
-    const m = document.cookie.match('(?:^|; )' + COOKIE_KEY + '=([^;]*)');
-    if (m) return JSON.parse(decodeURIComponent(m[1]));
-  } catch(e) {}
-  return {};
+    const prefix=COOKIE_KEY+'=';
+    const part=document.cookie.split('; ').find(value=>value.startsWith(prefix));
+    if(part) cookie=decodePracticeCookie(part.slice(prefix.length));
+  } catch (_) {}
+  if(cookie && (!local || (cookie.updatedAt||0)>(local.updatedAt||0))) {
+    const result={...(local||{}),...cookie};
+    for(let d=1;d<=getPracticeConfig(cookie).days;d++) if(local?.['d'+d]?.note) result['d'+d].note=local['d'+d].note;
+    return result;
+  }
+  return local || cookie || {};
+}
+function applyPracticeConfig() {
+  const config=getPracticeConfig(state);
+  DAYS=config.days; CHANTS=config.chants;
+  detailDay=Math.min(detailDay,DAYS);
 }
 
 let state = loadState();
+applyPracticeConfig();
 
 function ensureDay(d) {
   const k = 'd' + d;
@@ -2509,11 +2534,12 @@ function ensureDay(d) {
 
 // ── BUILD CARDS ──
 function buildCards() {
+  applyPracticeConfig();
   const container = document.getElementById('cardsContainer');
   container.innerHTML = '';
   for (let d = 1; d <= DAYS; d++) {
     ensureDay(d);
-    container.appendChild(makeCard(d));
+    if (d === detailDay) container.appendChild(makeCard(d));
   }
   updateStats();
   document.getElementById('startDateRow').style.display = state.datesFixed ? 'none' : '';
@@ -2533,7 +2559,7 @@ function makeCard(d) {
   const k = 'd' + d;
   const s = state[k];
   const count = s.marks.filter(Boolean).length;
-  const done  = count === CHANTS && s.temple;
+  const done  = dayIsComplete(s, getPracticeConfig(state));
 
   const future  = isFuture(d);
   const isToday = !future && s.date && s.date === todayISO();
@@ -2613,7 +2639,7 @@ function makeCard(d) {
   templeBtn.setAttribute('aria-pressed', String(s.temple));
   templeBtn.textContent = s.temple ? '🛕 Visited' : '🛕 Temple';
   templeBtn.addEventListener('click', () => changeDay(d, day => {
-    if (day.temple && day.marks.every(Boolean)) return;
+    if (dayIsComplete(day, getPracticeConfig(state))) return;
     day.temple = !day.temple;
   }, 'Temple visit updated'));
 
@@ -2627,7 +2653,7 @@ function makeCard(d) {
   completeBtn.className = 'complete-day-btn';
   completeBtn.id = 'completebtn' + d;
   completeBtn.disabled = future || done;
-  completeBtn.textContent = done ? '✓ Day Complete' : future ? '🔒 Future Day' : '🙏 Complete Day (21 chants + Temple)';
+  completeBtn.textContent = done ? '✓ Day Complete' : future ? '🔒 Future Day' : '🙏 Complete Day (' + CHANTS + ' chants' + (getPracticeConfig(state).templeRequired ? ' + Temple' : '') + ')';
   completeBtn.addEventListener('click', () => completeDay(d));
   card.appendChild(completeBtn);
 
@@ -2636,7 +2662,7 @@ function makeCard(d) {
   grid.className = 'marks-grid';
   grid.id = 'grid' + d;
 
-  for (let m = 0; m < CHANTS; m++) {
+  for (let m = 0; m < Math.min(CHANTS, 108); m++) {
     const mk = document.createElement('button');
     mk.type = 'button';
     mk.disabled = future || done || (isToday && m !== s.marks.indexOf(false));
@@ -2648,6 +2674,13 @@ function makeCard(d) {
     mk.setAttribute('aria-label', 'Chanting ' + (m + 1) + (s.marks[m] ? ' completed' : ' pending'));
     mk.addEventListener('click', () => toggleMark(d, m));
     grid.appendChild(mk);
+  }
+  if (CHANTS > 108) {
+    grid.replaceChildren();
+    const add=document.createElement('button'); add.className='compact-count';
+    add.textContent='＋ Record one chant'; add.disabled=future || count >= CHANTS;
+    add.addEventListener('click',()=>changeDay(d,day=>{ const next=day.marks.indexOf(false); if(next>=0)day.marks[next]=true; },'Chant recorded'));
+    grid.appendChild(add);
   }
   if (isToday && !done) applyNextMark(grid, s.marks);
   card.appendChild(grid);
@@ -2690,11 +2723,11 @@ function isPast(d) {
 }
 
 function completeDay(d) {
-  return changeDay(d, day => { day.marks.fill(true); day.temple = true; }, 'Day completed');
+  return changeDay(d, day => { day.marks.fill(true); if(getPracticeConfig(state).templeRequired) day.temple = true; }, 'Day completed');
 }
 function toggleMark(d, m) {
   return changeDay(d, day => {
-    if (day.marks.every(Boolean) && day.temple) return;
+    if (dayIsComplete(day, getPracticeConfig(state))) return;
     if (day.date === todayISO() && m !== day.marks.indexOf(false)) return;
     day.marks[m] = !day.marks[m];
   }, 'Chant updated');
@@ -2711,19 +2744,20 @@ function refreshCard(d) {
   const focusedMark = grid.contains(document.activeElement) ? document.activeElement : null;
 
   const marks = grid.querySelectorAll('.mark');
-  let count = 0;
+  const count = s.marks.filter(Boolean).length;
   marks.forEach((el, i) => {
-    if (s.marks[i]) { el.classList.add('done'); count++; }
+    if (s.marks[i]) { el.classList.add('done'); }
     else el.classList.remove('done');
   });
 
-  const done = count === CHANTS && s.temple;
+  const done = dayIsComplete(s, getPracticeConfig(state));
   const counter = document.getElementById('chantCount' + d);
   counter.textContent = count + ' / ' + CHANTS;
   counter.setAttribute('aria-label', count + ' of ' + CHANTS + ' chants completed');
   if (done) card.classList.add('completed');
   else card.classList.remove('completed');
 
+  const compact=grid.querySelector('.compact-count'); if(compact) compact.disabled=isFuture(d) || count >= CHANTS;
   if (done && !wasCompleted) showGitaQuote(d);
 
   // update future lock
@@ -2734,7 +2768,7 @@ function refreshCard(d) {
   // update complete-day button
   const cbtn = document.getElementById('completebtn' + d);
   if (cbtn) cbtn.disabled = future || done;
-  if (cbtn) cbtn.textContent = done ? '✓ Day Complete' : future ? '🔒 Future Day' : '🙏 Complete Day (21 chants + Temple)';
+  if (cbtn) cbtn.textContent = done ? '✓ Day Complete' : future ? '🔒 Future Day' : '🙏 Complete Day (' + CHANTS + ' chants' + (getPracticeConfig(state).templeRequired ? ' + Temple' : '') + ')';
 
   // update temple button
   const tbtn = document.getElementById('templebtn' + d);
@@ -2877,7 +2911,7 @@ function updateStats() {
     const c = state[k].marks.filter(Boolean).length;
     totalC += c;
     if (state[k].temple) templeV++;
-    if (c === CHANTS && state[k].temple) doneD++;
+    if (dayIsComplete(state[k],getPracticeConfig(state))) doneD++;
   }
   if (typeof renderCompanion === 'function') renderCompanion();
   document.getElementById('sDays').textContent   = doneD;
@@ -2888,8 +2922,9 @@ function updateStats() {
   const pct = Math.round((doneD / DAYS) * 100);
   document.getElementById('progressBar').style.width = pct + '%';
   document.getElementById('progressBar').setAttribute('aria-valuenow', doneD);
+  document.getElementById('progressBar').setAttribute('aria-valuemax', DAYS);
   document.getElementById('progressText').textContent =
-    doneD + ' of 48 days complete (' + pct + '%) 🙏';
+    doneD + ' of ' + DAYS + ' days complete (' + pct + '%) 🙏';
 }
 
 // ── START DATE AUTO-FILL ──
@@ -2991,10 +3026,12 @@ function toggleAudioPanel(n) {
 function syncTrackerState() {
   const latest = loadState();
   if (JSON.stringify(latest) === JSON.stringify(state)) return;
+  if (JSON.stringify(getPracticeConfig(state)) !== JSON.stringify(getPracticeConfig(latest)) && typeof stopGuidedAudio === 'function') stopGuidedAudio();
   state = latest;
   buildCards();
   document.getElementById('startDateRow').style.display = state.datesFixed ? 'none' : '';
 }
+if (practiceUpdates) practiceUpdates.onmessage = event => { if(event.data?.practiceId === activePractice) syncTrackerState(); };
 window.addEventListener('storage', event => {
   if (event.key === LS_KEY || event.key === null) syncTrackerState();
   if (event.key === 'vratha_theme' || event.key === null) {
@@ -3004,51 +3041,25 @@ window.addEventListener('storage', event => {
 window.addEventListener('focus', () => { syncTrackerState(); if (typeof renderCompanion === 'function') renderCompanion(); });
 
 // ── EXPORT JSON ──
-function exportJSON() {
+async function exportJSON() {
   syncTrackerState();
-  state.lastBackup = new Date().toISOString();
-  saveState(state);
-  if (typeof renderCompanion === 'function') renderCompanion();
-  const json = JSON.stringify(state, null, 2);
-  const blob = new Blob([json], { type: 'application/json' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href     = url;
-  a.download = activePractice + '-practice-backup.json';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  const id=activePractice, snapshot=structuredClone(state);
+  if (await downloadPracticeBackup(snapshot,id,id+'-practice-backup.json')) {
+    await practiceLock(()=>{
+      if(activePractice!==id)return;
+      syncTrackerState();state.lastBackup=new Date().toISOString();saveState(state);renderCompanion();
+    });
+  }
 }
 
-// ── IMPORT FROM FILE (welcome screen) ──
-function handleImportFile(input) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = async function(e) {
-    try {
-      const data = JSON.parse(e.target.result);
-      if (!validBackup(data)) throw new Error();
-      const targetPractice = data.practiceId || 'ganapati';
-      await switchPractice(targetPractice, { restoring: true });
-      stopGuidedAudio();
-      state = data;
-      state.sharedCountMigrated = true;
-      saveState(state);
-      closeWelcomeModal();
-      buildCards();
-      if (state.datesFixed) {
-        const row = document.getElementById('startDateRow');
-        if (row) row.style.display = 'none';
-        scrollToToday();
-      }
-    } catch(err) {
-      alert('Could not read the file. Please select a valid practice JSON backup.');
-    }
-    input.value = '';
-  };
-  reader.readAsText(file);
+async function handleImportFile(input) {
+  const file=input.files[0];
+  if(!file)return;
+  try {
+    if(file.size>75*1024*1024)throw new Error('Choose a backup smaller than 75 MB.');
+    await restorePracticeBackup(JSON.parse(await file.text()));
+  } catch(error) {alert('Could not restore this backup. '+error.message);}
+  finally {input.value='';}
 }
 
 let _welcomeTimer = null;
@@ -3110,7 +3121,7 @@ function showResetStep2() {
 function confirmReset() {
   [1, 2].forEach(n => { const audio = document.getElementById('manthramAudio' + n); audio.pause(); audio.currentTime = 0; });
   if (typeof stopGuidedAudio === 'function') stopGuidedAudio();
-  state = { sharedCountMigrated: true };
+  state = { sharedCountMigrated: true, config:getPracticeConfig(state) };
   saveState(state);
   closeResetModal();
   buildCards();
@@ -3156,6 +3167,7 @@ if (freshInstall) {
   } catch(e) {}
 }
 </script>
+<script src="custom-practices.js"></script>
 <script src="companion.js"></script>
 </body>
 </html>
