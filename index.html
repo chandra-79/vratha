@@ -31,6 +31,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&display=swap"/>
 
+  <script>
+    // Apply the saved preference before paint to avoid a light flash.
+    try {
+      document.documentElement.dataset.theme = localStorage.getItem('vratha_theme') ||
+        (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    } catch (_) {
+      document.documentElement.dataset.theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+  </script>
   <style>
     :root {
       --saffron:   #e65100;
@@ -388,10 +397,11 @@
     }
 
     /* ── FUTURE DAY (locked) ── */
-    .day-card.future { opacity: .55; }
+    .day-card.future { border-left-color: var(--gold); }
     .day-card.future .marks-grid { pointer-events: none; }
     .day-card.future .complete-day-btn {
-      background: #bdbdbd;
+      background: var(--gold-l);
+      color: var(--muted);
       box-shadow: none;
       pointer-events: none;
       letter-spacing: .3px;
@@ -864,28 +874,87 @@
       .onboard-modal .actions { flex-direction:column; }
       .onboard-modal .actions button { width:100%; }
     }
+    :root { color-scheme: light; --header-height: 110px; }
+    .day-card { scroll-margin-top: calc(var(--header-height) + 12px); }
+    .floating-nav {
+      position: fixed; right: max(12px, env(safe-area-inset-right));
+      bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 101;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .floating-nav button {
+      width: 48px; height: 48px; padding: 0; border-radius: 50%;
+      display: grid; place-items: center; touch-action: manipulation;
+      background: var(--card); color: var(--text); border: 2px solid var(--gold);
+      box-shadow: var(--shadow); font: inherit; font-size: 1.5rem; font-weight: 700; cursor: pointer;
+    }
+    .floating-nav button:disabled { opacity: .4; cursor: default; box-shadow: none; }
+    .floating-nav button:not(:disabled):active { transform: scale(.94); }
+    .hbtn, .reset-hbtn { min-height: 44px; }
+    .about-toggle { width: 100%; border: 0; font: inherit; text-align: left; }
+    .mark { font-family: inherit; touch-action: manipulation; padding: 0; }
+    .day-card:focus-visible { outline: 3px solid var(--saffron-l); outline-offset: 2px; }
+    .card-count-badge { display: inline-block; margin: 5px 4px 0 0; }
+    .card-header-info .day-line { white-space: normal; overflow: visible; }
+    .card-header-info .day-date-txt { display: inline-block; margin-left: 0; }
+    :where(a, button, input, [tabindex]):focus-visible { outline: 3px solid var(--saffron-l); outline-offset: 3px; }
+    .floating-nav button:hover { background: var(--gold-l); }
+    button:focus-visible, .mark:focus-visible { outline: 3px solid var(--saffron-l); outline-offset: 3px; }
+    .site-footer { padding-bottom: calc(90px + env(safe-area-inset-bottom)); }
+    @media (max-width: 540px) {
+      .header-top { flex-wrap: wrap; }
+      .header-actions { margin-left: auto; }
+      .start-date-row { flex-wrap: wrap; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+    @media screen {
+      :root[data-theme="dark"] {
+        color-scheme: dark;
+        --bg: #171310; --card: #251e19; --gold-l: #34291d; --gold: #796037;
+        --text: #f4e7d4; --muted: #d2b99b; --saffron: #ffab66;
+        --saffron-l: #e88936; --saffron-d: #ffc28e; --green: #203727; --green-b: #629b6b;
+        --shadow: 0 3px 16px rgba(0,0,0,.35);
+      }
+      [data-theme="dark"] body { background: var(--bg); }
+      [data-theme="dark"] :is(.stat-box, .modal, .about-section, .site-footer, .quote-box, .audio-panel, .bottom-bar) {
+        background: var(--card); box-shadow: var(--shadow);
+      }
+      [data-theme="dark"] :is(.card-header, .day-card.today .card-header, .about-toggle, .about-user-card) { background: var(--gold-l); }
+      [data-theme="dark"] :is(.mark:not(.done), .temple-btn:not(.done), .leg-dot:not(.on), .modal textarea, .modal code) {
+        background: var(--bg); color: var(--text);
+      }
+      [data-theme="dark"] :is(.day-card.completed, .day-card.completed .card-header, .day-card.completed .card-count-badge) { background: var(--green); }
+      [data-theme="dark"] :is(.day-card.completed .day-line, .day-card.completed .day-date-txt, .day-card.completed .card-count-badge) { color: #a5d6a7; }
+      [data-theme="dark"] :is(.audio-reset-btn, .modal .close-btn, .step-num) { background: #a9470b; }
+      [data-theme="dark"] .btn-export { background: var(--gold-l); }
+      [data-theme="dark"] .reset-warn { background: #432323; color: #ffb4b4; }
+    }
+    @media print { .floating-nav { display: none; } }
   </style>
 </head>
 <body>
 
 <!-- ── STICKY HEADER ── -->
-<header class="site-header">
+<header class="site-header" id="pageTop" tabindex="-1">
   <div class="header-top">
     <div class="header-title">
       <span class="om">🕉</span>
       <div>
         <h1>Ganapati Vratha Tracker</h1>
-        <p>48-Day Sacred Penance · 21 Chantings Daily</p>
+        <p>48-Day Sacred Penance · 212323 Chantings Daily</p>
       </div>
     </div>
     <div class="header-actions">
+      <button class="hbtn" id="themeToggle" onclick="toggleTheme()" aria-pressed="false">☾ Dark</button>
       <button class="reset-hbtn" onclick="openResetModal()">⚠ Reset</button>
-      <button class="hbtn" id="helpHbtn" onclick="showOnboard()">❓ Help</button>
+      <button class="hbtn" id="helpHbtn" onclick="showOnboard(true)">❓ Help</button>
     </div>
   </div>
   <div class="progress-strip">
     <div class="progress-bar-bg">
-      <div class="progress-bar-fg" id="progressBar"></div>
+      <div class="progress-bar-fg" id="progressBar" role="progressbar" aria-label="Vratha days completed" aria-valuemin="0" aria-valuemax="48" aria-valuenow="0"></div>
     </div>
     <div class="progress-text" id="progressText">0 of 48 days complete 🙏</div>
   </div>
@@ -916,10 +985,10 @@
 
 <!-- ── ABOUT ── -->
 <div class="about-section">
-  <div class="about-toggle" id="aboutToggle" onclick="toggleAbout()">
+  <button type="button" class="about-toggle" id="aboutToggle" onclick="toggleAbout()" aria-expanded="false" aria-controls="aboutBody">
     <span>ℹ About this Vratha &amp; Tracker</span>
-    <span class="chevron">▼</span>
-  </div>
+    <span class="chevron" aria-hidden="true">▼</span>
+  </button>
   <div class="about-body" id="aboutBody">
     <p><strong>Ganapati Vratha</strong> is a sacred 48-day penance dedicated to Lord Ganesha — the remover of obstacles and the bestower of wisdom and auspiciousness. Devotees observe strict discipline during this period: chanting the Ganapati Manthram <strong>21 times every day</strong> without interruption, visiting the temple daily, and maintaining purity of body, mind, and speech.</p>
     <p>This 48-day Vratha is rooted in the belief that sincere and unbroken devotion to Ganapati removes life's obstacles, brings peace and prosperity, and earns the divine grace of Lord Ganapati for the devotee and their entire family.</p>
@@ -1070,6 +1139,11 @@
   </div>
 </div>
 
+<nav class="floating-nav" aria-label="Page navigation">
+  <button id="navTop" type="button" onclick="scrollToTop()" aria-label="Go to top" title="Go to top"><span aria-hidden="true">⇈</span></button>
+  <button id="navToday" type="button" onclick="scrollToToday(true)" aria-label="Go to today" title="Go to today"><span aria-hidden="true">↓</span></button>
+</nav>
+
 <!-- Toast -->
 <div id="toast" role="status" aria-live="polite"></div>
 
@@ -1093,6 +1167,36 @@
 </div>
 
 <script>
+// ── THEME & NAVIGATION ──
+function applyTheme(theme) {
+  const dark = theme === 'dark';
+  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  const button = document.getElementById('themeToggle');
+  button.textContent = dark ? '☀ Light' : '☾ Dark';
+  button.setAttribute('aria-pressed', String(dark));
+  button.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+  document.querySelector('meta[name="theme-color"]').content = dark ? '#171310' : '#e65100';
+}
+function toggleTheme() {
+  const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  applyTheme(theme);
+  try { localStorage.setItem('vratha_theme', theme); } catch (_) {}
+}
+function scrollBehavior() {
+  return matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+}
+function scrollToTop() {
+  document.getElementById('pageTop').focus({ preventScroll: true });
+  window.scrollTo({ top: 0, behavior: scrollBehavior() });
+}
+applyTheme(document.documentElement.dataset.theme);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+  try { if (!localStorage.getItem('vratha_theme')) applyTheme(event.matches ? 'dark' : 'light'); } catch (_) {}
+});
+new ResizeObserver(entries => {
+  document.documentElement.style.setProperty('--header-height', entries[0].target.offsetHeight + 'px');
+}).observe(document.querySelector('.site-header'));
+
 // ── ORIGIN INTEGRITY CHECK ──
 // Shows a banner if this page is served from an unrecognised domain,
 // pointing visitors back to the original tracker.
@@ -2368,6 +2472,7 @@ function buildCards() {
     container.appendChild(makeCard(d));
   }
   updateStats();
+  updateFloatingNav();
 }
 
 function applyNextMark(grid, marks) {
@@ -2390,6 +2495,9 @@ function makeCard(d) {
   const card = document.createElement('div');
   card.className = 'day-card' + (done ? ' completed' : '') + (future ? ' future' : '') + (isToday && !done ? ' today' : '');
   card.id = 'card' + d;
+  card.tabIndex = -1;
+  card.setAttribute('role', 'region');
+  card.setAttribute('aria-label', 'Day ' + d + (isToday ? ', today' : ''));
 
   // ── card header ──
   const hdr = document.createElement('div');
@@ -2411,11 +2519,18 @@ function makeCard(d) {
   const dateTxt = document.createElement('span');
   dateTxt.textContent = s.date ? fmtDate(s.date) : '';
   dateTxt.style.cursor = 'pointer';
-  dateTxt.title = 'Click to edit date';
+  dateTxt.title = 'Edit date';
+  dateTxt.tabIndex = 0;
+  dateTxt.setAttribute('role', 'button');
+  dateTxt.setAttribute('aria-label', 'Edit date for day ' + d);
+  dateTxt.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDateEdit(d); }
+  });
 
   // hidden date input
   const dateInp = document.createElement('input');
   dateInp.type = 'date';
+  dateInp.setAttribute('aria-label', 'Date for day ' + d);
   dateInp.id = 'dateinp' + d;
   dateInp.value = s.date || '';
   dateInp.style.display = 'none';
@@ -2432,6 +2547,12 @@ function makeCard(d) {
   dateWrap.appendChild(dateInp);
   dayLine.appendChild(dateWrap);
   info.appendChild(dayLine);
+  const counter = document.createElement('span');
+  counter.className = 'card-count-badge';
+  counter.id = 'chantCount' + d;
+  counter.textContent = count + ' / ' + CHANTS;
+  counter.setAttribute('aria-label', count + ' of ' + CHANTS + ' chants completed');
+  info.appendChild(counter);
 
   if (isToday && !done) {
     const todayTag = document.createElement('div');
@@ -2443,9 +2564,12 @@ function makeCard(d) {
   const templeBtn = document.createElement('button');
   templeBtn.className = 'temple-btn' + (s.temple ? ' done' : '');
   templeBtn.id = 'templebtn' + d;
+  templeBtn.disabled = future || done;
+  templeBtn.setAttribute('aria-pressed', String(s.temple));
   templeBtn.textContent = s.temple ? '🛕 Visited' : '🛕 Temple';
   templeBtn.addEventListener('click', () => {
-    if (isFuture(d)) return;
+    syncTrackerState();
+    if (isFuture(d) || (state[k].temple && state[k].marks.every(Boolean))) return;
     state[k].temple = !state[k].temple;
     saveState(state);
     refreshCard(d);
@@ -2461,6 +2585,7 @@ function makeCard(d) {
   const completeBtn = document.createElement('button');
   completeBtn.className = 'complete-day-btn';
   completeBtn.id = 'completebtn' + d;
+  completeBtn.disabled = future || done;
   completeBtn.textContent = done ? '✓ Day Complete' : future ? '🔒 Future Day' : '🙏 Complete Day (21 chants + Temple)';
   completeBtn.addEventListener('click', () => completeDay(d));
   card.appendChild(completeBtn);
@@ -2471,7 +2596,9 @@ function makeCard(d) {
   grid.id = 'grid' + d;
 
   for (let m = 0; m < CHANTS; m++) {
-    const mk = document.createElement('div');
+    const mk = document.createElement('button');
+    mk.type = 'button';
+    mk.disabled = future || done || (isToday && m !== s.marks.indexOf(false));
     mk.className = 'mark' + (s.marks[m] ? ' done' : '');
     mk.title = 'Chanting ' + (m + 1);
     mk.setAttribute('role', 'button');
@@ -2479,10 +2606,6 @@ function makeCard(d) {
     mk.setAttribute('aria-pressed', s.marks[m] ? 'true' : 'false');
     mk.setAttribute('aria-label', 'Chanting ' + (m + 1) + (s.marks[m] ? ' completed' : ' pending'));
     mk.addEventListener('click', () => toggleMark(d, m));
-    // keyboard support
-    mk.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleMark(d, m); } });
-    // touch friendly
-    mk.addEventListener('touchend', e => { e.preventDefault(); toggleMark(d, m); });
     grid.appendChild(mk);
   }
   if (isToday && !done) applyNextMark(grid, s.marks);
@@ -2520,6 +2643,7 @@ function isPast(d) {
 }
 
 function completeDay(d) {
+  syncTrackerState();
   if (isFuture(d)) return;
   const k = 'd' + d;
   ensureDay(d);
@@ -2531,8 +2655,11 @@ function completeDay(d) {
 }
 
 function toggleMark(d, m) {
+  syncTrackerState();
   if (isFuture(d)) return;
   const k = 'd' + d;
+  if (state[k].marks.every(Boolean) && state[k].temple) return;
+  if (state[k].date === todayISO() && m !== state[k].marks.indexOf(false)) return;
   state[k].marks[m] = !state[k].marks[m];
   saveState(state);
   refreshCard(d);
@@ -2547,6 +2674,7 @@ function refreshCard(d) {
   if (!grid || !card) return;
 
   const wasCompleted = card.classList.contains('completed');
+  const focusedMark = grid.contains(document.activeElement) ? document.activeElement : null;
 
   const marks = grid.querySelectorAll('.mark');
   let count = 0;
@@ -2556,6 +2684,9 @@ function refreshCard(d) {
   });
 
   const done = count === CHANTS && s.temple;
+  const counter = document.getElementById('chantCount' + d);
+  counter.textContent = count + ' / ' + CHANTS;
+  counter.setAttribute('aria-label', count + ' of ' + CHANTS + ' chants completed');
   if (done) card.classList.add('completed');
   else card.classList.remove('completed');
 
@@ -2568,11 +2699,14 @@ function refreshCard(d) {
 
   // update complete-day button
   const cbtn = document.getElementById('completebtn' + d);
+  if (cbtn) cbtn.disabled = future || done;
   if (cbtn) cbtn.textContent = done ? '✓ Day Complete' : future ? '🔒 Future Day' : '🙏 Complete Day (21 chants + Temple)';
 
   // update temple button
   const tbtn = document.getElementById('templebtn' + d);
   if (tbtn) {
+    tbtn.disabled = future || done;
+    tbtn.setAttribute('aria-pressed', String(s.temple));
     tbtn.textContent = s.temple ? '🛕 Visited' : '🛕 Temple';
     if (s.temple) tbtn.classList.add('done');
     else tbtn.classList.remove('done');
@@ -2596,6 +2730,13 @@ function refreshCard(d) {
   const isToday2 = !future && s.date && s.date === todayISO();
   if (isToday2 && !done) applyNextMark(grid, s.marks);
   else marks.forEach(el => el.classList.remove('next-mark'));
+  card.classList.toggle('today', Boolean(isToday2 && !done));
+  card.setAttribute('aria-label', 'Day ' + d + (isToday2 ? ', today' : ''));
+  marks.forEach((el, i) => { el.disabled = future || done || (isToday2 && i !== s.marks.indexOf(false)); });
+  if (focusedMark && focusedMark.disabled && !done) {
+    (grid.querySelector('.mark:not(:disabled)') || tbtn).focus({ preventScroll: true });
+  }
+  updateFloatingNav();
 }
 
 // Date edit helpers
@@ -2711,6 +2852,7 @@ function updateStats() {
 
   const pct = Math.round((doneD / DAYS) * 100);
   document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressBar').setAttribute('aria-valuenow', doneD);
   document.getElementById('progressText').textContent =
     doneD + ' of 48 days complete (' + pct + '%) 🙏';
 }
@@ -2744,20 +2886,73 @@ function applyStartDate() {
   scrollToToday();
 }
 
-function scrollToToday() {
-  const iso = todayISO();
-  for (let d = 1; d <= DAYS; d++) {
-    if (state['d' + d] && state['d' + d].date === iso) {
-      const card = document.getElementById('card' + d);
-      if (card) setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
-      break;
-    }
-  }
+function scrollToToday(moveFocus = false) {
+  const day = Array.from({ length: DAYS }, (_, i) => i + 1)
+    .find(d => state['d' + d] && state['d' + d].date === todayISO());
+  if (!day) { showToast('No day is scheduled for today. Set or adjust your dates.'); return; }
+  const card = document.getElementById('card' + day);
+  if (moveFocus) card.focus({ preventScroll: true });
+  card.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
 }
 
+// Keep the today arrow pointing toward its destination as the page scrolls.
+function updateFloatingNav() {
+  const top = document.getElementById('navTop');
+  const today = document.getElementById('navToday');
+  top.disabled = window.scrollY < 40;
+  const day = Array.from({ length: DAYS }, (_, i) => i + 1)
+    .find(d => state['d' + d]?.date === todayISO());
+  today.disabled = !day;
+  today.title = day ? 'Go to today' : 'No day scheduled for today';
+  today.setAttribute('aria-label', today.title);
+  if (day) {
+    const card = document.getElementById('card' + day);
+    const above = card.getBoundingClientRect().top < document.querySelector('.site-header').offsetHeight;
+    today.firstElementChild.textContent = above ? '↑' : '↓';
+  }
+}
+let navFramePending = false;
+function scheduleNavUpdate() {
+  if (navFramePending) return;
+  navFramePending = true;
+  requestAnimationFrame(() => { navFramePending = false; updateFloatingNav(); });
+}
+window.addEventListener('scroll', scheduleNavUpdate, { passive: true });
+window.addEventListener('resize', scheduleNavUpdate);
+let displayedDate = todayISO();
+setInterval(() => {
+  if (displayedDate === todayISO()) return;
+  displayedDate = todayISO();
+  buildCards();
+  loadAudioCounts();
+  renderAudioCounts();
+}, 60000);
 
 // ── QUICK LINKS ──
+const AUDIO_KEY = 'vratha_audio_counts_v1';
 let audioLoopCount = [0, 0, 0]; // index 1 = V1, index 2 = V2
+function loadAudioCounts() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(AUDIO_KEY));
+    audioLoopCount = [0, 1, 2].map(n => saved?.date === todayISO() && Number.isInteger(saved.counts?.[n])
+      ? Math.max(0, Math.min(CHANTS, saved.counts[n])) : 0);
+  } catch (_) { audioLoopCount = [0, 0, 0]; }
+}
+function renderAudioCounts() {
+  [1, 2].forEach(n => {
+    document.getElementById('audioCount' + n).textContent = audioLoopCount[n] === CHANTS
+      ? '✓ Completed 21 chantings 🙏'
+      : 'Chanting Counter: ' + audioLoopCount[n] + ' / ' + CHANTS;
+    if (audioLoopCount[n] === CHANTS) document.getElementById('manthramAudio' + n).pause();
+  });
+}
+function saveAudioCounts() {
+  try { localStorage.setItem(AUDIO_KEY, JSON.stringify({ date: todayISO(), counts: audioLoopCount })); } catch (_) {}
+  renderAudioCounts();
+}
+function withAudioLock(action) {
+  return navigator.locks ? navigator.locks.request(AUDIO_KEY, action) : Promise.resolve().then(action);
+}
 
 function toggleManthramImage() {
   document.getElementById('manthramImagePanel').classList.toggle('open');
@@ -2797,8 +2992,11 @@ function resetAudio(n) {
   const audio = document.getElementById('manthramAudio' + n);
   audio.pause();
   audio.currentTime = 0;
-  audioLoopCount[n] = 0;
-  document.getElementById('audioCount' + n).textContent = 'Chanting Counter: 0 / 21';
+  return withAudioLock(() => {
+    loadAudioCounts();
+    audioLoopCount[n] = 0;
+    saveAudioCounts();
+  });
 }
 
 // Helpers: map today's ISO date to a day number in the state
@@ -2839,29 +3037,47 @@ function applyAudioMarksToToday(count) {
 }
 
 (function initAudio() {
+  loadAudioCounts();
+  renderAudioCounts();
   [1, 2].forEach(function(n) {
     const audio = document.getElementById('manthramAudio' + n);
-    audio.addEventListener('ended', function() {
-      audioLoopCount[n]++;
-      if (audioLoopCount[n] < CHANTS) {
-        document.getElementById('audioCount' + n).textContent = 'Chanting Counter: ' + audioLoopCount[n] + ' / ' + CHANTS;
+    audio.addEventListener('ended', async function() {
+      await withAudioLock(() => {
+        loadAudioCounts();
+        audioLoopCount[n] = Math.min(CHANTS, audioLoopCount[n] + 1);
+        saveAudioCounts();
+        syncTrackerState();
         applyAudioMarksToToday(audioLoopCount[n]);
+      });
+      if (audioLoopCount[n] < CHANTS) {
         audio.currentTime = 0;
-        audio.play();
-      } else {
-        applyAudioMarksToToday(CHANTS);
-        document.getElementById('audioCount' + n).textContent = '✓ Completed 21 chantings 🙏';
-        audioLoopCount[n] = 0;
+        audio.play().catch(() => showToast('Tap play to continue chanting.'));
       }
     });
     audio.addEventListener('play', function() {
-      const count = audioLoopCount[n];
-      document.getElementById('audioCount' + n).textContent = count === 0
-        ? 'Chanting Counter: 0 / ' + CHANTS
-        : 'Chanting Counter: ' + count + ' / ' + CHANTS;
+      loadAudioCounts();
+      renderAudioCounts();
+      if (audioLoopCount[n] === CHANTS) showToast('21 chantings complete. Reset the count to start again.');
     });
   });
 })();
+
+// Changes in another tab update the UI without reloading or interrupting playback.
+function syncTrackerState() {
+  const latest = loadState();
+  if (JSON.stringify(latest) === JSON.stringify(state)) return;
+  state = latest;
+  buildCards();
+  document.getElementById('startDateRow').style.display = state.datesFixed ? 'none' : '';
+}
+window.addEventListener('storage', event => {
+  if (event.key === LS_KEY || event.key === null) syncTrackerState();
+  if (event.key === AUDIO_KEY || event.key === null) { loadAudioCounts(); renderAudioCounts(); }
+  if (event.key === 'vratha_theme' || event.key === null) {
+    applyTheme(localStorage.getItem('vratha_theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+  }
+});
+window.addEventListener('focus', () => { syncTrackerState(); loadAudioCounts(); renderAudioCounts(); });
 
 // ── EXPORT JSON ──
 function exportJSON() {
@@ -2950,6 +3166,8 @@ function openWelcomeModal() {
 
 // ── ABOUT TOGGLE ──
 function toggleAbout() {
+  const expanded = !document.getElementById('aboutBody').classList.contains('open');
+  document.getElementById('aboutToggle').setAttribute('aria-expanded', String(expanded));
   document.getElementById('aboutBody').classList.toggle('open');
   document.getElementById('aboutToggle').classList.toggle('open');
 }
@@ -2968,6 +3186,9 @@ function showResetStep2() {
   document.getElementById('resetStep2').style.display = '';
 }
 function confirmReset() {
+  [1, 2].forEach(n => { const audio = document.getElementById('manthramAudio' + n); audio.pause(); audio.currentTime = 0; });
+  audioLoopCount = [0, 0, 0];
+  saveAudioCounts();
   state = {};
   saveState(state);
   closeResetModal();
