@@ -1140,7 +1140,7 @@
 </div>
 
 <nav class="floating-nav" aria-label="Page navigation">
-  <button id="navTop" type="button" onclick="scrollToTop()" aria-label="Go to top" title="Go to top"><span aria-hidden="true">⇈</span></button>
+  <button id="navTop" type="button" onclick="scrollToTop()" aria-label="Go to top" title="Go to top"><span aria-hidden="true">↑</span></button>
   <button id="navToday" type="button" onclick="scrollToToday(true)" aria-label="Go to today" title="Go to today"><span aria-hidden="true">↓</span></button>
 </nav>
 
@@ -2895,7 +2895,7 @@ function scrollToToday(moveFocus = false) {
   card.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
 }
 
-// Keep the today arrow pointing toward its destination as the page scrolls.
+// Keep navigation availability in sync without changing the button icons.
 function updateFloatingNav() {
   const top = document.getElementById('navTop');
   const today = document.getElementById('navToday');
@@ -2905,11 +2905,6 @@ function updateFloatingNav() {
   today.disabled = !day;
   today.title = day ? 'Go to today' : 'No day scheduled for today';
   today.setAttribute('aria-label', today.title);
-  if (day) {
-    const card = document.getElementById('card' + day);
-    const above = card.getBoundingClientRect().top < document.querySelector('.site-header').offsetHeight;
-    today.firstElementChild.textContent = above ? '↑' : '↓';
-  }
 }
 let navFramePending = false;
 function scheduleNavUpdate() {
