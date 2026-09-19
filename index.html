@@ -13,11 +13,11 @@
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
   <meta name="apple-mobile-web-app-title" content="Vratha Tracker"/>
-  <meta name="description" content="48-Day Ganapati Vratha Tracker — chant 21 times daily, visit temple, track your sacred penance."/>
+  <meta name="description" content="Naam Jaap for Ganapati, Rama, Hanuman, Shiva, Gayatri Matha and Durga Devi — text, audio and separate daily progress."/>
   <meta name="author" content="Chandra Lanka"/>
   <meta name="copyright" content="© 2025 Chandra Lanka — https://ajnacs.com"/>
   <link rel="canonical" href="https://chandra-79.github.io/vratha"/>
-  <title>🕉 Ganapati Vratha Tracker — 48 Days</title>
+  <title>🕉 Naam Jaap &amp; Vratha Tracker</title>
 
   <!-- Favicon / PWA icons -->
   <link rel="icon" type="image/svg+xml" href="icon.svg"/>
@@ -25,7 +25,7 @@
   <link rel="apple-touch-icon" href="icon-192.png"/>
 
   <!-- PWA manifest inline -->
-  <link rel="manifest" href="data:application/json,%7B%22name%22%3A%22Ganapati%20Vratha%22%2C%22short_name%22%3A%22Vratha%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23fdf6ec%22%2C%22theme_color%22%3A%22%23e65100%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22icon-192.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D"/>
+  <link rel="manifest" href="data:application/json,%7B%22name%22%3A%22Naam%20Jaap%20Tracker%22%2C%22short_name%22%3A%22Vratha%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23fdf6ec%22%2C%22theme_color%22%3A%22%23e65100%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22icon-192.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D"/>
 
   <!-- Devotional heading font -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -933,8 +933,10 @@
     }
     @media print { .floating-nav { display: none; } }
   </style>
+  <link rel="stylesheet" href="companion.css"/>
 </head>
 <body>
+<a class="skip-link" href="#todayDashboard">Skip to today’s practice</a>
 
 <!-- ── STICKY HEADER ── -->
 <header class="site-header" id="pageTop" tabindex="-1">
@@ -942,8 +944,8 @@
     <div class="header-title">
       <span class="om">🕉</span>
       <div>
-        <h1>Ganapati Vratha Tracker</h1>
-        <p>48-Day Sacred Penance · 212323 Chantings Daily</p>
+        <h1>Naam Jaap &amp; Vratha Tracker</h1>
+        <p>48-Day Practice · 21 Chantings Daily</p>
       </div>
     </div>
     <div class="header-actions">
@@ -959,6 +961,35 @@
     <div class="progress-text" id="progressText">0 of 48 days complete 🙏</div>
   </div>
 </header>
+
+<main id="practiceMain">
+<section class="companion-panel today-dashboard" id="todayDashboard" tabindex="-1" aria-labelledby="todayHeading">
+  <div class="practice-picker"><label for="practiceSelect">Choose your practice</label><select id="practiceSelect" onchange="switchPractice(this.value)"><option value="ganapati">Ganapati</option><option value="rama">Rama</option><option value="hanuman">Hanuman</option><option value="shiva">Shiva</option><option value="gayatri">Gayatri Matha</option><option value="durga">Durga Devi</option></select><p class="quiet">Each practice keeps its own 21-count goal, schedule, notes, and history.</p></div>
+  <div class="eyebrow">YOUR DAILY RETURN TO PRACTICE</div>
+  <div class="section-heading"><div><h2 id="todayHeading">Today’s practice</h2><p id="todaySubtitle"></p></div><span id="saveStatus" role="status">Saved on this device</span></div>
+  <div id="mantraPreview" class="mantra-preview" hidden><p id="mantraScript" lang="sa"></p><p id="mantraTransliteration"></p></div>
+  <div class="today-layout">
+    <button class="chant-ring" id="dailyTap" onclick="countChant()" aria-label="Count one chant"><span><strong id="dailyCount">0</strong><small>of 21 chants</small></span></button>
+    <div class="today-actions"><p id="practiceHint">One repetition. One tap.</p>
+      <div class="action-row"><button class="primary-action" id="focusLaunch" onclick="openFocus()">Enter focus mode</button><button id="dailyTemple" onclick="toggleDailyTemple()" aria-pressed="false">Temple visit</button></div>
+      <div class="action-row"><button id="undoButton" onclick="undoPractice()" disabled>↶ Undo last action</button><button onclick="openReader()">Read the mantra</button></div>
+      <label class="note-label" for="dailyNote">A note for today <span>(optional)</span></label><textarea id="dailyNote" maxlength="2000" rows="2" placeholder="A thought, intention, or temple visited…"></textarea><button id="saveNote" onclick="saveDailyNote()">Save note</button>
+    </div>
+  </div>
+  <div class="guided-player" aria-label="Guided chanting">
+    <div class="section-heading"><h3>Listen &amp; chant</h3><span id="sessionTime">Session · 00:00</span></div>
+    <div class="action-row"><label>Recording <select id="audioVersion" onchange="selectRecording()"><option value="1">Manthram V1</option><option value="2">Manthram V2</option></select></label><button id="audioToggle" onclick="toggleGuidedAudio()">▶ Play</button><label>Speed <select id="audioSpeed" onchange="saveAudioPreferences()"><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option></select></label><label>Pause between chants <select id="audioGap" onchange="saveAudioPreferences()"><option value="0">None</option><option value="2">2 seconds</option><option value="5">5 seconds</option><option value="10">10 seconds</option></select></label></div>
+    <label class="check-label"><input type="checkbox" id="stopAfter"/> Stop after this repetition</label><p class="quiet" id="audioHint">Each finished recording adds one chant to today’s count.</p>
+  </div>
+</section>
+<section class="companion-panel" aria-labelledby="journeyHeading"><div class="section-heading"><div><div class="eyebrow">ONE DAY AT A TIME</div><h2 id="journeyHeading">Your 48-day journey</h2></div><span id="journeySummary"></span></div><div id="journeyGrid" class="journey-grid"></div><p class="quiet">○ Not recorded · ◐ In progress · ✓ Complete · · Upcoming</p></section>
+<details class="companion-panel settings-panel"><summary>Settings, reminders &amp; previous cycles</summary>
+  <div class="settings-grid"><section><h3>Your preferences</h3><label>Reading size <input id="readingSize" type="range" min="16" max="32" value="20" oninput="setReadingSize(this.value)"/></label><label class="check-label"><input type="checkbox" id="completionSound" onchange="saveAudioPreferences()"/> Gentle completion chime</label><label class="check-label"><input type="checkbox" id="hapticFeedback" onchange="saveAudioPreferences()"/> Vibration feedback (supported devices)</label></section>
+  <section><h3>Daily reminder</h3><label>Local time <input type="time" id="reminderTime" value="07:00"/></label><button onclick="downloadReminder()">Add to my calendar</button><p class="quiet">Download a recurring reminder for your calendar app.</p></section>
+  <section><h3>Keep your progress</h3><button onclick="exportJSON()">Download selected practice</button><button onclick="document.getElementById('importFileInput').click()">Restore backup</button><p class="quiet" id="lastBackup">No backup downloaded yet.</p><p class="quiet">Saved in this browser. Back up to move devices or keep a separate copy.</p></section>
+  <section><h3>A new beginning</h3><label>Next cycle’s start <input type="date" id="nextCycleDate"/></label><button onclick="archiveAndRestart()">Archive this cycle &amp; start another</button><p class="quiet">Your current cycle and notes stay in the archive.</p></section></div><div id="archiveList"></div>
+</details>
+</main>
 
 <!-- ── STATS ── -->
 <div class="stats-row">
@@ -1019,24 +1050,24 @@
 </div>
 
 <div class="audio-panel" id="audioPanel1">
-  <audio id="manthramAudio1" src="Manthram.mpeg" controls preload="auto"></audio>
+  <audio id="manthramAudio1" src="Manthram.mpeg" controls preload="metadata"></audio>
   <div class="audio-count" id="audioCount1" role="status" aria-live="polite">Chanting Counter: 0 / 21</div>
   <button class="audio-reset-btn" onclick="resetAudio(1)">↺ Reset count</button>
 </div>
 <div class="audio-panel" id="audioPanel2">
-  <audio id="manthramAudio2" src="Manthram_Variation.mp3" controls preload="auto"></audio>
+  <audio id="manthramAudio2" src="Manthram_Variation.mp3" controls preload="metadata"></audio>
   <div class="audio-count" id="audioCount2" role="status" aria-live="polite">Chanting Counter: 0 / 21</div>
   <button class="audio-reset-btn" onclick="resetAudio(2)">↺ Reset count</button>
 </div>
 
 <!-- ── CARDS ── -->
-<div class="cards-container" id="cardsContainer"></div>
+<details class="companion-panel" id="dayDetails"><summary>Day-by-day details &amp; corrections</summary><div class="cards-container" id="cardsContainer"></div></details>
 
 <!-- ── WELCOME / IMPORT MODAL ── -->
 <div class="modal-overlay" id="welcomeModal">
   <div class="modal">
     <div class="welcome-icon">🕉</div>
-    <h2 style="text-align:center">Welcome to Ganapati Vratha Tracker</h2>
+    <h2 style="text-align:center">Welcome to Naam Jaap &amp; Vratha Tracker</h2>
     <p style="font-size:0.82rem;color:var(--text);margin-top:8px;line-height:1.6">
       Have you already begun this Vratha and saved your progress as a JSON backup? You can restore it now — or start fresh.
     </p>
@@ -1057,13 +1088,13 @@
 <!-- ── RESET CONFIRMATION MODAL ── -->
 <div class="modal-overlay" id="resetModal">
   <div class="modal">
-    <h2>⚠ Reset All Progress</h2>
+    <h2>⚠ Reset Selected Practice</h2>
 
     <!-- Step 1 -->
     <div id="resetStep1" class="reset-modal-step">
       <div class="reset-warn">
         <strong>This will permanently erase everything:</strong>
-        All 48 days of chantings, temple visits, and assigned dates will be deleted. This cannot be undone.
+        The selected practice’s cycle, archives, notes, chantings, temple visits, and dates will be deleted. Your other practices will be kept. This cannot be undone.
       </div>
       <p style="font-size:0.82rem;color:var(--text)">Export your data first if you want a backup before resetting.</p>
       <div class="reset-confirm-btns">
@@ -1076,7 +1107,7 @@
     <div id="resetStep2" class="reset-modal-step" style="display:none">
       <div class="reset-warn">
         <strong>⚠ Final confirmation</strong>
-        You are about to erase ALL Vratha progress. Are you absolutely sure?
+        You are about to erase all progress for the selected practice. Are you absolutely sure?
       </div>
       <button class="btn-export-json" onclick="exportJSON()">📥 Save a JSON backup before resetting</button>
       <div class="reset-confirm-btns">
@@ -1095,7 +1126,7 @@
   <div class="footer-name">Chandra Lanka</div>
   <div class="footer-tagline">
     Devotee · Technology Enthusiast · Builder of things that matter<br/>
-    This tracker was crafted with love and devotion for Lord Ganapati.
+    A quiet companion for your daily devotional practice.
   </div>
   <div class="footer-divider"></div>
   <div class="footer-links">
@@ -1107,7 +1138,7 @@
     </a>
   </div>
   <div class="footer-copy">
-    Built for personal devotional use · Ganapati Vratha Tracker<br/>
+    Built for personal devotional use · Naam Jaap &amp; Vratha Tracker<br/>
   </div>
   <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:8px">
     <button class="qbtn" onclick="sharePage()">🔗 Share</button>
@@ -1135,7 +1166,7 @@
     <div class="quote-source">— Bhagavad Gita</div>
     <div class="quote-context" id="quoteContext"></div>
     <button class="quote-share-btn" style="margin-bottom:10px" onclick="captureProgress()">📸 Share Progress</button>
-    <button class="quote-close-btn" onclick="closeGitaQuote()">🙏 Jai Ganapati!</button>
+    <button class="quote-close-btn" onclick="closeGitaQuote()">🙏 Continue</button>
   </div>
 </div>
 
@@ -1144,6 +1175,10 @@
   <button id="navToday" type="button" onclick="scrollToToday(true)" aria-label="Go to today" title="Go to today"><span aria-hidden="true">↓</span></button>
 </nav>
 
+<dialog id="focusDialog" class="practice-dialog" aria-labelledby="focusHeading"><div class="section-heading"><h2 id="focusHeading">One chant at a time</h2><button onclick="closeFocus()" aria-label="Exit focus mode">✕</button></div><p id="focusDay" class="quiet"></p><p id="focusMantra" class="focus-mantra"></p><button class="chant-ring focus-ring" id="focusTap" onclick="countChant()" aria-label="Count one chant"><span><strong id="focusCount">0</strong><small>of 21 chants</small></span></button><p id="focusHint">Tap the circle or press Space.</p><div class="action-row"><button id="focusUndo" onclick="undoPractice()" disabled>↶ Undo</button><button id="focusAudio" onclick="toggleGuidedAudio()">▶ Audio</button></div><p class="quiet">Space counts · Backspace undoes · Escape exits</p></dialog>
+<dialog id="readerDialog" class="practice-dialog reader-dialog" aria-labelledby="readerHeading"><div class="section-heading"><h2 id="readerHeading">Ganapati Manthram</h2><button onclick="document.getElementById('readerDialog').close()" aria-label="Close reading view">✕</button></div><div class="action-row"><label>Read in <select id="readerLanguage" onchange="renderReader()"><option value="en">Transliteration</option><option value="sa">देवनागरी</option><option value="te">తెలుగు</option><option value="meaning">Meaning overview</option></select></label><label>Text size <input type="range" id="readerSize" min="16" max="32" value="20" oninput="setReadingSize(this.value)"/></label></div><div id="readerText"></div></dialog>
+<dialog id="editDayDialog" class="practice-dialog" aria-labelledby="editDayHeading"><h2 id="editDayHeading">Correct a day</h2><form id="editDayForm"><label>Chants completed <input id="editChants" type="number" min="0" max="21" required/></label><label class="check-label"><input id="editTemple" type="checkbox"/> Temple visited</label><label>Note <textarea id="editNote" maxlength="2000" rows="4"></textarea></label><div class="action-row"><button class="primary-action" type="submit">Save correction</button><button type="button" onclick="document.getElementById('editDayDialog').close()">Cancel</button></div></form></dialog>
+<div class="sr-only" id="practiceAnnouncement" role="status" aria-live="polite"></div>
 <!-- Toast -->
 <div id="toast" role="status" aria-live="polite"></div>
 
@@ -1166,6 +1201,7 @@
   </div>
 </div>
 
+<script src="practices.js"></script>
 <script>
 // ── THEME & NAVIGATION ──
 function applyTheme(theme) {
@@ -1223,7 +1259,7 @@ new ResizeObserver(entries => {
 })();
 
 function sharePage() {
-  const shareData = { title: document.title, text: 'Track your Ganapati Vratha progress', url: location.href };
+  const shareData = { title: document.title, text: 'Track your ' + PRACTICES[activePractice].name + ' practice', url: location.href };
   if (navigator.share) {
     navigator.share(shareData).catch(() => {});
   } else {
@@ -1334,7 +1370,7 @@ function captureProgress() {
 
   ctx.font = 'bold 16px Georgia, serif';
   ctx.fillStyle = '#bf360c';
-  ctx.fillText('Ganapati Vratha Tracker', W / 2, y + 48);
+  ctx.fillText(PRACTICES[activePractice].name + ' Practice', W / 2, y + 48);
 
   ctx.font = '11px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
   ctx.fillStyle = '#8d5524';
@@ -1508,7 +1544,7 @@ function captureProgress() {
   ctx.font = '10px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
   ctx.fillStyle = '#8d5524';
   ctx.textAlign = 'center';
-  ctx.fillText('Ganapati Vratha Progress  \u00B7  ' +
+  ctx.fillText(PRACTICES[activePractice].name + ' Practice Progress  \u00B7  ' +
     now.getDate() + ' ' + MONTHS[now.getMonth()] + ' ' + now.getFullYear(), W / 2, y + 16);
 
   // Bottom border
@@ -1522,7 +1558,7 @@ function captureProgress() {
       try {
         await navigator.share({
           files: [file],
-          title: 'My Ganapati Vratha Progress',
+          title: 'My ' + PRACTICES[activePractice].name + ' Practice Progress',
           text: doneD + ' of 48 days complete (' + pct + '%) \uD83D\uDE4F'
         });
         showToast('Shared!');
@@ -2170,7 +2206,7 @@ let _currentQuote = null;
 function showGitaQuote(d) {
   const q = GITA_QUOTES[(d - 1) % GITA_QUOTES.length];
   _currentQuote = q;
-  document.getElementById('quoteDayLabel').textContent = 'Day ' + d + ' Complete — Jai Ganapati! \uD83D\uDE4F';
+  document.getElementById('quoteDayLabel').textContent = PRACTICES[activePractice].name + ' — Day ' + d + ' Complete 🙏';
   document.getElementById('quoteText').textContent = '\u201C' + q.text + '\u201D';
   document.getElementById('quoteChapterBadge').textContent = 'Chapter ' + q.chapter;
   document.getElementById('quoteVerseNum').textContent = 'Verse ' + q.verse;
@@ -2378,7 +2414,7 @@ function captureQuote() {
   ctx.font = '11px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
   ctx.fillStyle = '#a0693a';
   ctx.textAlign = 'center';
-  ctx.fillText('\uD83D\uDD49  Ganapati Vratha Tracker  \u00B7  48 Days of Sacred Penance', W / 2, y);
+  ctx.fillText(PRACTICES[activePractice].name + ' · Naam Jaap & Vratha Tracker', W / 2, y);
 
   // Bottom decorative dots
   ctx.fillStyle = 'rgba(255,213,0,0.6)';
@@ -2406,7 +2442,7 @@ function captureQuote() {
 }
 // register service worker for PWA/offline
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').then(() => {
+  navigator.serviceWorker.register('./sw.js').then(() => {
     console.log('Service worker registered');
   }).catch(() => {});
 }
@@ -2427,13 +2463,21 @@ function dismissOnboard(neverShow) {
 // ── CONSTANTS ──
 const DAYS       = 48;
 const CHANTS     = 21;
-const LS_KEY     = 'ganapatiVratha_v2';
-const COOKIE_KEY = 'gvt2';
+let LS_KEY = practiceStorageKey(activePractice);
+let COOKIE_KEY = practiceCookieKey(activePractice);
 
 // ── STORAGE: localStorage (primary) + cookie (backup) ──
 function saveState(st) {
+  st.practiceId = activePractice;
   const json = JSON.stringify(st);
-  try { localStorage.setItem(LS_KEY, json); } catch(e) {}
+  try {
+    localStorage.setItem(LS_KEY, json);
+    const status = document.getElementById('saveStatus');
+    if (status) status.textContent = 'Saved on this device';
+  } catch(e) {
+    const status = document.getElementById('saveStatus');
+    if (status) status.textContent = 'Could not save — download a backup';
+  }
   // compact cookie backup (expires 200 days)
   try {
     const d = new Date(); d.setDate(d.getDate() + 200);
@@ -2472,6 +2516,7 @@ function buildCards() {
     container.appendChild(makeCard(d));
   }
   updateStats();
+  document.getElementById('startDateRow').style.display = state.datesFixed ? 'none' : '';
   updateFloatingNav();
 }
 
@@ -2567,14 +2612,10 @@ function makeCard(d) {
   templeBtn.disabled = future || done;
   templeBtn.setAttribute('aria-pressed', String(s.temple));
   templeBtn.textContent = s.temple ? '🛕 Visited' : '🛕 Temple';
-  templeBtn.addEventListener('click', () => {
-    syncTrackerState();
-    if (isFuture(d) || (state[k].temple && state[k].marks.every(Boolean))) return;
-    state[k].temple = !state[k].temple;
-    saveState(state);
-    refreshCard(d);
-    updateStats();
-  });
+  templeBtn.addEventListener('click', () => changeDay(d, day => {
+    if (day.temple && day.marks.every(Boolean)) return;
+    day.temple = !day.temple;
+  }, 'Temple visit updated'));
 
   hdr.appendChild(badge);
   hdr.appendChild(info);
@@ -2610,6 +2651,12 @@ function makeCard(d) {
   }
   if (isToday && !done) applyNextMark(grid, s.marks);
   card.appendChild(grid);
+  const edit = document.createElement('button');
+  edit.className = 'edit-day-button';
+  edit.textContent = 'Edit entry';
+  edit.disabled = future;
+  edit.addEventListener('click', () => openDayEditor(d));
+  card.appendChild(edit);
   return card;
 }
 
@@ -2643,27 +2690,14 @@ function isPast(d) {
 }
 
 function completeDay(d) {
-  syncTrackerState();
-  if (isFuture(d)) return;
-  const k = 'd' + d;
-  ensureDay(d);
-  state[k].marks = new Array(CHANTS).fill(true);
-  state[k].temple = true;
-  saveState(state);
-  refreshCard(d);
-  updateStats();
+  return changeDay(d, day => { day.marks.fill(true); day.temple = true; }, 'Day completed');
 }
-
 function toggleMark(d, m) {
-  syncTrackerState();
-  if (isFuture(d)) return;
-  const k = 'd' + d;
-  if (state[k].marks.every(Boolean) && state[k].temple) return;
-  if (state[k].date === todayISO() && m !== state[k].marks.indexOf(false)) return;
-  state[k].marks[m] = !state[k].marks[m];
-  saveState(state);
-  refreshCard(d);
-  updateStats();
+  return changeDay(d, day => {
+    if (day.marks.every(Boolean) && day.temple) return;
+    if (day.date === todayISO() && m !== day.marks.indexOf(false)) return;
+    day.marks[m] = !day.marks[m];
+  }, 'Chant updated');
 }
 
 function refreshCard(d) {
@@ -2845,6 +2879,7 @@ function updateStats() {
     if (state[k].temple) templeV++;
     if (c === CHANTS && state[k].temple) doneD++;
   }
+  if (typeof renderCompanion === 'function') renderCompanion();
   document.getElementById('sDays').textContent   = doneD;
   document.getElementById('sTemple').textContent = templeV;
   document.getElementById('sChants').textContent = totalC;
@@ -2887,12 +2922,9 @@ function applyStartDate() {
 }
 
 function scrollToToday(moveFocus = false) {
-  const day = Array.from({ length: DAYS }, (_, i) => i + 1)
-    .find(d => state['d' + d] && state['d' + d].date === todayISO());
-  if (!day) { showToast('No day is scheduled for today. Set or adjust your dates.'); return; }
-  const card = document.getElementById('card' + day);
-  if (moveFocus) card.focus({ preventScroll: true });
-  card.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
+  const dashboard = document.getElementById('todayDashboard');
+  if (moveFocus) dashboard.focus({ preventScroll: true });
+  dashboard.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
 }
 
 // Keep navigation availability in sync without changing the button icons.
@@ -2900,10 +2932,8 @@ function updateFloatingNav() {
   const top = document.getElementById('navTop');
   const today = document.getElementById('navToday');
   top.disabled = window.scrollY < 40;
-  const day = Array.from({ length: DAYS }, (_, i) => i + 1)
-    .find(d => state['d' + d]?.date === todayISO());
-  today.disabled = !day;
-  today.title = day ? 'Go to today' : 'No day scheduled for today';
+  today.disabled = false;
+  today.title = 'Go to today';
   today.setAttribute('aria-label', today.title);
 }
 let navFramePending = false;
@@ -2919,36 +2949,10 @@ setInterval(() => {
   if (displayedDate === todayISO()) return;
   displayedDate = todayISO();
   buildCards();
-  loadAudioCounts();
-  renderAudioCounts();
+  if (typeof renderCompanion === 'function') renderCompanion();
 }, 60000);
 
 // ── QUICK LINKS ──
-const AUDIO_KEY = 'vratha_audio_counts_v1';
-let audioLoopCount = [0, 0, 0]; // index 1 = V1, index 2 = V2
-function loadAudioCounts() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(AUDIO_KEY));
-    audioLoopCount = [0, 1, 2].map(n => saved?.date === todayISO() && Number.isInteger(saved.counts?.[n])
-      ? Math.max(0, Math.min(CHANTS, saved.counts[n])) : 0);
-  } catch (_) { audioLoopCount = [0, 0, 0]; }
-}
-function renderAudioCounts() {
-  [1, 2].forEach(n => {
-    document.getElementById('audioCount' + n).textContent = audioLoopCount[n] === CHANTS
-      ? '✓ Completed 21 chantings 🙏'
-      : 'Chanting Counter: ' + audioLoopCount[n] + ' / ' + CHANTS;
-    if (audioLoopCount[n] === CHANTS) document.getElementById('manthramAudio' + n).pause();
-  });
-}
-function saveAudioCounts() {
-  try { localStorage.setItem(AUDIO_KEY, JSON.stringify({ date: todayISO(), counts: audioLoopCount })); } catch (_) {}
-  renderAudioCounts();
-}
-function withAudioLock(action) {
-  return navigator.locks ? navigator.locks.request(AUDIO_KEY, action) : Promise.resolve().then(action);
-}
-
 function toggleManthramImage() {
   document.getElementById('manthramImagePanel').classList.toggle('open');
   document.getElementById('qImgBtn').classList.toggle('active');
@@ -2983,80 +2987,6 @@ function toggleAudioPanel(n) {
   }
 }
 
-function resetAudio(n) {
-  const audio = document.getElementById('manthramAudio' + n);
-  audio.pause();
-  audio.currentTime = 0;
-  return withAudioLock(() => {
-    loadAudioCounts();
-    audioLoopCount[n] = 0;
-    saveAudioCounts();
-  });
-}
-
-// Helpers: map today's ISO date to a day number in the state
-function getDayForToday() {
-  const iso = todayISO();
-  // 1) If dates are assigned, find the day with matching date
-  for (let d = 1; d <= DAYS; d++) {
-    const s = state['d' + d];
-    if (s && s.date === iso) return d;
-  }
-  // 2) Otherwise, pick the first incomplete (not fully done) day
-  for (let d = 1; d <= DAYS; d++) {
-    ensureDay(d);
-    const s = state['d' + d];
-    const c = s.marks.filter(Boolean).length;
-    const done = (c === CHANTS && s.temple);
-    if (!done) return d;
-  }
-  // fallback last day
-  return DAYS;
-}
-
-// Apply `count` completed chants to the current day (idempotent)
-function applyAudioMarksToToday(count) {
-  const d = getDayForToday();
-  if (!d) return;
-  ensureDay(d);
-  const k = 'd' + d;
-  // If the day is explicitly in the future, don't mark
-  if (isFuture(d)) return;
-  // Mark the first `count` marks as done (preserve existing trues)
-  for (let i = 0; i < CHANTS; i++) {
-    state[k].marks[i] = i < count ? true : state[k].marks[i];
-  }
-  saveState(state);
-  refreshCard(d);
-  updateStats();
-}
-
-(function initAudio() {
-  loadAudioCounts();
-  renderAudioCounts();
-  [1, 2].forEach(function(n) {
-    const audio = document.getElementById('manthramAudio' + n);
-    audio.addEventListener('ended', async function() {
-      await withAudioLock(() => {
-        loadAudioCounts();
-        audioLoopCount[n] = Math.min(CHANTS, audioLoopCount[n] + 1);
-        saveAudioCounts();
-        syncTrackerState();
-        applyAudioMarksToToday(audioLoopCount[n]);
-      });
-      if (audioLoopCount[n] < CHANTS) {
-        audio.currentTime = 0;
-        audio.play().catch(() => showToast('Tap play to continue chanting.'));
-      }
-    });
-    audio.addEventListener('play', function() {
-      loadAudioCounts();
-      renderAudioCounts();
-      if (audioLoopCount[n] === CHANTS) showToast('21 chantings complete. Reset the count to start again.');
-    });
-  });
-})();
-
 // Changes in another tab update the UI without reloading or interrupting playback.
 function syncTrackerState() {
   const latest = loadState();
@@ -3067,21 +2997,24 @@ function syncTrackerState() {
 }
 window.addEventListener('storage', event => {
   if (event.key === LS_KEY || event.key === null) syncTrackerState();
-  if (event.key === AUDIO_KEY || event.key === null) { loadAudioCounts(); renderAudioCounts(); }
   if (event.key === 'vratha_theme' || event.key === null) {
     applyTheme(localStorage.getItem('vratha_theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
   }
 });
-window.addEventListener('focus', () => { syncTrackerState(); loadAudioCounts(); renderAudioCounts(); });
+window.addEventListener('focus', () => { syncTrackerState(); if (typeof renderCompanion === 'function') renderCompanion(); });
 
 // ── EXPORT JSON ──
 function exportJSON() {
+  syncTrackerState();
+  state.lastBackup = new Date().toISOString();
+  saveState(state);
+  if (typeof renderCompanion === 'function') renderCompanion();
   const json = JSON.stringify(state, null, 2);
   const blob = new Blob([json], { type: 'application/json' });
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
   a.href     = url;
-  a.download = 'ganapati-vratha-backup.json';
+  a.download = activePractice + '-practice-backup.json';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -3093,11 +3026,15 @@ function handleImportFile(input) {
   const file = input.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = function(e) {
+  reader.onload = async function(e) {
     try {
       const data = JSON.parse(e.target.result);
-      if (typeof data !== 'object' || Array.isArray(data)) throw new Error();
+      if (!validBackup(data)) throw new Error();
+      const targetPractice = data.practiceId || 'ganapati';
+      await switchPractice(targetPractice, { restoring: true });
+      stopGuidedAudio();
       state = data;
+      state.sharedCountMigrated = true;
       saveState(state);
       closeWelcomeModal();
       buildCards();
@@ -3107,7 +3044,7 @@ function handleImportFile(input) {
         scrollToToday();
       }
     } catch(err) {
-      alert('Could not read the file. Please select a valid Ganapati Vratha JSON backup.');
+      alert('Could not read the file. Please select a valid practice JSON backup.');
     }
     input.value = '';
   };
@@ -3126,7 +3063,7 @@ function closeWelcomeModal() {
 }
 
 function _welcomeKeyHandler(e) {
-  if (e.key === 'Escape' || e.key === 'Enter') closeWelcomeModal();
+  if (e.key === 'Escape') closeWelcomeModal();
 }
 
 function openWelcomeModal() {
@@ -3144,19 +3081,9 @@ function openWelcomeModal() {
   // Close on Escape or Enter
   document.addEventListener('keydown', _welcomeKeyHandler);
 
-  // Countdown display
-  const secEl = document.getElementById('welcomeCountSec');
-  let remaining = 5;
-  secEl.textContent = remaining;
-  clearInterval(_welcomeCountInterval);
-  _welcomeCountInterval = setInterval(() => {
-    remaining -= 1;
-    secEl.textContent = remaining;
-    if (remaining <= 0) clearInterval(_welcomeCountInterval);
-  }, 1000);
+  // Keep the welcome dialog open until dismissed; no reading time limit.
+  document.getElementById('welcomeCountdown').hidden = true;
 
-  // Auto-close after 5 seconds
-  _welcomeTimer = setTimeout(closeWelcomeModal, 5000);
 }
 
 // ── ABOUT TOGGLE ──
@@ -3182,9 +3109,8 @@ function showResetStep2() {
 }
 function confirmReset() {
   [1, 2].forEach(n => { const audio = document.getElementById('manthramAudio' + n); audio.pause(); audio.currentTime = 0; });
-  audioLoopCount = [0, 0, 0];
-  saveAudioCounts();
-  state = {};
+  if (typeof stopGuidedAudio === 'function') stopGuidedAudio();
+  state = { sharedCountMigrated: true };
   saveState(state);
   closeResetModal();
   buildCards();
@@ -3230,5 +3156,6 @@ if (freshInstall) {
   } catch(e) {}
 }
 </script>
+<script src="companion.js"></script>
 </body>
 </html>
