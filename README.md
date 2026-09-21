@@ -18,6 +18,8 @@ Open `http://127.0.0.1:8765`. Use HTTP localhost or HTTPS for offline caching an
 - Both recordings share the daily count. Switch recordings without losing progress; adjust playback speed, the gap between repetitions, or stop after the current repetition. Starting playback in another tab pauses the first tab where BroadcastChannel is supported.
 - Undo remains available for 30 seconds, provided the entry has not changed in another tab. Use **Edit entry** for older corrections. Future days cannot be marked.
 - Daily notes are saved using **Save note**. The reader includes Telugu, transliteration from the provided reference sheets, and a short meaning overview.
+- The page runs top to bottom: today's practice (with a collapsible **Listen & chant** player), the day grid, **Day details & corrections**, **Your practice at a glance**, Settings, the Ganapati reference sheets, and the footer. Collapsible panels remember whether you left them open. A single floating arrow jumps to the bottom from the top half of the page and back to the top from the bottom half.
+- The completion card and the **Progress card** image use the same palette as the rest of the app and follow light or dark mode. When installed to a home screen, the header and dialogs keep clear of the status bar and home indicator.
 
 ## Progress and backups
 

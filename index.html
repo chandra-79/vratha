@@ -9,10 +9,10 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-  <meta name="theme-color" content="#e65100"/>
+  <meta name="theme-color" content="#99410c"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-  <meta name="apple-mobile-web-app-title" content="Vratha Tracker"/>
+  <meta name="apple-mobile-web-app-title" content="Naam Jaap"/>
   <meta name="description" content="Mantra practice for Ganapati, Rama, Hanuman, Shiva, Gayatri Matha and Durga Devi, plus your own text, images, PDFs and audio. Independent goals and daily progress."/>
   <meta name="author" content="Chandra Lanka"/>
   <meta name="copyright" content="© 2025 Chandra Lanka — https://ajnacs.com"/>
@@ -44,6 +44,9 @@
       --saffron:   #e65100;
       --saffron-l: #ff8f00;
       --saffron-d: #bf360c;
+      --brand:     #93400e;
+      --brand-l:   #b5541a;
+      --brand-d:   #713010;
       --bg:        #fef8ee;
       --card:      #fffcf7;
       --gold:      #f0c060;
@@ -77,16 +80,17 @@
         linear-gradient(170deg, #fff9f0 0%, #fef5e4 55%, #fdf0d8 100%);
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      padding: 0;
+      padding: 0 env(safe-area-inset-right) calc(72px + env(safe-area-inset-bottom)) env(safe-area-inset-left);
       min-height: 100vh;
+      overflow-x: clip;
     }
 
     /* ── STICKY HEADER ── */
     .site-header {
       position: sticky; top: 0; z-index: 100;
-      background: linear-gradient(150deg, #ff8f00 0%, #e65100 55%, #bf360c 100%);
+      background: linear-gradient(120deg, #99410c, #713010);
       color: white;
-      padding: 13px 16px 11px;
+      padding: calc(13px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) 11px calc(16px + env(safe-area-inset-left));
       box-shadow: 0 4px 20px rgba(150,20,0,.45);
       border-bottom: 3px solid rgba(255,213,0,.55);
     }
@@ -140,12 +144,12 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 8px;
-      padding: 12px 12px 0;
+      padding: 12px 0 0;
     }
     .stat-box {
       background: linear-gradient(160deg, #fffcf5, #fff8e8);
       border: 2px solid var(--gold);
-      border-top: 3px solid var(--saffron);
+      border-top: 3px solid var(--brand);
       border-radius: var(--radius);
       padding: 10px 4px 8px;
       text-align: center;
@@ -153,7 +157,7 @@
     }
     .stat-box .num {
       font-family: 'Cinzel', Georgia, serif;
-      font-size: 1.5rem; font-weight: 800; color: var(--saffron);
+      font-size: 1.5rem; font-weight: 800; color: var(--saffron-d);
       line-height: 1.1;
     }
     .stat-box .lbl { font-size: 0.58rem; color: var(--muted); margin-top: 3px; letter-spacing: .3px; text-transform: uppercase; }
@@ -171,7 +175,7 @@
       color: var(--text); cursor: pointer;
     }
     .start-date-row button {
-      background: linear-gradient(135deg, var(--saffron-l), var(--saffron));
+      background: linear-gradient(135deg, var(--brand-l), var(--brand));
       color: white; border: none; border-radius: 8px;
       padding: 6px 14px; font-size: 0.75rem; font-weight: 600; cursor: pointer;
       box-shadow: 0 2px 6px rgba(183,28,28,.25);
@@ -181,14 +185,14 @@
     .legend {
       display: flex; flex-wrap: wrap;
       justify-content: center; gap: 12px;
-      padding: 8px 12px; font-size: 0.72rem; color: var(--muted);
+      padding: 8px 12px 0; font-size: 0.72rem; color: var(--muted);
     }
-    .legend span { display: flex; align-items: center; gap: 5px; }
+    .legend > span { display: inline-flex; align-items: center; gap: 5px; }
     .leg-dot {
       width: 13px; height: 13px; border-radius: 50%;
-      border: 2px solid var(--saffron); background: white; flex-shrink: 0;
+      border: 2px solid var(--brand); background: var(--card); flex-shrink: 0;
     }
-    .leg-dot.on { background: var(--saffron); }
+    .leg-dot.on { background: var(--brand); }
 
     /* ── DAY CARDS ── */
     .cards-container {
@@ -201,7 +205,7 @@
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       border: 1.5px solid var(--gold);
-      border-left: 4px solid var(--saffron);
+      border-left: 4px solid var(--brand);
       overflow: hidden;
       transition: border-color .2s, box-shadow .2s;
     }
@@ -225,7 +229,7 @@
     }
 
     .day-badge {
-      background: linear-gradient(135deg, #ff8f00, #e65100);
+      background: linear-gradient(135deg, var(--brand-l), var(--brand));
       color: white;
       font-weight: 800; font-size: 0.85rem;
       min-width: 36px; height: 36px;
@@ -273,9 +277,9 @@
       flex-shrink: 0;
       padding: 7px 13px;
       border-radius: 20px;
-      border: 2px solid var(--saffron);
+      border: 2px solid var(--brand);
       background: white;
-      color: var(--saffron);
+      color: var(--brand);
       font-size: 0.8rem; font-weight: 700;
       cursor: pointer; white-space: nowrap;
       transition: all .18s;
@@ -285,9 +289,9 @@
     }
     .temple-btn:active { transform: scale(.93); }
     .temple-btn.done {
-      background: linear-gradient(135deg, var(--saffron-l), var(--saffron));
+      background: linear-gradient(135deg, var(--brand-l), var(--brand));
       color: white;
-      border-color: var(--saffron-d);
+      border-color: var(--brand-d);
       box-shadow: 0 2px 8px rgba(183,28,28,.3);
     }
     .day-card.completed .temple-btn {
@@ -312,7 +316,7 @@
     .mark {
       aspect-ratio: 1;
       border-radius: 50%;
-      border: 2px solid var(--saffron);
+      border: 2px solid var(--brand);
       background: white;
       cursor: pointer;
       display: flex; align-items: center; justify-content: center;
@@ -324,8 +328,8 @@
     }
     .mark:active { transform: scale(.88); }
     .mark.done {
-      background: radial-gradient(circle at 38% 32%, #ff7043, #e64a19, #bf360c);
-      border-color: #bf360c;
+      background: radial-gradient(circle at 38% 32%, var(--brand-l), var(--brand), var(--brand-d));
+      border-color: var(--brand-d);
       color: white;
       box-shadow: 0 1px 6px rgba(183,28,28,.45), inset 0 1px 0 rgba(255,200,150,.25);
     }
@@ -339,7 +343,7 @@
       display: block; width: calc(100% - 24px);
       margin: 0 12px 12px;
       padding: 12px 8px;
-      background: linear-gradient(135deg, #ff8f00, #e65100, #bf360c);
+      background: linear-gradient(135deg, var(--brand-l), var(--brand), var(--brand-d));
       color: white;
       border: none; border-radius: 10px;
       font-size: 0.88rem; font-weight: 700;
@@ -357,8 +361,8 @@
 
     /* ── TODAY CARD ── */
     .day-card.today {
-      border-left-color: #ff8f00;
-      box-shadow: 0 3px 20px rgba(255,143,0,.22), 0 0 0 2px rgba(255,143,0,.14);
+      border-left-color: var(--brand);
+      box-shadow: 0 3px 20px rgba(150,60,0,.18), 0 0 0 2px rgba(150,60,0,.12);
     }
     .day-card.today .card-header {
       background: linear-gradient(90deg, #fff3d0, #fffcf5);
@@ -368,7 +372,7 @@
       display: inline-block;
       font-size: 0.58rem; font-weight: 800; letter-spacing: .8px;
       text-transform: uppercase;
-      background: linear-gradient(135deg, #ff8f00, #e65100);
+      background: linear-gradient(135deg, var(--brand-l), var(--brand));
       color: white; border-radius: 10px;
       padding: 2px 7px; margin-top: 3px;
     }
@@ -387,12 +391,12 @@
     }
     /* The single next mark to tap — pulse highlight */
     .day-card.today .marks-grid .mark.next-mark {
-      box-shadow: 0 0 0 3px rgba(230,81,0,.45);
+      box-shadow: 0 0 0 3px rgba(147,64,14,.45);
       animation: pulseNext 1.8s ease-in-out infinite;
     }
     @keyframes pulseNext {
-      0%,100% { box-shadow: 0 0 0 2px rgba(230,81,0,.3); }
-      50%      { box-shadow: 0 0 0 6px rgba(230,81,0,.55); }
+      0%,100% { box-shadow: 0 0 0 2px rgba(147,64,14,.3); }
+      50%      { box-shadow: 0 0 0 6px rgba(147,64,14,.55); }
     }
 
     /* ── FUTURE DAY (locked) ── */
@@ -426,7 +430,7 @@
     .btn-export { background: #fff3e0; color: var(--saffron); border: 1.5px solid var(--gold); }
     .btn-import { background: #e8f5e9; color: #2e7d32; border: 1.5px solid var(--green-b); }
     .btn-reset  { background: #fce4ec; color: #c62828; border: 1.5px solid #ef9a9a; }
-    .btn-guide  { background: var(--saffron); color: white; }
+    .btn-guide  { background: var(--brand); color: white; }
 
     .btn-export:active, .btn-import:active, .btn-reset:active, .btn-guide:active {
       opacity: .75; transform: scale(.97);
@@ -440,7 +444,7 @@
       -webkit-backdrop-filter: blur(4px);
       z-index: 200;
       align-items: center; justify-content: center;
-      padding: 16px;
+      padding: calc(16px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) calc(16px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
     }
     .modal-overlay.open { display: flex; }
     .modal {
@@ -470,13 +474,13 @@
     }
     .modal .close-btn {
       display: block; width: 100%; margin-top: 16px;
-      padding: 10px; background: var(--saffron); color: white;
+      padding: 10px; background: var(--brand); color: white;
       border: none; border-radius: 10px; font-size: 0.85rem;
       cursor: pointer; font-weight: 600;
     }
     .modal section { margin-bottom: 14px; }
     .modal section h3 {
-      font-size: 0.85rem; color: var(--saffron);
+      font-size: 0.85rem; color: var(--saffron-d);
       margin-bottom: 6px; font-weight: 700;
     }
     .modal textarea {
@@ -497,7 +501,7 @@
 
     .step-num {
       display: inline-block; width: 20px; height: 20px;
-      background: var(--saffron); color: white;
+      background: var(--brand); color: white;
       border-radius: 50%; text-align: center; line-height: 20px;
       font-size: 0.72rem; font-weight: 700; margin-right: 4px;
       flex-shrink: 0;
@@ -524,13 +528,12 @@
     /* ── QUICK LINKS ── */
     .quick-links {
       display: flex; gap: 8px; flex-wrap: wrap;
-      padding: 8px 12px 4px;
-      justify-content: center;
+      padding: 14px 0 4px;
     }
     .qbtn {
-      background: rgba(230,81,0,.08);
-      border: 1.5px solid var(--saffron);
-      color: var(--saffron);
+      background: var(--gold-l);
+      border: 1px solid var(--gold);
+      color: var(--text);
       border-radius: 20px;
       padding: 7px 16px;
       font-size: 0.8rem; font-weight: 600;
@@ -539,15 +542,15 @@
       -webkit-tap-highlight-color: transparent;
       box-shadow: 0 1px 4px rgba(230,81,0,.1);
     }
-    .qbtn:hover { background: rgba(230,81,0,.18); box-shadow: 0 2px 8px rgba(183,28,28,.18); }
+    .qbtn:hover { background: var(--gold); box-shadow: 0 2px 8px rgba(120,60,10,.18); }
     .qbtn.active {
-      background: linear-gradient(135deg, var(--saffron-l), var(--saffron));
-      color: white; border-color: var(--saffron-d);
+      background: linear-gradient(135deg, var(--brand-l), var(--brand));
+      color: white; border-color: var(--brand-d);
       box-shadow: 0 2px 8px rgba(183,28,28,.3);
     }
 
     .manthram-image-panel {
-      display: none; padding: 0 12px 8px;
+      display: none; padding: 12px 0 4px;
     }
     .manthram-image-panel.open { display: block; }
     .manthram-image-panel img {
@@ -571,57 +574,15 @@
     }
     .audio-reset-btn {
       display: block; width: 100%; margin-top: 6px;
-      padding: 7px; background: var(--saffron); color: white;
+      padding: 7px; background: var(--brand); color: white;
       border: none; border-radius: 8px; font-size: 0.75rem;
       font-weight: 600; cursor: pointer;
     }
 
     /* ── ABOUT SECTION ── */
-    .about-section {
-      margin: 10px 12px 0;
-      background: linear-gradient(150deg, #fffcf5, #fff8e8);
-      border: 1.5px solid var(--gold);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-    .about-toggle {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 11px 14px;
-      cursor: pointer;
-      background: linear-gradient(90deg, #fff3e0, #fff8ea);
-      font-size: 0.82rem; font-weight: 700;
-      color: var(--saffron-d);
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .about-toggle:hover { background: linear-gradient(90deg, #ffe8b8, #fff0d0); }
-    .about-toggle .chevron { transition: transform .2s; font-size: 0.7rem; }
-    .about-toggle.open .chevron { transform: rotate(180deg); }
-    .about-body {
-      display: none;
-      padding: 14px 16px;
-      font-size: 0.82rem; line-height: 1.7;
-      color: var(--text);
-      border-top: 1px solid var(--gold);
-    }
-    .about-body.open { display: block; }
+    .about-body { padding-top: 12px; font-size: 0.85rem; line-height: 1.7; color: var(--text); }
     .about-body p { margin-bottom: 10px; }
     .about-body p:last-of-type { margin-bottom: 0; }
-    .about-user-card {
-      display: flex; align-items: center; gap: 12px;
-      margin-top: 12px; padding: 12px;
-      background: linear-gradient(135deg, #fff3e0, #fff8ea);
-      border: 2px solid var(--gold);
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(150,60,0,.08);
-    }
-    .about-user-card .avatar { font-size: 2rem; line-height: 1; }
-    .about-user-card .name {
-      font-family: 'Cinzel', Georgia, serif;
-      font-weight: 700; font-size: 0.95rem; color: var(--saffron-d);
-    }
-    .about-user-card .sub { font-size: 0.68rem; color: var(--muted); margin-top: 3px; }
 
     /* ── RESET BUTTON (header) ── */
     .reset-hbtn {
@@ -680,7 +641,7 @@
     .btn-load-json:hover { background: #c8e6c9; }
     .btn-start-fresh {
       padding: 12px 10px;
-      background: linear-gradient(135deg, var(--saffron-l), var(--saffron));
+      background: linear-gradient(135deg, var(--brand-l), var(--brand));
       color: white; border: none; border-radius: 10px;
       font-size: 0.85rem; font-weight: 600;
       cursor: pointer; transition: opacity .2s;
@@ -692,22 +653,8 @@
     }
 
     /* ── FOOTER ── */
-    .site-footer {
-      margin: 4px 12px 28px;
-      padding: 20px 18px 18px;
-      background: linear-gradient(150deg, #fffcf5, #fff8e8);
-      border: 1.5px solid var(--gold);
-      border-top: 3px solid var(--saffron);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      text-align: center;
-    }
-    .footer-om {
-      font-size: 1.8rem;
-      animation: omGlow 2.5s ease-in-out infinite alternate;
-      display: block;
-      margin-bottom: 8px;
-    }
+    .site-footer { text-align: center; }
+    .footer-mark { display: block; margin: 0 auto 10px; }
     .footer-name {
       font-family: 'Cinzel', Georgia, serif;
       font-size: 1rem; font-weight: 800;
@@ -715,57 +662,24 @@
       letter-spacing: 1px;
       margin-bottom: 4px;
     }
-    .footer-tagline {
-      font-size: 0.75rem;
-      color: var(--muted);
-      line-height: 1.6;
-      margin-bottom: 14px;
-    }
-    .footer-divider {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      margin: 12px 0;
-    }
-    .footer-links {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 14px;
-    }
+    .footer-tagline { font-size: 0.8rem; color: var(--muted); line-height: 1.6; margin-bottom: 14px; }
+    .footer-divider { height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 12px 0; }
+    .footer-links { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 14px; }
     .footer-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 16px;
-      background: linear-gradient(135deg, rgba(230,81,0,.08), rgba(230,81,0,.04));
-      border: 1.5px solid var(--saffron);
+      display: inline-flex; align-items: center; gap: 6px;
+      min-height: 44px; padding: 8px 16px;
+      background: var(--gold-l);
+      border: 1px solid var(--gold);
       border-radius: 20px;
-      color: var(--saffron-d);
-      font-size: 0.78rem; font-weight: 700;
-      text-decoration: none;
-      transition: all .2s;
-      box-shadow: 0 1px 5px rgba(183,28,28,.1);
+      color: var(--text);
+      font: inherit; font-size: 0.82rem; font-weight: 600;
+      text-decoration: none; cursor: pointer;
+      transition: background .2s, color .2s;
     }
-    .footer-link:hover {
-      background: linear-gradient(135deg, var(--saffron-l), var(--saffron));
-      color: white;
-      border-color: var(--saffron-d);
-      box-shadow: 0 3px 12px rgba(183,28,28,.3);
-      transform: translateY(-1px);
-    }
+    .footer-link:hover { background: var(--brand); color: white; border-color: var(--brand-d); }
     .footer-link .link-icon { font-size: 1rem; }
-    .footer-copy {
-      font-size: 0.66rem;
-      color: var(--muted);
-      opacity: .75;
-      line-height: 1.6;
-    }
-    .footer-copy a {
-      color: var(--saffron);
-      text-decoration: none;
-      font-weight: 600;
-    }
+    .footer-copy { font-size: 0.7rem; color: var(--muted); line-height: 1.6; margin-top: 6px; }
+    .footer-copy a { color: var(--saffron-d); text-decoration: none; font-weight: 600; }
 
     /* ── PRINT ── */
     @media print {
@@ -777,7 +691,7 @@
 
     /* toast */
     #toast {
-      position: fixed; left: 50%; transform: translateX(-50%); bottom: 110px;
+      position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(84px + env(safe-area-inset-bottom));
       background: rgba(0,0,0,0.8); color: white; padding: 8px 12px; border-radius: 8px;
       font-size: 0.9rem; z-index: 300; display: none; box-shadow: 0 6px 18px rgba(0,0,0,0.3);
     }
@@ -785,50 +699,37 @@
     /* quote celebration overlay */
     .quote-overlay {
       position: fixed; inset: 0; z-index: 300;
-      background: rgba(30,8,0,.72);
+      background: #100b08cc;
       backdrop-filter: blur(5px);
       -webkit-backdrop-filter: blur(5px);
       display: none; align-items: center; justify-content: center;
-      padding: 20px;
+      padding: calc(16px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) calc(16px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
     }
     .quote-overlay.open { display: flex; }
     .quote-box {
-      background: linear-gradient(150deg, #fffcf5, #fff8e8, #fff3d8);
-      border-radius: 20px;
-      max-width: 420px; width: 100%;
-      max-height: 90vh; overflow-y: auto;
-      padding: 28px 24px 24px;
-      box-shadow: 0 16px 48px rgba(0,0,0,.35);
-      border: 2px solid var(--gold);
+      background: var(--card);
+      color: var(--text);
+      border-radius: 22px;
+      max-width: 440px; width: 100%;
+      max-height: 90dvh; overflow-y: auto;
+      padding: clamp(20px, 5vw, 30px);
+      box-shadow: 0 20px 80px #0005;
+      border: 1px solid var(--gold);
       text-align: center;
     }
-    .quote-om { font-size: 2.4rem; animation: omGlow 2.5s ease-in-out infinite alternate; display: block; margin-bottom: 10px; }
-    .quote-day-label { font-size: 0.73rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; }
-    .quote-text {
-      font-size: 0.92rem; color: var(--text); line-height: 1.75;
-      font-style: italic; margin-bottom: 10px;
-      border-left: 3px solid var(--saffron);
-      padding: 8px 12px; text-align: left;
-      background: rgba(255,193,7,.07); border-radius: 0 8px 8px 0;
+    .quote-mark { display: block; margin: 0 auto 12px; }
+    .quote-eyebrow { text-align: center; }
+    .quote-day-label {
+      font-family: 'Cinzel', Georgia, serif;
+      font-size: clamp(1.05rem, 3vw, 1.35rem); line-height: 1.4;
+      color: var(--text); margin-bottom: 14px; overflow-wrap: anywhere;
     }
-    .quote-source { font-size: 0.7rem; color: var(--muted); margin-bottom: 6px; }
-    .quote-close-btn {
-      padding: 10px 32px;
-      background: linear-gradient(135deg, var(--saffron-l), var(--saffron));
-      color: white; border: none; border-radius: 10px;
-      font-size: 0.85rem; font-weight: 700; cursor: pointer;
-      box-shadow: 0 3px 10px rgba(183,28,28,.3);
-      transition: opacity .2s;
-    }
-    .quote-close-btn:hover { opacity: .88; }
-
-    /* quote verse metadata */
     .quote-verse-meta {
       display: flex; align-items: center; justify-content: center;
       gap: 6px; flex-wrap: wrap; margin-bottom: 4px;
     }
     .quote-chapter-badge {
-      background: linear-gradient(135deg, var(--saffron-l), var(--saffron));
+      background: var(--brand);
       color: white; font-size: 0.62rem; font-weight: 700; letter-spacing: 1px;
       padding: 3px 9px; border-radius: 999px; text-transform: uppercase;
     }
@@ -838,34 +739,42 @@
       padding: 2px 8px; border-radius: 999px;
     }
     .quote-chapter-name {
-      font-size: 0.63rem; color: var(--muted); font-style: italic;
+      font-size: 0.68rem; color: var(--muted); font-style: italic;
       width: 100%; text-align: center; margin-bottom: 12px; letter-spacing: 0.3px;
     }
+    .quote-text {
+      font-size: 0.95rem; color: var(--text); line-height: 1.75;
+      font-style: italic; margin-bottom: 10px;
+      border: 1px solid var(--gold); border-left: 3px solid var(--brand);
+      padding: 10px 14px; text-align: left;
+      background: var(--gold-l); border-radius: 0 10px 10px 0;
+    }
+    .quote-source { font-size: 0.72rem; color: var(--muted); margin-bottom: 6px; }
     .quote-context {
-      font-size: 0.71rem; color: var(--muted); line-height: 1.65;
-      margin: 8px 0 16px; text-align: left;
-      border-top: 1px solid rgba(240,192,96,0.5); padding-top: 10px;
+      font-size: 0.78rem; color: var(--muted); line-height: 1.65;
+      margin: 8px 0 4px; text-align: left;
+      border-top: 1px solid var(--gold); padding-top: 10px;
     }
-    .quote-actions {
-      display: flex; gap: 8px; justify-content: center; margin-bottom: 10px;
-    }
-    .quote-share-btn {
-      padding: 8px 18px;
-      background: rgba(230,81,0,.1);
-      color: var(--saffron-d); border: 1.5px solid var(--saffron);
-      border-radius: 10px; font-size: 0.78rem; font-weight: 600; cursor: pointer;
+    .quote-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+    .quote-share-btn, .quote-close-btn {
+      min-height: 44px; padding: 10px 14px;
+      border: 1px solid var(--gold); border-radius: 10px;
+      background: var(--gold-l); color: var(--text);
+      font: inherit; font-size: 0.88rem; font-weight: 600; cursor: pointer; line-height: 1.4;
       transition: background .2s;
     }
-    .quote-share-btn:hover { background: rgba(230,81,0,.2); }
+    .quote-share-btn:hover { background: var(--gold); }
+    .quote-close-btn.primary-action { background: var(--brand); color: white; border-color: var(--brand); }
+    .quote-close-btn.primary-action:hover { background: var(--brand-d); }
 
     /* onboard modal (tooltip-like) */
     .onboard-modal .note { font-size:0.95rem; color:var(--text); line-height:1.5; margin:6px 0; }
     .onboard-modal .pill { display:inline-block; padding:6px 10px; border-radius:999px; background:var(--gold-l); border:1.5px solid var(--gold); color:var(--saffron-d); font-weight:700; }
     .onboard-modal .modal { background: linear-gradient(160deg,#fffaf0,#fff6e6); border-radius:14px; padding:18px; box-shadow:0 10px 36px rgba(0,0,0,.12); }
-    .onboard-modal .icon { font-size:2.6rem; line-height:1; width:56px; height:56px; border-radius:12px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,var(--saffron-l),var(--saffron)); color:white; box-shadow:0 4px 12px rgba(230,81,0,.18); }
+    .onboard-modal .icon { font-size:2.6rem; line-height:1; width:56px; height:56px; border-radius:12px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,var(--brand-l),var(--brand)); color:white; box-shadow:0 4px 12px rgba(230,81,0,.18); }
     .onboard-modal .actions { display:flex; gap:10px; justify-content:center; align-items:center; margin-top:12px; flex-wrap:nowrap; }
     .onboard-modal .actions button { padding:8px 12px; font-size:0.92rem; border-radius:10px; white-space:nowrap; }
-    .onboard-modal .actions .primary { background: linear-gradient(135deg,var(--saffron-l),var(--saffron)); color:white; border:none; }
+    .onboard-modal .actions .primary { background: linear-gradient(135deg,var(--brand-l),var(--brand)); color:white; border:none; }
     .onboard-modal .actions .secondary { background:#f5f5f5; color:#444; border:1px solid #e5e5e5; }
     @media (max-width:560px) {
       .onboard-modal .icon { width:48px; height:48px; font-size:1.8rem; }
@@ -891,14 +800,18 @@
     .hbtn, .reset-hbtn { min-height: 44px; }
     .about-toggle { width: 100%; border: 0; font: inherit; text-align: left; }
     .mark { font-family: inherit; touch-action: manipulation; padding: 0; }
-    .day-card:focus-visible { outline: 3px solid var(--saffron-l); outline-offset: 2px; }
+    .day-card:focus-visible { outline: 3px solid var(--accent-ink); outline-offset: 2px; }
     .card-count-badge { display: inline-block; margin: 5px 4px 0 0; }
     .card-header-info .day-line { white-space: normal; overflow: visible; }
     .card-header-info .day-date-txt { display: inline-block; margin-left: 0; }
-    :where(a, button, input, [tabindex]):focus-visible { outline: 3px solid var(--saffron-l); outline-offset: 3px; }
+    :where(a, button, input, [tabindex]):focus-visible { outline: 3px solid var(--accent-ink); outline-offset: 3px; }
     .floating-nav button:hover { background: var(--gold-l); }
-    button:focus-visible, .mark:focus-visible { outline: 3px solid var(--saffron-l); outline-offset: 3px; }
+    button:focus-visible, .mark:focus-visible { outline: 3px solid var(--accent-ink); outline-offset: 3px; }
     .site-footer { padding-bottom: calc(90px + env(safe-area-inset-bottom)); }
+    @media (max-width: 360px) {
+      .marks-grid { gap: 5px; padding: 10px; }
+      .mark { min-height: 28px; }
+    }
     @media (max-width: 540px) {
       .header-top { flex-wrap: wrap; }
       .header-actions { margin-left: auto; }
@@ -928,6 +841,8 @@
       [data-theme="dark"] :is(.day-card.completed .day-line, .day-card.completed .day-date-txt, .day-card.completed .card-count-badge) { color: #a5d6a7; }
       [data-theme="dark"] :is(.audio-reset-btn, .modal .close-btn, .step-num) { background: #a9470b; }
       [data-theme="dark"] .btn-export { background: var(--gold-l); }
+      [data-theme="dark"] :is(.temple-btn:not(.done), .leg-dot:not(.on), .mark:not(.done)) { border-color: var(--saffron-d); }
+      [data-theme="dark"] .temple-btn:not(.done) { color: var(--saffron-d); }
       [data-theme="dark"] .reset-warn { background: #432323; color: #ffb4b4; }
     }
     @media print { .floating-nav { display: none; } }
@@ -975,80 +890,43 @@
       <label class="note-label" for="dailyNote">A note for today <span>(optional)</span></label><textarea id="dailyNote" maxlength="2000" rows="2" placeholder="A thought, intention, or temple visited…"></textarea><button id="saveNote" onclick="saveDailyNote()">Save note</button>
     </div>
   </div>
-  <div class="guided-player" aria-label="Guided chanting">
-    <div class="section-heading"><h3>Listen &amp; chant</h3><span id="sessionTime">Session · 00:00</span></div>
+  <details class="guided-player" id="guidedPlayer" data-remember open>
+    <summary class="panel-summary"><span class="panel-title">Listen &amp; chant</span><span id="sessionTime">Session · 00:00</span></summary>
     <div class="action-row"><label>Recording <select id="audioVersion" onchange="selectRecording()"><option value="1">Manthram V1</option><option value="2">Manthram V2</option></select></label><button id="audioToggle" onclick="toggleGuidedAudio()">▶ Play</button><label>Speed <select id="audioSpeed" onchange="saveAudioPreferences()"><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option></select></label><label>Pause between chants <select id="audioGap" onchange="saveAudioPreferences()"><option value="0">None</option><option value="2">2 seconds</option><option value="5">5 seconds</option><option value="10">10 seconds</option></select></label></div>
     <label class="check-label"><input type="checkbox" id="stopAfter"/> Stop after this repetition</label><p class="quiet" id="audioHint">Each finished recording adds one chant to today’s count.</p>
-  </div>
+  </details>
 </section>
-<section class="companion-panel"><h2>Your practice at a glance</h2><div id="practiceInsights" class="insights-row"></div><div id="weeklyHistory" class="weekly-history" aria-label="Last seven days"></div></section>
-<section class="companion-panel" aria-labelledby="journeyHeading"><div class="section-heading"><div><div class="eyebrow">ONE DAY AT A TIME</div><h2 id="journeyHeading">Your 48-day journey</h2></div><span id="journeySummary"></span></div><div id="journeyGrid" class="journey-grid"></div><p class="quiet">○ Not recorded · ◐ In progress · ✓ Complete · · Upcoming</p></section>
-<details class="companion-panel settings-panel"><summary>Settings, reminders &amp; previous cycles</summary>
+<section class="companion-panel" aria-labelledby="journeyHeading"><div class="section-heading"><div><div class="eyebrow">ONE DAY AT A TIME</div><h2 id="journeyHeading">Your 48-day journey</h2></div><span id="journeySummary"></span></div><div id="journeyGrid" class="journey-grid"></div><p class="quiet">○ Not recorded · ◐ In progress · ✓ Complete · · Upcoming · Tap a day to review or correct it.</p></section>
+<details class="companion-panel" id="dayDetails"><summary class="panel-summary"><span class="panel-title">Day details &amp; corrections</span><span class="quiet">Tap a day above to open it</span></summary><div class="cards-container" id="cardsContainer"></div>
+  <p class="quiet legend"><span><span class="leg-dot"></span> Pending chant</span><span><span class="leg-dot on"></span> Done chant</span><span>☐ Temple visit</span><span>✓ Full day complete</span></p></details>
+<details class="companion-panel" id="glancePanel" data-remember open><summary class="panel-summary"><span class="panel-title">Your practice at a glance</span></summary>
+  <div class="stats-row">
+    <div class="stat-box"><div class="num" id="sDays">0</div><div class="lbl">Days Done</div></div>
+    <div class="stat-box"><div class="num" id="sTemple">0</div><div class="lbl">Temple Visits</div></div>
+    <div class="stat-box"><div class="num" id="sChants">0</div><div class="lbl">Chantings</div></div>
+    <div class="stat-box"><div class="num" id="sLeft">48</div><div class="lbl">Days Remaining</div></div>
+  </div>
+  <div id="practiceInsights" class="insights-row"></div><div id="weeklyHistory" class="weekly-history" aria-label="Last seven days"></div></details>
+<details class="companion-panel settings-panel" id="settingsPanel" data-remember><summary class="panel-summary"><span class="panel-title">Settings, reminders &amp; previous cycles</span></summary>
   <form id="practiceConfigForm" class="goal-settings"><h3>Goals for <span id="configPracticeName"></span></h3><div class="goal-fields"><label>Chants per day <input type="number" id="configChants" min="1" max="1008" required/></label><label>Number of days <input type="number" id="configDays" min="1" max="365" required/></label><button type="submit" class="primary-action">Save practice goals</button></div><div class="action-row" aria-label="Chant target presets"><span class="quiet">Quick targets</span><button type="button" onclick="document.getElementById('configChants').value=21">21</button><button type="button" onclick="document.getElementById('configChants').value=54">54</button><button type="button" onclick="document.getElementById('configChants').value=108">108</button><button type="button" onclick="document.getElementById('configChants').value=1008">1008</button></div><label class="check-label"><input type="checkbox" id="configTemple"/> Require a temple visit to complete a day</label><p class="quiet" id="goalProjection"></p><p class="quiet">Recorded counts are kept. Changing your target recalculates completion. Cookies preserve targets and daily counts; notes and archives are kept in browser storage and backups.</p><p id="configMessage" role="status"></p></form><div class="settings-grid"><section><h3>Your preferences</h3><label>Reading size <input id="readingSize" type="range" min="16" max="32" value="20" oninput="setReadingSize(this.value)"/></label><label class="check-label"><input type="checkbox" id="completionSound" onchange="saveAudioPreferences()"/> Gentle completion chime</label><label class="check-label"><input type="checkbox" id="hapticFeedback" onchange="saveAudioPreferences()"/> Vibration feedback (supported devices)</label></section>
   <section><h3>Daily reminder</h3><label>Local time <input type="time" id="reminderTime" value="07:00"/></label><button onclick="downloadReminder()">Add to my calendar</button><p class="quiet">Download a recurring reminder for your calendar app.</p></section>
   <section><h3>Keep your progress</h3><button onclick="exportJSON()">Download selected practice</button><button onclick="document.getElementById('importFileInput').click()">Restore backup</button><p class="quiet" id="lastBackup">No backup downloaded yet.</p><p class="quiet">Saved in this browser. Back up to move devices or keep a separate copy.</p></section>
   <section><h3>A new beginning</h3><label>Next cycle’s start <input type="date" id="nextCycleDate"/></label><button onclick="archiveAndRestart()">Archive this cycle &amp; start another</button><p class="quiet">Your current cycle and notes stay in the archive.</p></section></div><div id="archiveList"></div>
 </details>
-</main>
-
-<!-- ── STATS ── -->
-<div class="stats-row">
-  <div class="stat-box"><div class="num" id="sDays">0</div><div class="lbl">Days Done</div></div>
-  <div class="stat-box"><div class="num" id="sTemple">0</div><div class="lbl">Temple Visits</div></div>
-  <div class="stat-box"><div class="num" id="sChants">0</div><div class="lbl">Chantings</div></div>
-  <div class="stat-box"><div class="num" id="sLeft">48</div><div class="lbl">Days Remaining</div></div>
-</div>
-
-<!-- ── START DATE ── -->
-<div class="start-date-row" id="startDateRow">
-  <label for="startDate">Vratha Start Date:</label>
-  <input type="date" id="startDate"/>
-  <button onclick="applyStartDate()">Auto-fill dates</button>
-</div>
-
-<!-- ── LEGEND ── -->
-<div class="legend">
-  <span><span class="leg-dot"></span> Pending chant</span>
-  <span><span class="leg-dot on"></span> Done chant</span>
-  <span>☐ Temple visit</span>
-  <span>🟩 Full day complete</span>
-</div>
-
-<!-- ── ABOUT ── -->
-<div class="about-section">
-  <button type="button" class="about-toggle" id="aboutToggle" onclick="toggleAbout()" aria-expanded="false" aria-controls="aboutBody">
-    <span>ℹ About this Vratha &amp; Tracker</span>
-    <span class="chevron" aria-hidden="true">▼</span>
-  </button>
-  <div class="about-body" id="aboutBody">
+<details class="companion-panel about-section" id="aboutPanel" data-remember><summary class="panel-summary"><span class="panel-title">About the Ganapati Vratha &amp; reference sheets</span></summary>
+  <div class="about-body">
     <p><strong>Ganapati Vratha</strong> is a sacred 48-day penance dedicated to Lord Ganesha — the remover of obstacles and the bestower of wisdom and auspiciousness. Devotees observe strict discipline during this period: chanting the Ganapati Manthram <strong>21 times every day</strong> without interruption, visiting the temple daily, and maintaining purity of body, mind, and speech.</p>
     <p>This 48-day Vratha is rooted in the belief that sincere and unbroken devotion to Ganapati removes life's obstacles, brings peace and prosperity, and earns the divine grace of Lord Ganapati for the devotee and their entire family.</p>
-    <!-- <div class="about-user-card">
-      <div class="avatar">🙏</div>
-      <div>
-        <div class="name">Chandra</div>
-        <div class="sub">Personal Vratha Tracker · 48 Days · 21 Chantings Daily</div>
-      </div>
-    </div> -->
   </div>
-</div>
-
-<!-- ── QUICK LINKS ── -->
-<div class="quick-links">
-  <button class="qbtn" id="qImgBtn" onclick="toggleManthramImage()">📜 Manthram (Telugu)</button>
-  <button class="qbtn" id="qEngBtn" onclick="toggleManthramEnglish()">📖 Manthram (English)</button>
-  <button class="qbtn" id="qAudioBtn1" onclick="toggleAudioPanel(1)">🔊 Play Manthram V1 (21×)</button>
-  <button class="qbtn" id="qAudioBtn2" onclick="toggleAudioPanel(2)">🔊 Play Manthram V2 (21×)</button>
-</div>
-
-<div class="manthram-image-panel" id="manthramImagePanel">
-  <img src="Manthram.png" alt="Manthram in Telugu"/>
-</div>
-
-<div class="manthram-image-panel" id="manthramEnglishPanel">
-  <img src="Manthram_English.png" alt="Manthram in English"/>
-</div>
-
+  <div class="quick-links">
+    <button class="qbtn" id="qImgBtn" onclick="toggleManthramImage()">📜 Manthram (Telugu)</button>
+    <button class="qbtn" id="qEngBtn" onclick="toggleManthramEnglish()">📖 Manthram (English)</button>
+    <button class="qbtn" id="qAudioBtn1" onclick="toggleAudioPanel(1)">🔊 Play Manthram V1 (21×)</button>
+    <button class="qbtn" id="qAudioBtn2" onclick="toggleAudioPanel(2)">🔊 Play Manthram V2 (21×)</button>
+  </div>
+  <div class="manthram-image-panel" id="manthramImagePanel"><img src="Manthram.png" alt="Manthram in Telugu"/></div>
+  <div class="manthram-image-panel" id="manthramEnglishPanel"><img src="Manthram_English.png" alt="Manthram in English"/></div>
+</details>
 <div class="audio-panel" id="audioPanel1">
   <audio id="manthramAudio1" src="Manthram.mpeg" controls preload="metadata"></audio>
   <div class="audio-count" id="audioCount1" role="status" aria-live="polite">Chanting Counter: 0 / 21</div>
@@ -1059,9 +937,14 @@
   <div class="audio-count" id="audioCount2" role="status" aria-live="polite">Chanting Counter: 0 / 21</div>
   <button class="audio-reset-btn" onclick="resetAudio(2)">↺ Reset count</button>
 </div>
+</main>
 
-<!-- ── CARDS ── -->
-<details class="companion-panel" id="dayDetails"><summary>Selected day &amp; corrections</summary><div class="cards-container" id="cardsContainer"></div></details>
+<!-- ── START DATE ── -->
+<div class="start-date-row" id="startDateRow">
+  <label for="startDate">Vratha Start Date:</label>
+  <input type="date" id="startDate"/>
+  <button onclick="applyStartDate()">Auto-fill dates</button>
+</div>
 
 <!-- ── WELCOME / IMPORT MODAL ── -->
 <div class="modal-overlay" id="welcomeModal">
@@ -1121,8 +1004,8 @@
 
 
 <!-- ── FOOTER ── -->
-<footer class="site-footer">
-  <span class="footer-om">🕉</span>
+<footer class="site-footer companion-panel" id="pageBottom" tabindex="-1">
+  <img class="brand-mark footer-mark" src="assets/icon-192.png" width="52" height="52" alt=""/>
   <div class="footer-name">Chandra Lanka</div>
   <div class="footer-tagline">
     Devotee · Technology Enthusiast · Builder of things that matter<br/>
@@ -1140,14 +1023,13 @@
   <div class="footer-copy">
     Built for personal devotional use · Naam Jaap &amp; Vratha Tracker<br/>
   </div>
-  <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:8px">
-    <button class="qbtn" onclick="sharePage()">🔗 Share</button>
-    <button class="qbtn" onclick="captureProgress()">📸 Progress</button>
-    <a class="qbtn" href="https://github.com/chandra-79/vratha" target="_blank" rel="noopener noreferrer"
-       title="If this tracker is useful to you, please give it a ⭐ on GitHub to help others discover it!"
-       style="text-decoration:none">⭐ Star on GitHub</a>
+  <div class="footer-links">
+    <button class="footer-link" type="button" onclick="sharePage()"><span class="link-icon">🔗</span> Share</button>
+    <button class="footer-link" type="button" onclick="captureProgress()"><span class="link-icon">📸</span> Progress card</button>
+    <a class="footer-link" href="https://github.com/chandra-79/vratha" target="_blank" rel="noopener noreferrer"
+       title="If this tracker is useful to you, please give it a ⭐ on GitHub to help others discover it!"><span class="link-icon">⭐</span> Star on GitHub</a>
   </div>
-  <p style="font-size:0.68rem;color:var(--muted);text-align:center;margin-top:6px;line-height:1.5">
+  <p class="footer-copy">
     Found this helpful? A ⭐ on GitHub helps more devotees discover this tracker 🙏
   </p>
 </footer>
@@ -1155,8 +1037,9 @@
 <!-- Quote Celebration Overlay -->
 <div id="quoteOverlay" class="quote-overlay" onclick="if(event.target===this)closeGitaQuote()">
   <div class="quote-box">
-    <span class="quote-om">🕉</span>
-    <div class="quote-day-label" id="quoteDayLabel">Day 1 Complete 🙏</div>
+    <img class="brand-mark quote-mark" src="assets/icon-192.png" width="52" height="52" alt=""/>
+    <div class="eyebrow quote-eyebrow">TODAY’S BLESSING</div>
+    <h2 class="quote-day-label" id="quoteDayLabel">Day 1 complete 🙏</h2>
     <div class="quote-verse-meta">
       <span class="quote-chapter-badge" id="quoteChapterBadge">Chapter 2</span>
       <span class="quote-verse-num" id="quoteVerseNum">Verse 47</span>
@@ -1165,14 +1048,15 @@
     <div class="quote-text" id="quoteText"></div>
     <div class="quote-source">— Bhagavad Gita</div>
     <div class="quote-context" id="quoteContext"></div>
-    <button class="quote-share-btn" style="margin-bottom:10px" onclick="captureProgress()">📸 Share Progress</button>
-    <button class="quote-close-btn" onclick="closeGitaQuote()">🙏 Continue</button>
+    <div class="action-row quote-actions">
+      <button class="quote-share-btn" type="button" onclick="captureProgress()">📸 Share progress</button>
+      <button class="quote-close-btn primary-action" type="button" onclick="closeGitaQuote()">🙏 Continue</button>
+    </div>
   </div>
 </div>
 
 <nav class="floating-nav" aria-label="Page navigation">
-  <button id="navTop" type="button" onclick="scrollToTop()" aria-label="Go to top" title="Go to top"><span aria-hidden="true">↑</span></button>
-  <button id="navToday" type="button" onclick="scrollToToday(true)" aria-label="Go to today" title="Go to today"><span aria-hidden="true">↓</span></button>
+  <button id="navJump" type="button" onclick="jumpPage()" aria-label="Go to bottom" title="Go to bottom" data-direction="bottom"><span aria-hidden="true">↓</span></button>
 </nav>
 
 <dialog id="focusDialog" class="practice-dialog" aria-labelledby="focusHeading"><div class="section-heading"><h2 id="focusHeading">One chant at a time</h2><button onclick="closeFocus()" aria-label="Exit focus mode">✕</button></div><p id="focusDay" class="quiet"></p><p id="focusMantra" class="focus-mantra"></p><button class="chant-ring focus-ring" id="focusTap" onclick="countChant()" aria-label="Count one chant"><span><strong id="focusCount">0</strong><small>of 21 chants</small></span></button><p id="focusHint">Tap the circle or press Space.</p><div class="action-row"><button id="focusUndo" onclick="undoPractice()" disabled>↶ Undo</button><button id="focusAudio" onclick="toggleGuidedAudio()">▶ Audio</button></div><p class="quiet">Space counts · Backspace undoes · Escape exits</p></dialog>
@@ -1192,7 +1076,7 @@
         <p class="note">Choose a practice, or use <strong>＋ Add your mantra</strong> for your own text, reading sheets and recording. Set its chant target and number of days in Settings. Download a backup to keep your progress and uploads.</p>
         <p class="note">Tap each circle to mark a chanting, then press <span class="pill">Temple</span> to record your visit for the day.</p>
         <p class="note">On completing your daily goal and any required temple visit, you will receive a verse from the Bhagavad Gita as a blessing. 🙏</p>
-        <p class="note">Use <span class="pill">📸 Progress</span> in the footer to capture a shareable progress card of completed days. Use <span class="pill">🔗 Share</span> to share the tracker link. This app also supports offline use — add it to your homescreen.</p>
+        <p class="note">Use <span class="pill">📸 Progress card</span> in the footer to capture a shareable progress card of completed days. Use <span class="pill">🔗 Share</span> to share the tracker link. This app also supports offline use — add it to your homescreen.</p>
       </div>
     </div>
     <div class="actions" style="margin-top:6px">
@@ -1236,7 +1120,7 @@ function applyTheme(theme) {
   button.textContent = dark ? '☀ Light' : '☾ Dark';
   button.setAttribute('aria-pressed', String(dark));
   button.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
-  document.querySelector('meta[name="theme-color"]').content = dark ? '#171310' : '#e65100';
+  document.querySelector('meta[name="theme-color"]').content = dark ? '#171310' : '#99410c';
 }
 function toggleTheme() {
   const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
@@ -1250,6 +1134,27 @@ function scrollToTop() {
   document.getElementById('pageTop').focus({ preventScroll: true });
   window.scrollTo({ top: 0, behavior: scrollBehavior() });
 }
+function scrollToBottom() {
+  document.getElementById('pageBottom').focus({ preventScroll: true });
+  window.scrollTo({ top: document.documentElement.scrollHeight, behavior: scrollBehavior() });
+}
+// One arrow: points down from the top half of the page, up from the bottom half.
+function jumpPage() {
+  if (document.getElementById('navJump').dataset.direction === 'top') scrollToTop(); else scrollToBottom();
+}
+
+// Collapsible panels marked data-remember keep their open state on this device.
+(function rememberPanels() {
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem('vratha_panels')) || {}; } catch (_) {}
+  document.querySelectorAll('details[data-remember]').forEach(panel => {
+    if (typeof saved[panel.id] === 'boolean') panel.open = saved[panel.id];
+    panel.addEventListener('toggle', () => {
+      saved[panel.id] = panel.open;
+      try { localStorage.setItem('vratha_panels', JSON.stringify(saved)); } catch (_) {}
+    });
+  });
+})();
 applyTheme(document.documentElement.dataset.theme);
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
   try { if (!localStorage.getItem('vratha_theme')) applyTheme(event.matches ? 'dark' : 'light'); } catch (_) {}
@@ -1295,7 +1200,26 @@ function sharePage() {
 }
 
 // ── PROGRESS SCREENSHOT (pure Canvas API — no external library) ──
-function captureProgress() {
+// Colours come from the live theme tokens so the card matches light or dark mode.
+function _cardPalette() {
+  const css = getComputedStyle(document.documentElement);
+  const v = name => css.getPropertyValue(name).trim();
+  return {
+    dark: document.documentElement.dataset.theme === 'dark',
+    bg: v('--bg'), card: v('--card'), gold: v('--gold'), goldL: v('--gold-l'),
+    text: v('--text'), muted: v('--muted'), accent: v('--saffron-d'),
+    brand: '#93400e', brandL: '#b5541a', brandD: '#713010',
+    barTrack: 'rgba(0,0,0,.2)', barFill: ['#ffe082', '#ffd740', '#ffab00']
+  };
+}
+function _loadBrandMark() {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => resolve(img); img.onerror = () => resolve(null);
+    img.src = 'assets/icon-192.png';
+  });
+}
+async function captureProgress() {
   // Collect current stats
   let doneD = 0, templeV = 0, totalC = 0;
   for (let d = 1; d <= DAYS; d++) {
@@ -1308,58 +1232,42 @@ function captureProgress() {
   }
   const pct  = Math.round((doneD / DAYS) * 100);
   const dLeft = DAYS - doneD;
-
   const q = _currentQuote; // null if opened from footer before any day completed
+  const P = _cardPalette();
+  const [mark] = await Promise.all([_loadBrandMark(), document.fonts.load('700 18px Cinzel').catch(() => {})]);
+  const SANS = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif';
+  const SERIF = 'Cinzel, Georgia, serif';
 
-  // ── Grid: smaller cells, 8 cols → 6 rows ──
+  // ── Day grid ──
   const W = 480, PAD = 24;
-  const COLS = 8, CELL = 30, CGAP = 4;
-  const GROW   = Math.ceil(DAYS / COLS);                   // 6 rows
-  const GRID_W = COLS * CELL + (COLS - 1) * CGAP;         // 268
-  const GRID_H = GROW * CELL + (GROW - 1) * CGAP;         // 200
+  const COLS = DAYS > 60 ? 10 : 8, CELL = DAYS > 60 ? 24 : 30, CGAP = 4;
+  const GROW   = Math.ceil(DAYS / COLS);
+  const GRID_W = COLS * CELL + (COLS - 1) * CGAP;
+  const GRID_H = GROW * CELL + (GROW - 1) * CGAP;
   const GRID_X = (W - GRID_W) / 2;
 
-  // ── Pre-measure quote text on an off-screen canvas ──
-  // Quote text-layout constants (used in both height calc and drawing)
-  const Q_CARD_PAD = 10; // inside-card top & bottom padding
-  const Q_CARD_GAP = 20; // gap between card bottom and context block
-  const Q_CTX_LEAD = 12; // extra top lead before context so ascenders clear the card
-  const Q_LINE_H   = 22; // quote line-height (13 px font)
-  const CTX_LINE_H = 18; // context line-height (10.5 px font)
-
+  // ── Pre-measure quote text ──
+  const Q_CARD_PAD = 12, Q_CARD_GAP = 18, Q_CTX_LEAD = 12, Q_LINE_H = 22, CTX_LINE_H = 18;
   let qLines = [], ctxLines = [], qH = 0, ctxH = 0;
   if (q) {
-    const tmp = document.createElement('canvas');
-    const tc  = tmp.getContext('2d');
-    const innerW = W - PAD * 2 - 20; // available inside card (left-bar indent + right margin)
+    const tc = document.createElement('canvas').getContext('2d');
     tc.font = 'italic 13px Georgia, serif';
-    qLines = _wrapTextLines(tc, '\u201C' + q.text + '\u201D', innerW);
+    qLines = _wrapTextLines(tc, '“' + q.text + '”', W - PAD * 2 - 24);
     qH = qLines.length * Q_LINE_H;
-    tc.font = '10.5px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
+    tc.font = '10.5px ' + SANS;
     ctxLines = _wrapTextLines(tc, q.context, W - PAD * 2);
     ctxH = ctxLines.length * CTX_LINE_H;
   }
 
-  // ── Fixed section heights ──
-  const S_BORDER = 6, S_PAD = 20, S_HDR = 78, S_STATS = 62,
-        S_BAR = 36, S_GAP = 12;
-  // Quote block height (0 when no quote)
+  // ── Section heights ──
+  const S_HDR = 96, S_PAD = 20, S_STATS = 62, S_BAR = 36, S_GAP = 14;
   const Q_BLOCK = q
-    ? 1 + S_GAP                          // divider + gap
-      + 16 + 6                           // blessing label + gap
-      + 22 + 4                           // badge row + gap
-      + 16 + S_GAP                       // chapter name + gap
-      + (qH + Q_CARD_PAD * 2) + Q_CARD_GAP  // quote card (text + padding) + gap
-      + Q_CTX_LEAD + ctxH + S_GAP       // context lead + text + gap
+    ? 1 + S_GAP + 16 + 8 + 22 + 6 + 16 + S_GAP
+      + (qH + Q_CARD_PAD * 2) + Q_CARD_GAP
+      + Q_CTX_LEAD + ctxH + S_GAP
     : 0;
   const S_FOOTER = 34;
-  const H = S_BORDER + S_PAD
-    + S_HDR + S_GAP
-    + S_STATS + S_GAP
-    + S_BAR + S_GAP
-    + GRID_H + S_GAP
-    + Q_BLOCK
-    + S_FOOTER + S_PAD + S_BORDER;
+  const H = S_HDR + S_PAD + S_STATS + S_GAP + S_BAR + S_GAP + GRID_H + S_GAP + Q_BLOCK + S_FOOTER + S_PAD + 4;
 
   const dpr = Math.min(window.devicePixelRatio || 1, 3);
   const canvas = document.createElement('canvas');
@@ -1368,212 +1276,170 @@ function captureProgress() {
   const ctx = canvas.getContext('2d');
   ctx.scale(dpr, dpr);
 
-  // ── Background ──
-  const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
-  bgGrad.addColorStop(0, '#fff9f0');
-  bgGrad.addColorStop(1, '#fdf0d8');
-  ctx.fillStyle = bgGrad;
+  // ── Page background (same as the site body) ──
+  ctx.fillStyle = P.bg;
   ctx.fillRect(0, 0, W, H);
 
-  // Saffron gradient (reused)
-  const sfGrad = ctx.createLinearGradient(0, 0, W, 0);
-  sfGrad.addColorStop(0, '#ff8f00');
-  sfGrad.addColorStop(0.5, '#e65100');
-  sfGrad.addColorStop(1, '#bf360c');
+  // ── Header band: brand gradient + lotus mark + Cinzel title, like the sticky header ──
+  const hdrGrad = ctx.createLinearGradient(0, 0, W, S_HDR);
+  hdrGrad.addColorStop(0, '#99410c'); hdrGrad.addColorStop(1, '#713010');
+  ctx.fillStyle = hdrGrad;
+  ctx.fillRect(0, 0, W, S_HDR);
+  ctx.fillStyle = 'rgba(240,192,96,.7)';
+  ctx.fillRect(0, S_HDR - 3, W, 3);
+  const MARK = 44, markX = PAD, markY = (S_HDR - 3 - MARK) / 2;
+  if (mark) {
+    ctx.save(); _rrect(ctx, markX, markY, MARK, MARK, 12); ctx.clip();
+    ctx.drawImage(mark, markX, markY, MARK, MARK); ctx.restore();
+  }
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '700 17px ' + SERIF;
+  ctx.fillText(PRACTICES[activePractice].name + ' Practice', markX + MARK + 14, markY + 20, W - PAD * 2 - MARK - 14);
+  ctx.font = '11px ' + SANS;
+  ctx.fillStyle = 'rgba(255,255,255,.88)';
+  ctx.fillText(DAYS + '-Day Practice · ' + CHANTS + ' Chantings Daily', markX + MARK + 14, markY + 38);
 
-  // Top border
-  ctx.fillStyle = sfGrad;
-  ctx.fillRect(0, 0, W, S_BORDER);
+  let y = S_HDR + S_PAD;
 
-  let y = S_BORDER + S_PAD;
-
-  // ── Header ──
-  ctx.font = '28px serif';
-  ctx.textAlign = 'center';
-  ctx.fillStyle = '#3b1f00';
-  ctx.fillText('\uD83D\uDD49', W / 2, y + 26);
-
-  ctx.font = 'bold 16px Georgia, serif';
-  ctx.fillStyle = '#bf360c';
-  ctx.fillText(PRACTICES[activePractice].name + ' Practice', W / 2, y + 48, W - PAD * 2);
-
-  ctx.font = '11px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
-  ctx.fillStyle = '#8d5524';
-  ctx.fillText(DAYS + '-Day Practice · ' + CHANTS + ' Chantings Daily', W / 2, y + 66);
-
-  y += S_HDR + S_GAP;
-
-  // ── Stats boxes ──
+  // ── Stat boxes: card surface, gold border, brand accent line ──
   const stats = [
-    { num: doneD,   lbl: 'DAYS DONE'  },
-    { num: templeV, lbl: 'TEMPLE'     },
-    { num: totalC,  lbl: 'CHANTINGS'  },
-    { num: dLeft,   lbl: 'REMAINING'  },
+    { num: doneD,   lbl: 'DAYS DONE' },
+    { num: templeV, lbl: 'TEMPLE'    },
+    { num: totalC,  lbl: 'CHANTINGS' },
+    { num: dLeft,   lbl: 'REMAINING' },
   ];
   const boxW = Math.floor((W - PAD * 2 - 8 * 3) / 4);
   for (let i = 0; i < 4; i++) {
     const bx = PAD + i * (boxW + 8);
-    ctx.fillStyle = '#fffcf5';
-    _rrect(ctx, bx, y, boxW, 54, 8); ctx.fill();
-    ctx.fillStyle = '#e65100';
-    ctx.fillRect(bx + 12, y, boxW - 24, 3);
-    ctx.font = 'bold 22px Georgia, serif';
-    ctx.fillStyle = '#e65100';
+    _rrect(ctx, bx, y, boxW, 54, 10);
+    ctx.fillStyle = P.card; ctx.fill();
+    ctx.strokeStyle = P.gold; ctx.lineWidth = 1; ctx.stroke();
+    ctx.fillStyle = P.brand;
+    _rrect(ctx, bx + 12, y, boxW - 24, 3, 1.5); ctx.fill();
+    ctx.font = '800 22px ' + SERIF;
+    ctx.fillStyle = P.accent;
     ctx.textAlign = 'center';
-    ctx.fillText(String(stats[i].num), bx + boxW / 2, y + 33);
-    ctx.font = '8.5px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
-    ctx.fillStyle = '#8d5524';
+    ctx.fillText(String(stats[i].num), bx + boxW / 2, y + 34);
+    ctx.font = '8.5px ' + SANS;
+    ctx.fillStyle = P.muted;
     ctx.fillText(stats[i].lbl, bx + boxW / 2, y + 47);
   }
   y += S_STATS + S_GAP;
 
-  // ── Progress bar ──
-  const barX = PAD, barW = W - PAD * 2, barH = 9, barR = 4;
-  ctx.fillStyle = 'rgba(0,0,0,.12)';
+  // ── Progress bar (gold on a dark track, as in the header) ──
+  const barX = PAD, barW = W - PAD * 2, barH = 9, barR = 4.5;
+  ctx.fillStyle = P.dark ? 'rgba(255,255,255,.14)' : P.barTrack;
   _rrect(ctx, barX, y, barW, barH, barR); ctx.fill();
   if (pct > 0) {
     const fw = Math.max(barR * 2, barW * pct / 100);
     const fGrad = ctx.createLinearGradient(barX, 0, barX + fw, 0);
-    fGrad.addColorStop(0, '#ffe082'); fGrad.addColorStop(0.5, '#ffd740'); fGrad.addColorStop(1, '#ffab00');
+    fGrad.addColorStop(0, P.barFill[0]); fGrad.addColorStop(0.5, P.barFill[1]); fGrad.addColorStop(1, P.barFill[2]);
     ctx.fillStyle = fGrad;
     _rrect(ctx, barX, y, fw, barH, barR); ctx.fill();
   }
-  ctx.font = '10px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
-  ctx.fillStyle = '#3b1f00';
+  ctx.font = '10px ' + SANS;
+  ctx.fillStyle = P.text;
   ctx.textAlign = 'center';
-  ctx.fillText(doneD + ' of ' + DAYS + ' days complete (' + pct + '%) \uD83D\uDE4F', W / 2, y + barH + 17);
+  ctx.fillText(doneD + ' of ' + DAYS + ' days complete (' + pct + '%) 🙏', W / 2, y + barH + 17);
   y += S_BAR + S_GAP;
 
-  // ── Day grid (smaller) ──
+  // ── Day grid: complete = brand fill, partial = gold ring, upcoming = quiet ──
+  const config = getPracticeConfig(state);
   for (let d = 1; d <= DAYS; d++) {
     const col = (d - 1) % COLS;
     const row = Math.floor((d - 1) / COLS);
     const cx  = GRID_X + col * (CELL + CGAP) + CELL / 2;
     const cy  = y + row * (CELL + CGAP) + CELL / 2;
     const r   = CELL / 2 - 2;
-
     const s    = state['d' + d];
     const cnt  = s ? s.marks.filter(Boolean).length : 0;
-    const done = dayIsComplete(s,getPracticeConfig(state));
-
+    const done = dayIsComplete(s, config);
+    const partial = !done && (cnt > 0 || (s && s.temple));
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
-
     if (done) {
-      const cGrad = ctx.createRadialGradient(cx - r * .25, cy - r * .25, r * .1, cx, cy, r);
-      cGrad.addColorStop(0, '#ff7043'); cGrad.addColorStop(0.6, '#e64a19'); cGrad.addColorStop(1, '#bf360c');
+      const cGrad = ctx.createLinearGradient(cx - r, cy - r, cx + r, cy + r);
+      cGrad.addColorStop(0, P.brandL); cGrad.addColorStop(1, P.brandD);
       ctx.fillStyle = cGrad; ctx.fill();
-      ctx.font = 'bold 9px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
-      ctx.fillStyle = 'rgba(255,255,255,.92)';
-      ctx.textAlign = 'center';
-      ctx.fillText(String(d), cx, cy + 3);
+      ctx.font = '700 ' + (CELL > 26 ? 9 : 8) + 'px ' + SANS;
+      ctx.fillStyle = '#fff8e8';
     } else {
-      ctx.fillStyle = '#ede0cc'; ctx.fill();
-      ctx.strokeStyle = '#c8a87a'; ctx.lineWidth = 1.2; ctx.stroke();
-      ctx.font = '8px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
-      ctx.fillStyle = '#b09070';
-      ctx.textAlign = 'center';
-      ctx.fillText(String(d), cx, cy + 3);
+      ctx.fillStyle = partial ? P.goldL : P.card; ctx.fill();
+      ctx.strokeStyle = P.gold; ctx.lineWidth = partial ? 2 : 1; ctx.stroke();
+      ctx.font = (CELL > 26 ? 8 : 7) + 'px ' + SANS;
+      ctx.fillStyle = partial ? P.text : P.muted;
     }
+    ctx.textAlign = 'center';
+    ctx.fillText(String(d), cx, cy + 3);
   }
   y += GRID_H + S_GAP;
 
-  // ── Quote section ──
-  if (q) {
-    // Divider
-    const divGrad = ctx.createLinearGradient(PAD, 0, W - PAD, 0);
-    divGrad.addColorStop(0, 'transparent');
-    divGrad.addColorStop(0.25, '#f0c060');
-    divGrad.addColorStop(0.5,  '#e65100');
-    divGrad.addColorStop(0.75, '#f0c060');
-    divGrad.addColorStop(1, 'transparent');
-    ctx.strokeStyle = divGrad; ctx.lineWidth = 1;
+  // ── Blessing section ──
+  const goldRule = () => {
+    ctx.strokeStyle = P.gold; ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(W - PAD, y); ctx.stroke();
+  };
+  if (q) {
+    goldRule();
     y += 1 + S_GAP;
-
-    // "TODAY'S BLESSING" label
-    ctx.font = 'bold 10px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
-    ctx.fillStyle = '#e65100';
+    ctx.font = '700 9.5px ' + SANS;
+    ctx.fillStyle = P.muted;
     ctx.textAlign = 'center';
-    ctx.fillText('\u2736  TODAY\u2019S BLESSING  \u2736', W / 2, y);
-    y += 16 + 6;
+    ctx.letterSpacing = '2px';
+    ctx.fillText('TODAY’S BLESSING', W / 2, y + 4);
+    ctx.letterSpacing = '0px';
+    y += 16 + 8;
 
-    // Chapter badge + Verse pill
-    ctx.font = 'bold 9.5px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
-    const chText = 'Chapter ' + q.chapter;
-    const vsText = 'Verse ' + q.verse;
-    const chW = ctx.measureText(chText).width + 16;
-    const vsW = ctx.measureText(vsText).width + 16;
-    const totalBW = chW + 6 + vsW;
-    let bx = (W - totalBW) / 2;
-
+    ctx.font = '700 9.5px ' + SANS;
+    const chText = 'Chapter ' + q.chapter, vsText = 'Verse ' + q.verse;
+    const chW = ctx.measureText(chText).width + 16, vsW = ctx.measureText(vsText).width + 16;
+    let bx = (W - (chW + 6 + vsW)) / 2;
     _rrect(ctx, bx, y - 12, chW, 18, 9);
-    ctx.fillStyle = sfGrad; ctx.fill();
-    ctx.fillStyle = 'white'; ctx.textAlign = 'center';
+    ctx.fillStyle = P.brand; ctx.fill();
+    ctx.fillStyle = '#ffffff'; ctx.textAlign = 'center';
     ctx.fillText(chText, bx + chW / 2, y + 2);
-
     bx += chW + 6;
     _rrect(ctx, bx, y - 12, vsW, 18, 9);
-    ctx.fillStyle = '#fff8e0'; ctx.fill();
-    ctx.strokeStyle = '#f0c060'; ctx.lineWidth = 1; ctx.stroke();
-    ctx.fillStyle = '#8d5524';
+    ctx.fillStyle = P.goldL; ctx.fill();
+    ctx.strokeStyle = P.gold; ctx.lineWidth = 1; ctx.stroke();
+    ctx.fillStyle = P.muted;
     ctx.fillText(vsText, bx + vsW / 2, y + 2);
-    y += 22 + 4;
+    y += 22 + 6;
 
-    // Chapter name
-    ctx.font = 'italic 10px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
-    ctx.fillStyle = '#a0693a';
-    ctx.textAlign = 'center';
+    ctx.font = 'italic 10px ' + SANS;
+    ctx.fillStyle = P.muted;
     ctx.fillText(q.chapterName, W / 2, y);
     y += 16 + S_GAP;
 
-    // ── Quote text card ──
-    const qCardH = qH + Q_CARD_PAD * 2;
-    const qCardX = PAD, qCardW = W - PAD * 2;
-    _rrect(ctx, qCardX, y, qCardW, qCardH, 7);
-    ctx.fillStyle = 'rgba(255,193,7,0.09)'; ctx.fill();
-    ctx.strokeStyle = 'rgba(230,81,0,0.22)'; ctx.lineWidth = 1; ctx.stroke();
-    // Left accent bar (flush with card)
-    ctx.fillStyle = '#e65100';
-    ctx.fillRect(qCardX, y, 3, qCardH);
-
-    // Quote lines — baseline starts at card-top + padding + cap-height
+    // Quote card, matching .quote-text on the page
+    const qCardH = qH + Q_CARD_PAD * 2, qCardX = PAD, qCardW = W - PAD * 2;
+    _rrect(ctx, qCardX, y, qCardW, qCardH, 8);
+    ctx.fillStyle = P.goldL; ctx.fill();
+    ctx.strokeStyle = P.gold; ctx.lineWidth = 1; ctx.stroke();
+    ctx.fillStyle = P.brand;
+    ctx.fillRect(qCardX, y + 2, 3, qCardH - 4);
     ctx.font = 'italic 13px Georgia, serif';
-    ctx.fillStyle = '#2d1600';
+    ctx.fillStyle = P.text;
     ctx.textAlign = 'left';
-    const qTextX = PAD + 11; // inside bar (3px) + gutter (8px)
-    const qFirstBaseline = y + Q_CARD_PAD + 12; // 12 ≈ cap-height for 13px Georgia
-    for (let i = 0; i < qLines.length; i++) {
-      ctx.fillText(qLines[i], qTextX, qFirstBaseline + i * Q_LINE_H);
-    }
-    y += qCardH + Q_CARD_GAP; // card bottom + explicit gap
+    for (let i = 0; i < qLines.length; i++) ctx.fillText(qLines[i], PAD + 14, y + Q_CARD_PAD + 12 + i * Q_LINE_H);
+    y += qCardH + Q_CARD_GAP;
 
-    // ── Context text ──
-    // Q_CTX_LEAD pushes the first baseline down so ascenders clear the card gap
-    ctx.font = '10.5px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
-    ctx.fillStyle = '#7a4a20';
-    ctx.textAlign = 'left';
-    const ctxFirstBaseline = y + Q_CTX_LEAD;
-    for (let i = 0; i < ctxLines.length; i++) {
-      ctx.fillText(ctxLines[i], PAD, ctxFirstBaseline + i * CTX_LINE_H);
-    }
+    ctx.font = '10.5px ' + SANS;
+    ctx.fillStyle = P.muted;
+    for (let i = 0; i < ctxLines.length; i++) ctx.fillText(ctxLines[i], PAD, y + Q_CTX_LEAD + i * CTX_LINE_H);
     y += Q_CTX_LEAD + ctxH + S_GAP;
   }
 
   // ── Footer ──
-  ctx.strokeStyle = '#f0c060'; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(W - PAD, y); ctx.stroke();
-
+  goldRule();
   const now = new Date();
   const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  ctx.font = '10px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
-  ctx.fillStyle = '#8d5524';
+  ctx.font = '10px ' + SANS;
+  ctx.fillStyle = P.muted;
   ctx.textAlign = 'center';
-  ctx.fillText(PRACTICES[activePractice].name + ' Practice Progress  \u00B7  ' +
-    now.getDate() + ' ' + MONTHS[now.getMonth()] + ' ' + now.getFullYear(), W / 2, y + 16);
-
-  // Bottom border
-  ctx.fillStyle = sfGrad;
+  ctx.fillText('Naam Jaap & Vratha Tracker  ·  ' + now.getDate() + ' ' + MONTHS[now.getMonth()] + ' ' + now.getFullYear(), W / 2, y + 18);
+  ctx.fillStyle = hdrGrad;
   ctx.fillRect(0, H - 4, W, 4);
 
   // ── Share or download ──
@@ -1584,11 +1450,11 @@ function captureProgress() {
         await navigator.share({
           files: [file],
           title: 'My ' + PRACTICES[activePractice].name + ' Practice Progress',
-          text: doneD + ' of ' + DAYS + ' days complete (' + pct + '%) \uD83D\uDE4F'
+          text: doneD + ' of ' + DAYS + ' days complete (' + pct + '%) 🙏'
         });
         showToast('Shared!');
       } catch(e) {
-        if (e.name !== 'AbortError') _downloadCanvas(canvas);
+        if (e.name !== 'AbortError') _downloadCanvas(canvas, file.name);
       }
     } else {
       _downloadCanvas(canvas, file.name);
@@ -2258,213 +2124,6 @@ function _wrapTextLines(ctx, text, maxW) {
   return lines;
 }
 
-function captureQuote() {
-  const q = _currentQuote;
-  if (!q) return;
-
-  const W = 480, PAD = 32, dpr = Math.min(window.devicePixelRatio || 1, 3);
-  const innerW = W - PAD * 2;
-
-  // ── Measure text heights on a temp canvas ──
-  const tmp = document.createElement('canvas');
-  tmp.width = W * dpr; tmp.height = 10;
-  const tc = tmp.getContext('2d'); tc.scale(dpr, dpr);
-
-  tc.font = 'italic 17px Georgia, serif';
-  const qLines = _wrapTextLines(tc, '\u201C' + q.text + '\u201D', innerW - 16);
-  const qH = qLines.length * 28;
-
-  tc.font = '12px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
-  const ctxLines = _wrapTextLines(tc, q.context, innerW);
-  const ctxH = ctxLines.length * 20;
-
-  // ── Layout ──
-  const BORDER = 6, VPAD = 28;
-  const H = BORDER + VPAD
-    + 52          // Om
-    + 10          // gap
-    + 26          // "BHAGAVAD GITA"
-    + 8           // gap
-    + 26          // chapter badge row
-    + 6           // gap
-    + 20          // chapter name
-    + 18          // gap
-    + 1 + 14      // divider + gap
-    + qH + 16     // quote + gap
-    + 1 + 16      // divider + gap
-    + ctxH + 20   // context + gap
-    + 1 + 14      // footer divider + gap
-    + 20          // footer text
-    + VPAD + BORDER;
-
-  const canvas = document.createElement('canvas');
-  canvas.width = W * dpr; canvas.height = H * dpr;
-  const ctx = canvas.getContext('2d');
-  ctx.scale(dpr, dpr);
-
-  // ── Background ──
-  const bg = ctx.createLinearGradient(0, 0, W, H);
-  bg.addColorStop(0,   '#fffcf5');
-  bg.addColorStop(0.5, '#fff8e8');
-  bg.addColorStop(1,   '#fdf0d8');
-  ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
-
-  // Subtle radial warmth
-  const warm = ctx.createRadialGradient(W * 0.15, H * 0.2, 0, W * 0.15, H * 0.2, W * 0.6);
-  warm.addColorStop(0, 'rgba(255,193,7,0.07)');
-  warm.addColorStop(1, 'transparent');
-  ctx.fillStyle = warm; ctx.fillRect(0, 0, W, H);
-
-  // ── Saffron gradient (reused) ──
-  const sf = ctx.createLinearGradient(0, 0, W, 0);
-  sf.addColorStop(0,   '#ff8f00');
-  sf.addColorStop(0.5, '#e65100');
-  sf.addColorStop(1,   '#bf360c');
-
-  // Top border
-  ctx.fillStyle = sf; ctx.fillRect(0, 0, W, BORDER);
-
-  // Decorative dots on borders
-  ctx.fillStyle = 'rgba(255,213,0,0.6)';
-  for (let i = 0; i < 5; i++) {
-    ctx.beginPath(); ctx.arc(PAD + i * (innerW / 4), BORDER + 3, 2, 0, Math.PI * 2); ctx.fill();
-  }
-
-  let y = BORDER + VPAD;
-
-  // ── Om ──
-  ctx.font = '38px serif';
-  ctx.textAlign = 'center';
-  ctx.shadowColor = 'rgba(255,165,0,0.7)';
-  ctx.shadowBlur = 14;
-  ctx.fillStyle = '#e65100';
-  ctx.fillText('\uD83D\uDD49', W / 2, y + 36);
-  ctx.shadowBlur = 0;
-  y += 52 + 10;
-
-  // ── "BHAGAVAD GITA" ──
-  ctx.font = 'bold 15px Georgia, serif';
-  ctx.letterSpacing = '3px';
-  const hdr = ctx.createLinearGradient(PAD, 0, W - PAD, 0);
-  hdr.addColorStop(0, '#bf360c'); hdr.addColorStop(0.5, '#e65100'); hdr.addColorStop(1, '#bf360c');
-  ctx.fillStyle = hdr;
-  ctx.fillText('✦  BHAGAVAD GITA  ✦', W / 2, y);
-  ctx.letterSpacing = '0px';
-  y += 26 + 8;
-
-  // ── Chapter badge + Verse pill ──
-  const chText = 'Chapter ' + q.chapter;
-  const vsText = 'Verse ' + q.verse;
-  ctx.font = 'bold 11px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
-  const chW = ctx.measureText(chText).width + 20;
-  const vsW = ctx.measureText(vsText).width + 20;
-  const totalBadgeW = chW + 8 + vsW;
-  let bx = (W - totalBadgeW) / 2;
-
-  // Chapter badge (filled saffron pill)
-  _rrect(ctx, bx, y - 14, chW, 22, 11);
-  ctx.fillStyle = sf; ctx.fill();
-  ctx.fillStyle = 'white';
-  ctx.textAlign = 'center';
-  ctx.fillText(chText, bx + chW / 2, y + 3);
-
-  bx += chW + 8;
-  // Verse pill (outlined gold)
-  _rrect(ctx, bx, y - 14, vsW, 22, 11);
-  ctx.fillStyle = '#fff8e0'; ctx.fill();
-  ctx.strokeStyle = '#f0c060'; ctx.lineWidth = 1.5; ctx.stroke();
-  ctx.fillStyle = '#8d5524';
-  ctx.fillText(vsText, bx + vsW / 2, y + 3);
-
-  y += 26 + 6;
-
-  // ── Chapter name ──
-  ctx.font = 'italic 12px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
-  ctx.fillStyle = '#a0693a';
-  ctx.textAlign = 'center';
-  ctx.fillText(q.chapterName, W / 2, y);
-  y += 20 + 18;
-
-  // ── Divider ──
-  const divGrad = ctx.createLinearGradient(PAD, 0, W - PAD, 0);
-  divGrad.addColorStop(0, 'transparent');
-  divGrad.addColorStop(0.3, '#f0c060');
-  divGrad.addColorStop(0.5, '#e65100');
-  divGrad.addColorStop(0.7, '#f0c060');
-  divGrad.addColorStop(1, 'transparent');
-  ctx.strokeStyle = divGrad; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(W - PAD, y); ctx.stroke();
-  y += 1 + 14;
-
-  // ── Quote ──
-  ctx.font = 'italic 17px Georgia, serif';
-  ctx.fillStyle = '#3b1f00';
-  ctx.textAlign = 'left';
-
-  // Quote background card
-  _rrect(ctx, PAD - 8, y - 8, innerW + 16, qH + 16, 8);
-  ctx.fillStyle = 'rgba(255,193,7,0.08)'; ctx.fill();
-  ctx.strokeStyle = 'rgba(230,81,0,0.25)'; ctx.lineWidth = 1; ctx.stroke();
-
-  // Left accent bar
-  ctx.fillStyle = '#e65100';
-  ctx.fillRect(PAD - 8, y - 8, 4, qH + 16);
-
-  ctx.fillStyle = '#2d1600';
-  for (let i = 0; i < qLines.length; i++) {
-    ctx.fillText(qLines[i], PAD + 8, y + 14 + i * 28);
-  }
-  y += qH + 16;
-
-  // ── Divider ──
-  ctx.strokeStyle = divGrad;
-  ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(W - PAD, y); ctx.stroke();
-  y += 1 + 16;
-
-  // ── Context ──
-  ctx.font = '12px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
-  ctx.fillStyle = '#8d5524';
-  ctx.textAlign = 'left';
-  for (let i = 0; i < ctxLines.length; i++) {
-    ctx.fillText(ctxLines[i], PAD, y + i * 20);
-  }
-  y += ctxH + 20;
-
-  // ── Footer divider ──
-  ctx.strokeStyle = 'rgba(240,192,96,0.5)'; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(W - PAD, y); ctx.stroke();
-  y += 1 + 14;
-
-  // ── Footer ──
-  ctx.font = '11px -apple-system, BlinkMacSystemFont, Arial, sans-serif';
-  ctx.fillStyle = '#a0693a';
-  ctx.textAlign = 'center';
-  ctx.fillText(PRACTICES[activePractice].name + ' · Naam Jaap & Vratha Tracker', W / 2, y);
-
-  // Bottom decorative dots
-  ctx.fillStyle = 'rgba(255,213,0,0.6)';
-  for (let i = 0; i < 5; i++) {
-    ctx.beginPath(); ctx.arc(PAD + i * (innerW / 4), H - BORDER - 3, 2, 0, Math.PI * 2); ctx.fill();
-  }
-
-  // Bottom border
-  ctx.fillStyle = sf; ctx.fillRect(0, H - BORDER, W, BORDER);
-
-  // ── Share or download ──
-  canvas.toBlob(async (blob) => {
-    const file = new File([blob], 'gita-verse-' + q.chapter + '-' + q.verse.replace(':', '-') + '.png', { type: 'image/png' });
-    if (navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
-      try {
-        await navigator.share({ files: [file], title: 'Bhagavad Gita — Chapter ' + q.chapter + ', Verse ' + q.verse, text: q.text });
-        showToast('Shared!');
-      } catch(e) {
-        if (e.name !== 'AbortError') _downloadCanvas(canvas, file.name);
-      }
-    } else {
-      _downloadCanvas(canvas, file.name);
-    }
-  }, 'image/png');
-}
 // register service worker for PWA/offline
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').then(() => {
@@ -2962,14 +2621,17 @@ function scrollToToday(moveFocus = false) {
   dashboard.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
 }
 
-// Keep navigation availability in sync without changing the button icons.
+// Flip the single arrow according to where the viewport sits on the page.
 function updateFloatingNav() {
-  const top = document.getElementById('navTop');
-  const today = document.getElementById('navToday');
-  top.disabled = window.scrollY < 40;
-  today.disabled = false;
-  today.title = 'Go to today';
-  today.setAttribute('aria-label', today.title);
+  const button = document.getElementById('navJump');
+  const range = document.documentElement.scrollHeight - window.innerHeight;
+  button.hidden = range < 160;
+  const direction = window.scrollY > range / 2 ? 'top' : 'bottom';
+  if (button.dataset.direction === direction) return;
+  button.dataset.direction = direction;
+  button.firstElementChild.textContent = direction === 'top' ? '↑' : '↓';
+  button.title = direction === 'top' ? 'Go to top' : 'Go to bottom';
+  button.setAttribute('aria-label', button.title);
 }
 let navFramePending = false;
 function scheduleNavUpdate() {
@@ -3095,14 +2757,6 @@ function openWelcomeModal() {
   // Keep the welcome dialog open until dismissed; no reading time limit.
   document.getElementById('welcomeCountdown').hidden = true;
 
-}
-
-// ── ABOUT TOGGLE ──
-function toggleAbout() {
-  const expanded = !document.getElementById('aboutBody').classList.contains('open');
-  document.getElementById('aboutToggle').setAttribute('aria-expanded', String(expanded));
-  document.getElementById('aboutBody').classList.toggle('open');
-  document.getElementById('aboutToggle').classList.toggle('open');
 }
 
 // ── RESET ──
