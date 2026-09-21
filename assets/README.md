@@ -12,6 +12,6 @@ Final prompt:
 
 ## Practice illustrations
 
-`ganapati.svg`, `rama.svg`, `hanuman.svg`, `shiva.svg`, `gayatri.svg` and `durga.svg` are original code-drawn vector symbols in a matching terracotta/ivory palette. They depict an elephant face, bow and arrow, gada, trident/crescent, sun with an open book, and lotus/trident respectively. They are symbolic illustrations, not depictions of sacred iconography claimed to be authoritative.
+`ganapati.svg`, `rama.svg`, `krishna.svg`, `hanuman.svg`, `shiva.svg`, `mrityunjaya.svg`, `narayana.svg`, `gayatri.svg`, `durga.svg`, `lakshmi.svg`, `saraswati.svg` and `subrahmanya.svg` are original code-drawn vector symbols in a matching terracotta/ivory palette. They depict an elephant face, bow and arrow, flute with peacock feather, gada, trident/crescent, tripundra with a drop, Sudarshana chakra, sun with an open book, lotus/trident, lotus with coins, veena, and vel with peacock feather respectively. They are symbolic illustrations, not depictions of sacred iconography claimed to be authoritative.
 
 The images are decorative beside a visible practice name, with empty alternative text to avoid repeating that label. A personal uploaded cover is also decorative; reading-sheet images retain their filenames as labels and are accompanied by optional user-entered text.

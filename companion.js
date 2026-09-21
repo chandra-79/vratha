@@ -60,8 +60,10 @@ async function countChant() {
   }, 'Chant recorded');
   if (changed) {
     if (!sessionStarted) sessionStarted = Date.now();
-    feedback(dayCount(d) === CHANTS);
-    if ([Math.ceil(CHANTS/3), Math.ceil(CHANTS*2/3), CHANTS].includes(dayCount(d))) announce(dayCount(d) + ' of ' + CHANTS + ' chants completed');
+    const n = dayCount(d), malaDone = n < CHANTS && n % MALA === 0;
+    feedback(n === CHANTS, malaDone);
+    if (malaDone) announce('Mala ' + (n / MALA) + ' complete');
+    else if ([Math.ceil(CHANTS/3), Math.ceil(CHANTS*2/3), CHANTS].includes(n)) announce(n + ' of ' + CHANTS + ' chants completed');
   }
   return changed;
 }
@@ -84,6 +86,14 @@ async function undoPractice() {
     saveState(state); buildCards(); renderCompanion(); announce('Last action undone');
   });
 }
+// Bead position within the current 108-bead round, shown once the target reaches a full mala.
+const MALA = 108;
+function malaReadout(count) {
+  if (CHANTS < MALA) return '';
+  const rounds = Math.floor(count / MALA), total = Math.ceil(CHANTS / MALA);
+  if (count >= CHANTS) return rounds + (rounds === 1 ? ' mala' : ' malas') + ' complete';
+  return 'Mala ' + (rounds + 1) + (total > 1 ? ' of ' + total : '') + ' · bead ' + (count % MALA) + ' of ' + MALA;
+}
 function renderCompanion() {
   if (!companionReady) return;
   const d = getDayForToday();
@@ -93,6 +103,8 @@ function renderCompanion() {
   $('todaySubtitle').textContent = d ? 'Day ' + d + ' of ' + DAYS + ' · ' + fmtDate(todayISO()) : fmtDate(todayISO());
   $('practiceHint').textContent = !d ? 'Choose a start date above to schedule your practice.' : count === CHANTS ? (isDayComplete(day) ? 'Today’s practice is complete. Take a quiet moment.' : CHANTS + ' chants complete. Record your temple visit when ready.') : 'One repetition. One tap.';
   $('dailyCount').textContent = $('focusCount').textContent = count;
+  const mala = malaReadout(count);
+  ['dailyMala','focusMala'].forEach(id => { $(id).textContent = mala; $(id).hidden = !mala; });
   ['dailyTap','focusTap'].forEach(id => {
     $(id).style.setProperty('--progress', (count / CHANTS * 360) + 'deg');
     $(id).disabled = !d || count >= CHANTS;
@@ -177,6 +189,7 @@ $('editDayForm').addEventListener('submit', async event => {
 function openFocus() {
   if (!getDayForToday()) return;
   focusReturn = document.activeElement;
+  $('focusArt').src = $('practiceArt').src;
   $('focusDialog').showModal();
   if (!sessionStarted) sessionStarted = Date.now();
   $('focusTap').focus();
@@ -189,8 +202,9 @@ $('focusDialog').addEventListener('keydown', event => {
   if (event.code === 'Space' && !event.target.closest('button,input,select,textarea')) { event.preventDefault(); countChant(); }
   if (event.key === 'Backspace') { event.preventDefault(); undoPractice(); }
 });
-function feedback(completed) {
-  if (preferences.haptics && navigator.vibrate) navigator.vibrate(completed ? [80,80,80] : 20);
+// A full mala (108) gets a longer pulse than a single bead; the daily goal gets three.
+function feedback(completed, malaDone = false) {
+  if (preferences.haptics && navigator.vibrate) navigator.vibrate(completed ? [80,80,80] : malaDone ? [60,60,60] : 20);
   if (!completed || !preferences.chime) return;
   try {
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
@@ -569,11 +583,15 @@ function renderInsights() {
   let serial=parseInt(dateSerial(todayISO()),36), streak=0;
   if(!completedDates.has(serial.toString(36)))serial--;
   while(completedDates.has(serial.toString(36))){streak++;serial--;}
+  // Longest unbroken run of completed days in this cycle.
+  let best=0, run=0, previous=null;
+  for(const key of [...completedDates].map(k=>parseInt(k,36)).sort((a,b)=>a-b)) { run=previous!==null&&key===previous+1?run+1:1; previous=key; best=Math.max(best,run); }
   $('practiceInsights').replaceChildren();
-  for(const [value,label] of [[total.toLocaleString(),'Recorded chants · all cycles'],[streak,'Current streak · days'],[(config.days*config.chants).toLocaleString(),'Current cycle target']]) {
+  for(const [value,label] of [[total.toLocaleString(),'Recorded chants · all cycles'],[streak,'Current streak · days'],[best,'Best streak · this cycle'],[(config.days*config.chants).toLocaleString(),'Current cycle target']]) {
     const box=document.createElement('div'),number=document.createElement('strong'),caption=document.createElement('span');
     number.textContent=value;caption.textContent=label;box.append(number,caption);$('practiceInsights').appendChild(box);
   }
+  renderMilestone(total);
   $('weeklyHistory').replaceChildren();
   const today=parseInt(dateSerial(todayISO()),36);
   for(let offset=6;offset>=0;offset--) {
@@ -585,6 +603,18 @@ function renderInsights() {
     label.textContent=new Date(date+'T12:00').toLocaleDateString(undefined,{weekday:'short'});value.textContent=count;
     item.append(value,bar,label);$('weeklyHistory').appendChild(item);
   }
+}
+
+// Lifetime chant milestones in the traditional counts, up to one crore.
+const MILESTONES=[[108,'108'],[1008,'1,008'],[10008,'10,008'],[100000,'1 lakh'],[1000000,'10 lakh'],[10000000,'1 crore']];
+function renderMilestone(total) {
+  const next=MILESTONES.find(([n])=>total<n);
+  const [target,label]=next||MILESTONES[MILESTONES.length-1];
+  const pct=Math.min(100,Math.round(total/target*100));
+  $('milestoneLabel').textContent=next?'Lifetime milestone · next '+label+' chants':'Lifetime milestone · 1 crore reached 🙏';
+  $('milestoneValue').textContent=next?total.toLocaleString()+' of '+target.toLocaleString()+' · '+pct+'%':total.toLocaleString()+' chants';
+  $('milestoneFill').style.width=pct+'%';
+  $('lifetimeMilestone').setAttribute('aria-label','Lifetime chants: '+total.toLocaleString()+(next?', next milestone '+label:''));
 }
 
 // Retain any legacy audio progress once; daily marks are authoritative thereafter.

@@ -8,6 +8,21 @@ Reviewed 19 September 2026. This compares the products' own public feature descr
 | [DailyBliss mantra counter](https://dailybliss.app/tools/mantra-counter/) | Browser counting with keyboard support; its companion app advertises separate mantra histories and daily/lifetime goals | Added recorded totals across the selected practice's current and archived cycles. Kept each deity's data separate. The web tool itself says it does not preserve history beyond today; we do. |
 | [NaamJaap goal calculator](https://blog.naamjaap.in/naam-jap-calculator-how-long-to-complete-your-goal/) | Planning a larger goal from daily repetition targets | Added the projected cycle total (chants per day × number of days). |
 
+## Competitor review, 21 September 2026
+
+Reviewed the current crop of japa counters (apps and browser tools) for the mantras they ship and for look-and-feel patterns. Sources: [NaamJaap comparison of five counters](https://naamjaap.in/blog/top-5-naam-japa-counter-apps), [NaamJaap online counter](https://naamjaap.in/online-counter), [JapaCounterOnline](https://japacounteronline.in/), [JapaCount](https://www.japacount.com/), [600IQ naam japa counter](https://600iq.com/tools/naam-japa-counter/), [Japa Counter by Sweetedge](https://play.google.com/store/apps/details?id=com.sweetedge.japacounter), [an open-source japa mala counter](https://github.com/Srusti-26/japa-mala-counter), and the [Divine Life Society japa mantra list](https://www.dlshq.org/teachings/japa-yoga/) used as the text reference.
+
+| Pattern seen across competitors | Decision for this site |
+| --- | --- |
+| Mantra presets converge on Om Namah Shivaya, Hare Krishna Maha Mantra, Ram Naam, Gayatri, Om Gam Ganapataye, Maha Mrityunjaya, Radhe, Om Namo Narayanaya; Lakshmi and Saraswati appear in longer lists | Added Krishna (Maha Mantra), Maha Mrityunjaya, Narayana, Lakshmi, Saraswati and Subrahmanya as built-in practices with Devanagari, Telugu, transliteration, meaning, art and spoken guides. Radhe Radhe is a naam rather than a listed mantra text; users can add it as a personal practice. |
+| Counting is framed as beads within a 108-bead mala plus a mala number ("Bead 37 / 108 · Mala 2"), with presets of 11, 27, 54, 108 | Counter and focus ring show mala round and bead position once the target is 108 or more. Added the 27 preset. Kept our per-day target model rather than auto-resetting at 108, because a vratha has a fixed daily count. |
+| Distinct haptic on completing a mala, softer tap per bead; guru bead drawn larger on the ring | Longer vibration pulse on each completed mala; guru-bead marker at the top of the focus ring. |
+| Focus mode shows a large deity image with minimal chrome | Focus mode now shows the practice artwork above the ring. Artwork remains symbolic line drawings, not sacred iconography. |
+| Streaks with current and best values; lifetime tallies toward 1 lakh / 1 crore | Added best streak for the cycle and a lifetime milestone bar (108 → 1,008 → 10,008 → 1 lakh → 10 lakh → 1 crore) driven by the existing all-cycle total. No leaderboard. |
+| Warm saffron/marigold accents on cream or deep indigo backgrounds; low visual noise for meditation | Already the direction here; the completion card and share image were brought onto the same palette in the previous pass. |
+
+Not adopted: voice/microphone counting (accuracy untested and battery-hungry), background music loops, mini-games, and global leaderboards.
+
 ## Implemented
 
 - Each practice supports 1–1008 chants per day and 1–365 days, with quick chant presets of 21, 54, 108 and 1008.

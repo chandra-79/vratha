@@ -152,7 +152,16 @@ summary { min-height: 44px; padding: 8px 0; font-weight: 600; }
 .goal-fields { display: grid; grid-template-columns: 1fr 1fr auto; align-items: end; gap: 12px; }
 .goal-fields input { width: 100%; }
 #configMessage { margin-top: 10px; font-size: .85rem; line-height: 1.5; }
-.insights-row { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+.insights-row { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 16px; margin: 18px 0; }
+.mala-readout { font-style: normal; font-size: .72rem; color: var(--accent-ink); letter-spacing: .02em; }
+.focus-art { display: block; margin: 4px auto 10px; width: 96px; height: 96px; border-radius: 24px; }
+.focus-ring { position: relative; }
+/* Guru bead: marks where each round begins and ends, like the larger bead on a mala. */
+.focus-ring::before { content: ''; position: absolute; top: -8px; left: calc(50% - 9px); width: 18px; height: 18px; border-radius: 50%; background: var(--brand); border: 2px solid var(--card); box-shadow: 0 0 0 1px var(--gold); }
+.milestone { margin: 4px 0 18px; }
+.milestone-label { font-size: .82rem; font-weight: 600; }
+.milestone-bar { display: block; height: 10px; margin-top: 8px; border-radius: 6px; background: var(--gold-l); border: 1px solid var(--gold); overflow: hidden; }
+.milestone-bar span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--brand-l), var(--brand)); transition: width .6s ease; }
 .insights-row strong { display: block; font-size: 1.6rem; color: var(--saffron-d); }
 .insights-row span { font-size: .75rem; color: var(--muted); }
 .weekly-history { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); gap: 10px; margin-top: 20px; }
@@ -162,7 +171,7 @@ summary { min-height: 44px; padding: 8px 0; font-weight: 600; }
 .compact-count { grid-column: 1 / -1; }
 .focus-ring { background: repeating-conic-gradient(transparent 0deg var(--bead-fill,15deg), var(--card) var(--bead-fill,15deg) var(--bead-angle,17.142857deg)), conic-gradient(var(--saffron) var(--progress), var(--gold-l) 0); }
 .focus-ring.smooth-ring { background: conic-gradient(var(--saffron) var(--progress), var(--gold-l) 0); }
-@media(max-width:600px) { .goal-fields { grid-template-columns: 1fr 1fr; } .goal-fields button { grid-column: 1 / -1; } .insights-row { gap: 8px; } }
+@media(max-width:600px) { .goal-fields { grid-template-columns: 1fr 1fr; } .goal-fields button { grid-column: 1 / -1; } .insights-row { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px 8px; } }
 
 /* Personal library and consistent artwork. */
 .brand-mark { width: 52px; height: 52px; border-radius: 14px; flex: 0 0 auto; }

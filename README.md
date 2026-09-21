@@ -1,6 +1,6 @@
 # Naam Jaap & Vratha Tracker
 
-A browser-based companion for Ganapati, Rama, Hanuman, Shiva, Gayatri Matha, and Durga Devi, with separately configurable schedules, daily targets, and temple-visit records for each practice (defaults: 48 days and 21 chants). No account or build step is required.
+A browser-based companion for Ganapati, Rama, Krishna (Maha Mantra), Hanuman, Shiva, Maha Mrityunjaya, Narayana, Gayatri Matha, Durga Devi, Lakshmi Devi, Saraswati Devi and Subrahmanya, with separately configurable schedules, daily targets, and temple-visit records for each practice (defaults: 48 days and 21 chants). No account or build step is required.
 
 Run locally:
 
@@ -44,23 +44,25 @@ Chromium browser checks covered keyboard counting and Undo, concurrent counts fr
 
 ## Multiple naam-jaap practices
 
-Choose Ganapati, Rama, Hanuman, Shiva, Gayatri Matha, or Durga Devi above the dashboard. Each practice has an independent configurable schedule, daily goal, notes, archives, and temple records. Pick its start date on first use. The default 48 days and 21 chants are tracker defaults, not prescribed durations for the additional mantras.
+Choose Ganapati, Rama, Krishna, Hanuman, Shiva, Maha Mrityunjaya, Narayana, Gayatri Matha, Durga Devi, Lakshmi Devi, Saraswati Devi or Subrahmanya above the dashboard. Each practice has an independent configurable schedule, daily goal, notes, archives, and temple records. Pick its start date on first use. The default 48 days and 21 chants are tracker defaults, not prescribed durations for the additional mantras.
 
 Ganapati retains `ganapatiVratha_v2`; other practices use `vratha_practice_<id>_v1`. Selection is remembered per tab in session storage, so two tabs may show different practices. Counts still synchronize when tabs show the same practice. Changing practice stops audio, saves an unsaved daily note, and clears Undo to prevent cross-practice corrections.
 
 Backups and resets apply to the **selected practice**. New backups include `practiceId`; importing one selects its matching practice. Existing unlabelled backups are treated as Ganapati data. Export each practice separately to back up all your progress.
 
-`practices.js` contains the texts and audio mappings. The five new practices offer Devanagari, Telugu, transliteration, short meanings, and bundled synthetic spoken guides; see `audio/README.md` for sources and generation details. These audio guides also work offline after the service worker finishes caching them. Ganapati keeps its original two recordings.
+`practices.js` contains the texts and audio mappings. The eleven non-Ganapati practices offer Devanagari, Telugu, transliteration, short meanings, and bundled synthetic spoken guides; see `audio/README.md` for sources and generation details. These audio guides also work offline after the service worker finishes caching them. Ganapati keeps its original two recordings.
 
 ## Configurable goals and cookie recovery
 
-Open **Settings → Goals** for the selected practice. Set **1–1008 chants per day**, **1–365 days**, and whether a temple visit is required to complete the day. Quick presets fill the chant input; press **Save practice goals** to apply. Existing data defaults to 21 chants over 48 days.
+Open **Settings → Goals** for the selected practice. Set **1–1008 chants per day**, **1–365 days**, and whether a temple visit is required to complete the day. Quick presets (21, 27, 54, 108, 1008) fill the chant input; press **Save practice goals** to apply. Existing data defaults to 21 chants over 48 days.
+
+A traditional mala is 108 beads. With a daily target of 108 or more, the counter and focus ring show the current mala round and bead position (for example *Mala 2 · bead 37 of 108*), and completing a mala gives a longer vibration pulse than a single bead when haptics are on. The focus ring carries a guru-bead marker where each round begins.
 
 Changing the goal recalculates completion while preserving counts. Reducing the chant target below any recorded count, or shortening the schedule past days with recorded counts/temple visits/notes, is blocked. Archive the existing cycle first if you need a fresh start. Archives retain their original goal and duration even after the active cycle changes.
 
 Each practice now has a compact cookie fallback with a requested one-year lifetime. Cookies preserve goal settings, dates, daily chant totals and temple flags; full exact checkmark positions, notes and archives remain in local storage and JSON exports. Cookie recovery reconstructs checked marks in order. Clearing both cookies and local storage removes the on-device data. Cookie/storage availability is shown in the save indicator.
 
-The seven-day chart and current-cycle streak use the device's local calendar date. The recorded total includes the selected practice's active cycle and archives; it does not combine different deities. See [RESEARCH.md](RESEARCH.md) for comparisons and design decisions.
+The seven-day chart, current-cycle streak and best streak use the device's local calendar date. The recorded total includes the selected practice's active cycle and archives; it does not combine different deities. A lifetime milestone bar tracks that total toward the traditional counts of 108, 1,008, 10,008, 1 lakh, 10 lakh and 1 crore. See [RESEARCH.md](RESEARCH.md) for comparisons and design decisions.
 
 ## Your own mantras and uploads
 
