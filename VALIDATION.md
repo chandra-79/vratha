@@ -17,6 +17,24 @@ Tested 19 September 2026 using isolated Playwright Chromium browser contexts. Lo
 - Offline reload under `/vratha/`, offline custom counting and real audio completion, offline reading sheets, artwork, manifest and icons. All seven bundled recordings returned correct cached HTTP 206 byte ranges.
 - Layouts at 320, 390, 768, 1024 and 1440px had no horizontal page overflow. Desktop/mobile screenshots were inspected for the dashboard and custom editor.
 
+## Sharing and deep-link checks, 22 September 2026
+
+Tested in headless Chrome over the DevTools protocol against a local server.
+
+- `?practice=shiva` on a cold load selects the Shiva practice, sets the document
+  title, and renders `ॐ नमः शिवाय।` with `lang="sa"`.
+- Switching practice in the app updates the query string; returning to Ganapati
+  clears it. The Back button is not filled with view changes.
+- Offline reload of `?practice=krishna` restores the Krishna practice with the
+  full interface, served from the cache.
+- The cache holds exactly two index entries (`./` and `./index.html`) after
+  visiting several practices, confirming navigations are not cached per query.
+- Open Graph image, JSON-LD block, `robots.txt` and `sitemap.xml` all serve.
+- No console errors or uncaught exceptions in any of the above.
+
+Not covered: how a specific messaging app renders the preview card, which
+depends on each service's own crawler and cache.
+
 ## Accessibility checks
 
 Axe-core 4.10.3 checks for WCAG 2 A/AA, 2.1 AA and 2.2 AA reported no violations in the tested views: Ganapati and Gayatri dashboards in light/dark themes, their readers, focus mode, day correction, Help, reset and the custom editor. Keyboard tests covered modal containment, counting, Undo, Escape and focus return. A dark-theme footer contrast issue found during testing was corrected.

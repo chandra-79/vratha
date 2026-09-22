@@ -35,6 +35,21 @@ Cross-tab updates are for the same browser profile and site origin. Moving betwe
 - `companion.js`: shared count mutations, focus mode, audio sessions, notes, reader, reminders, archive, and dialog accessibility.
 - `companion.css`: responsive dashboard and dialog styling.
 - `sw.js`: offline app, reference-image, and audio cache, including media range requests. Paths work at both the site root and `/vratha/` on GitHub Pages.
+- `robots.txt`, `sitemap.xml`, `assets/og-image.png`: indexing rules and the link preview card.
+
+## Linking to a practice
+
+A practice can be addressed directly with `?practice=<id>`, for example
+`https://chandra-79.github.io/vratha/?practice=shiva`. The URL takes precedence
+over the tab's remembered selection, so a shared link or a home-screen shortcut
+always opens the practice it names. Changing practice in the app keeps the
+address bar in step (via `replaceState`, so the Back button is not filled with
+view changes). Ganapati is the default and carries no parameter; personal
+practices exist only in your own browser and so are deliberately not addressable
+this way.
+
+The installed app offers shortcuts to Ganapati, Shiva, Krishna and Gayatri from
+its home-screen icon.
 
 Offline use requires a successful initial load and completed service-worker installation. Browser storage can be cleared or evicted; keep exported backups for long-term preservation.
 

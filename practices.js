@@ -42,7 +42,17 @@ function refreshCustomRegistry() {
 }
 refreshCustomRegistry();
 let activePractice = 'ganapati';
+// Selection order: ?practice=<id> in the URL, then this tab's last choice.
+// The URL wins so a shared link and a home-screen shortcut both land on the
+// practice they name, regardless of what this tab was showing before.
+function practiceFromUrl() {
+  try {
+    const id = new URLSearchParams(location.search).get('practice');
+    return id && Object.hasOwn(PRACTICES, id) ? id : null;
+  } catch (_) { return null; }
+}
 try { const saved = sessionStorage.getItem('vratha_active_practice'); if (Object.hasOwn(PRACTICES,saved)) activePractice=saved; } catch (_) {}
+{ const fromUrl = practiceFromUrl(); if (fromUrl) activePractice = fromUrl; }
 function practiceStorageKey(id) { return id === 'ganapati' ? 'ganapatiVratha_v2' : 'vratha_practice_'+id+'_v1'; }
 function practiceCookieKey(id) { return id === 'ganapati' ? 'gvt2' : 'gvt_'+id; }
 

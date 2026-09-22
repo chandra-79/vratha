@@ -1,15 +1,29 @@
 {
   "name": "Naam Jaap & Vratha Tracker",
   "short_name": "Naam Jaap",
-  "description": "A personal mantra library with daily chanting, recordings and independent practice goals.",
+  "description": "A personal mantra library with daily chanting, recordings and independent practice goals for twelve traditional mantras plus your own. Mala rounds, streaks and offline progress.",
   "id": "./",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
+  "display_override": ["standalone", "browser"],
+  "orientation": "any",
   "background_color": "#fef8ee",
   "theme_color": "#99410c",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["lifestyle", "health", "education"],
+  "prefer_related_applications": false,
   "icons": [
     {"src":"assets/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
-    {"src":"assets/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"}
+    {"src":"assets/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"},
+    {"src":"assets/icon-192.png","sizes":"192x192","type":"image/png","purpose":"maskable"},
+    {"src":"assets/icon-512.png","sizes":"512x512","type":"image/png","purpose":"maskable"}
+  ],
+  "shortcuts": [
+    {"name":"Ganapati Manthram","short_name":"Ganapati","url":"./","description":"Open the Ganapati vratha"},
+    {"name":"Shiva — Om Namah Shivaya","short_name":"Shiva","url":"./?practice=shiva","description":"Open the Shiva practice"},
+    {"name":"Hare Krishna Maha Mantra","short_name":"Krishna","url":"./?practice=krishna","description":"Open the Krishna practice"},
+    {"name":"Gayatri Mantra","short_name":"Gayatri","url":"./?practice=gayatri","description":"Open the Gayatri practice"}
   ]
 }

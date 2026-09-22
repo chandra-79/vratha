@@ -494,6 +494,20 @@ function configurePractice() {
   $('sessionTime').textContent = 'Session · 00:00';
   renderReader();
 }
+/* Keep ?practice=<id> in step with the selection, so the address bar can be
+   copied, bookmarked or reloaded and still show the same practice. Custom
+   practices live only in this browser, so they are left out of the URL.
+   replaceState is used deliberately: switching practice is a change of view,
+   not a navigation, and should not fill the Back button with steps. */
+function syncPracticeUrl(id) {
+  try {
+    const url = new URL(location.href);
+    if (id === 'ganapati' || PRACTICES[id]?.custom) url.searchParams.delete('practice');
+    else url.searchParams.set('practice', id);
+    history.replaceState(null, '', url);
+  } catch (_) { /* file:// or unsupported — the app is unaffected */ }
+}
+
 async function switchPractice(id, options = {}) {
   if (!Object.hasOwn(PRACTICES,id)) return;
   if (noteDirty && !options.restoring) await saveDailyNote();
@@ -512,6 +526,7 @@ async function switchPractice(id, options = {}) {
       closeGitaQuote();
       configurePractice(); buildCards(); renderCompanion();
       $('dayDetails').open = false;
+      syncPracticeUrl(id);
       announce(PRACTICES[id].name + ' practice selected');
     });
   } finally { $('practiceSelect').disabled = false; }

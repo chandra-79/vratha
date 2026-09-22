@@ -23,6 +23,26 @@ Reviewed the current crop of japa counters (apps and browser tools) for the mant
 
 Not adopted: voice/microphone counting (accuracy untested and battery-hungry), background music loops, mini-games, and global leaderboards.
 
+## Sharing and discoverability pass, 22 September 2026
+
+The tracker is shared person to person — a link sent to family in WhatsApp or
+Telegram — but it carried no link-preview metadata at all, so those links
+appeared as bare URLs with no title, description or image.
+
+| Gap found | Decision for this site |
+| --- | --- |
+| No Open Graph or Twitter Card tags; a shared link showed nothing | Added the full set plus a 1200×630 preview card drawn in the app's own saffron and marigold palette, showing a mala ring, the guru bead and the mantra in Devanagari and Telugu. |
+| No structured data | Added JSON-LD (`WebApplication` + `Person`) describing the practice list and features. Nothing is claimed that the app does not do. |
+| No `robots.txt` or `sitemap.xml` | Added both. One canonical URL; practices are views of that page, not separate documents. |
+| A practice could not be linked to or bookmarked | Added `?practice=<id>`. The URL wins over the tab's remembered selection, and switching keeps the address bar in step with `replaceState`. |
+| Manifest had no shortcuts and no maskable icons | Added maskable icons, categories, `lang`/`dir`, and four home-screen shortcuts (Ganapati, Shiva, Krishna, Gayatri). |
+| `cache.addAll` in the service worker install | Replaced with individual `cache.add` calls. `addAll` is all-or-nothing, so one failing entry in the forty-asset media list would abort the install and leave no offline support whatsoever. |
+| The new query parameter would have cached one copy of the app per practice | Navigations are now stored under a single `./index.html` key. Verified: two index entries in the cache regardless of how many practices are visited. |
+
+Deliberately not done: personal practices are not addressable by URL, because
+they exist only in the user's own browser and a shared link to one would be
+dead for everyone else.
+
 ## Implemented
 
 - Each practice supports 1–1008 chants per day and 1–365 days, with quick chant presets of 21, 54, 108 and 1008.

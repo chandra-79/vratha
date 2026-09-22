@@ -1,0 +1,5 @@
+# Naam Jaap & Vratha Tracker
+User-agent: *
+Allow: /
+
+Sitemap: https://chandra-79.github.io/vratha/sitemap.xml
